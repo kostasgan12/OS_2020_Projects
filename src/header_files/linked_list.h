@@ -1,7 +1,10 @@
 #ifndef LINKEDLIST_H
 #define LINKEDLIST_H
 
+#include <cstdlib>
 #include <iostream>
+#include <string>
+
 using namespace std;
 
 struct node
@@ -10,12 +13,13 @@ struct node
     node *next;
 };
 
-class linkedList
+class LinkedList
 {
     private : node *head, *tail;
 
     public:
-        linkedList();
+        LinkedList();
+        ~LinkedList();
 
         void insert_end(int value);
         void insert_start(int value);

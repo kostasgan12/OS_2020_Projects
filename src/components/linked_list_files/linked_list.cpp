@@ -1,12 +1,17 @@
 #include "../../header_files/linked_list.h"
 
-linkedList::linkedList()
+LinkedList::LinkedList()
 {
     head = NULL;
     tail = NULL;
 }
 
-void linkedList::insert_end(int value)
+LinkedList::~LinkedList()
+{
+    cout<<"Deleting Linked List"<<endl;
+}
+
+void LinkedList::insert_end(int value)
 {
     node *temp = new node;
     temp->data = value;
@@ -24,7 +29,7 @@ void linkedList::insert_end(int value)
     }
 }
 
-void linkedList::insert_start(int value)
+void LinkedList::insert_start(int value)
 {
     node *temp = new node;
     temp->data = value;
@@ -32,7 +37,7 @@ void linkedList::insert_start(int value)
     head = temp;
 }
 
-void linkedList::insert_position(int pos, int value)
+void LinkedList::insert_position(int pos, int value)
 {
     node *previous = new node;
     node *current = new node;
@@ -48,7 +53,7 @@ void linkedList::insert_position(int pos, int value)
     temp->next = current;
 }
 
-void linkedList::delete_head()
+void LinkedList::delete_head()
 {
     node *temp = new node;
     temp = head;
@@ -56,7 +61,7 @@ void linkedList::delete_head()
     delete temp;
 }
 
-void linkedList::delete_tail()
+void LinkedList::delete_tail()
 {
     node *current = new node;
     node *previous = new node;
@@ -71,7 +76,7 @@ void linkedList::delete_tail()
     delete current;
 }
 
-void linkedList::delete_position(int pos)
+void LinkedList::delete_position(int pos)
 {
     node *current = new node;
     node *previous = new node;
@@ -84,7 +89,7 @@ void linkedList::delete_position(int pos)
     previous->next = current->next;
 }
 
-void linkedList::display()
+void LinkedList::display()
   {
     node *temp=new node;
     temp=head;
