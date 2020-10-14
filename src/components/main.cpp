@@ -168,8 +168,90 @@ int main(int argc, char *argv[])
             ++counter;
         }
     }
-
     infile.close(); //closing text file
 
     //////////////////////////////////////////////////////////////////////////////////////
+
+    cout<<"we have now closed the file. all students have entered the hashtable."<<endl;
+
+    ////////stuToBe == student to be inserted////////
+
+    int choice;
+
+    int stuToBe_zip_code, stuToBe_entry_year; 
+    float stuToBe_lesson_average;
+    string stuToBe_id, stuToBe_last_name, stuToBe_first_name;
+
+    int year, numberOfStudents;
+    
+    while (1)
+    {
+        cout << "1.Insert Student" << endl;
+        cout << "2.Look Up Student" << endl;
+        cout << "3.Delete Student" << endl;
+        cout << "4.Search Remaining Students In Year" << endl;
+        cout << "5.Find Top N Students For Given Year" << endl;
+        cout << "6.Compute Given Years Average" << endl;
+        cout << "7.For Given Year Find Student With Worst Average" << endl;
+        cout << "8.Count Students Per Year" << endl;
+        cout << "9.Find *rank* Most Popular Zip Code" << endl;
+        cout << "10.Exit" << endl;
+        cout << "Enter your choice: ";
+        cin >> choice;
+        switch (choice)
+        {
+        case 1:
+            cout << "Enter Student In The Following Format:  studentid lastname firstname zip year gpa  "<<endl;
+            cin >> stuToBe_id >> stuToBe_last_name >> stuToBe_first_name >> stuToBe_zip_code >> stuToBe_entry_year >> stuToBe_lesson_average;
+            // cout << "Enter key at which element to be inserted: ";
+            // cin >> k;
+            // HashTable.insert_student();
+            break;
+        case 2:
+            cout << "Enter The Student's ID: ";
+            cin >> stuToBe_id;
+            // HashTable.SearchKey(k);
+            break;
+        case 3:
+            cout << "Enter The Student's ID: ";
+            cin >> stuToBe_id;
+            // HashTable.Remove(k);
+            break;
+        case 4:
+            cout << "Enter Year: ";
+            cin >> year;
+            // HashTable.Remove(k);
+            break;
+        case 5:
+            cout << "Enter Number of Students: ";
+            cin >> numberOfStudents;
+            cout << "Enter Year To Search: ";
+            cin >> year;
+            // HashTable.Remove(k);
+            break;
+        case 6:
+            cout << "Enter Year: ";
+            cin >> year;
+            // HashTable.Remove(k);
+            break;
+        case 7:
+            cout << "Enter Year: ";
+            cin >> year;
+            // HashTable.Remove(k);
+            break;
+        case 8:
+            // HashTable.Remove(k);
+            break;
+        case 9:
+            cout << "Enter rank: ";
+            cin >> year;
+            // HashTable.Remove(k);
+            break;
+        case 10:
+            exit(1);
+        default:
+            cout << "\nEnter correct option\n";
+        }
+    }
+
 }
