@@ -7,20 +7,32 @@
 
 #include "main.h"
 #include "student_class.h"
+#include "../helpers/helper_functions.h"
+
+struct StudentHashTableEntry
+{
+    Student studentValue;
+    int key;
+    StudentHashTableEntry *n;
+    StudentHashTableEntry *p;
+
+    StudentHashTableEntry(Student* studentPassed);
+};
+
 
 class StudentHashTable
 {
 private:
 public:
-    Student **studentHashTable;
+    StudentHashTableEntry **studentHashTable;
 
     StudentHashTable();
 
     ~StudentHashTable();
 
-    int HashFunc(int key);
+    int HashFunc(string key);
 
-    void insert_student(Student student);
+    void insert_student(Student* student);
 };
 
 #endif

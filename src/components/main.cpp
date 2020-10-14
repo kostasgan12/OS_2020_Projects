@@ -130,7 +130,7 @@ int main(int argc, char *argv[])
     }
     infile.close();
 
-    StudentHashTable tempHashTable;
+    StudentHashTable HashTable;
 
     string studentsIdArray[studentSum];                                                         // array used for checking for student duplicates
     // Student * newStudent = NULL;
@@ -163,7 +163,7 @@ int main(int argc, char *argv[])
             Student newStudent(__studentId, __studentLastName, __student_Name, __zipcode, __studentEntryYear, __lessonsAverage);
             cout << "newStudent id is +++++> " << newStudent.getStudentId() << endl;
             // here we need to implement adding the student to our hashtable
-
+            HashTable.insert_student(&newStudent);
             studentsIdArray[counter] = __studentId;
             ++counter;
         }

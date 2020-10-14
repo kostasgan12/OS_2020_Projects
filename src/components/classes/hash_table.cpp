@@ -1,30 +1,49 @@
 #include "../../header_files/hash_table.h"
 
+// StudentHashTableEntry::StudentHashTableEntry(Student* studentPassed)
+// {
+//     this->key = stoi(studentPassed->getStudentId());
+//     this->studentValue = *studentPassed;
+//     this->n = NULL;
+// }
+StudentHashTableEntry::StudentHashTableEntry(Student *studentPassed)
+    :   
+        key(transform_id(studentPassed->getStudentId())),
+        studentValue(* studentPassed),
+        n(NULL)
+        {}
+
+int StudentHashTable::HashFunc(string id)
+{
+    int key = transform_id(id);
+    // int key = stol(id);
+
+    return key % hashTableSize;
+}
+
 StudentHashTable::StudentHashTable()
 {
-    studentHashTable = new Student *[hashTableSize];
+    studentHashTable = new StudentHashTableEntry *[hashTableSize];
     for (int i = 0; i < hashTableSize; i++)
         studentHashTable[i] = NULL;
 }
 
-int StudentHashTable::HashFunc(int key)
-{
-    return key % hashTableSize;
-}
 
-void StudentHashTable::insert_student(Student student)
+void StudentHashTable::insert_student(Student * student)
 {
-    int hash_v = HashFunc(k);
-    Student *p = NULL;
-    Student *en = studentHashTable[hash_v];
-    while (en != NULL)
+    int hash_v = HashFunc(student->getStudentId());
+
+    StudentHashTableEntry* p = NULL;
+    StudentHashTableEntry* en = studentHashTable[hash_v];
+
+    while (en != NULL)                                                  //searching chained list at hashtable position given by hash function until empty
     {
         p = en;
         en = en->n;
     }
     if (en == NULL)
     {
-        en = new Student(student);
+        en = new StudentHashTableEntry(student);
         if (p == NULL)
         {
             studentHashTable[hash_v] = en;
@@ -36,7 +55,7 @@ void StudentHashTable::insert_student(Student student)
     }
     else
     {
-        en->student = student;
+        en->studentValue = *student;
     }
 }
 
