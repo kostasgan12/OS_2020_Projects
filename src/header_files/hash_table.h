@@ -11,9 +11,10 @@
 
 struct StudentHashTableEntry
 {
-    Student* studentData;
+    // Student* studentData;
+    Student studentData;
     int key;
-    StudentHashTableEntry *n;
+    StudentHashTableEntry *nextSt;
     StudentHashTableEntry *p;
 
     StudentHashTableEntry(Student* studentPassed);

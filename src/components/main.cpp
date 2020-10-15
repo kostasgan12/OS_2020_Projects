@@ -251,7 +251,7 @@ int main(int argc, char *argv[])
         case 10:
             exit(1);
         default:
-            cout << "\nEnter correct option\n";
+            cout << "\nEnter correct option"<<endl;
         }
     }
 
