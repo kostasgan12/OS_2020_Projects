@@ -64,19 +64,15 @@ void StudentHashTable::InsertStudent(Student * student)
 
 void StudentHashTable::LookUpStudent(string id)
 {
-    cout << "########################################################################" << endl;
-    cout << "id given to LookUpStudent : "<< id << endl;
 
     int key = transform_id(id);
-    cout << "key transformed from id in LookUpStudent : " << key << endl;
 
     int hash_v = HashFunc(id);
 
-    cout << "hash_v in for id: "<<id<<"LookUpStudent : " << hash_v << endl;
     bool flag = false;
 
     StudentHashTableEntry *en = studentHashTable[hash_v];
-    cout << "########################################################################" << endl;
+    cout << "\n########################################################################\n" << endl;
     if (en != NULL)
     {
         while (en != NULL)
@@ -84,20 +80,20 @@ void StudentHashTable::LookUpStudent(string id)
             if (en->key == key)
             {
                 flag = true;
+                cout << "Student Found With Details:\n\n";
+                cout << "ID-> \t\t" << en->studentData.getStudentId()
+                     << "\nSurname->\t" << en->studentData.getStudentLastName()
+                     << "\nName->\t\t" << en->studentData.getStudentFirstName()
+                     << "\nZipCode->\t" << en->studentData.getStudentZipCode()
+                     << "\nEntry Year->\t" << en->studentData.getsStudentEntryYear()
+                     << "\nGPA->\t\t" << en->studentData.getStudentLessonAverage() << endl;
             }
-            if (flag)
-            {
-                cout << "Element found at key " << key << ": ";
-                // cout << en->studentData->getStudentId() << endl;
-                cout << en->studentData.getStudentId() << endl;
-            }
-            // cout << en->studentData->getStudentLastName() << endl;
             en = en->nextSt;
         }
     }
     if (!flag)
         cout << "No Element found at key " << key << endl;
-    cout << "########################################################################" << endl;
+    cout << "\n########################################################################\n" << endl;
 }
 
 void StudentHashTable::ShowAllStudents(){

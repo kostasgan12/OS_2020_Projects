@@ -188,16 +188,18 @@ int main(int argc, char *argv[])
 
     while (1)
     {
-        cout << "1.Insert Student" << endl;
-        cout << "2.Look Up Student" << endl;
-        cout << "3.Delete Student" << endl;
-        cout << "4.Search Remaining Students In Year" << endl;
-        cout << "5.Find Top N Students For Given Year" << endl;
-        cout << "6.Compute Given Years Average" << endl;
-        cout << "7.For Given Year Find Student With Worst Average" << endl;
-        cout << "8.Count Students Per Year" << endl;
-        cout << "9.Find *rank* Most Popular Zip Code" << endl;
-        cout << "10.Exit" << endl;
+        cout << "\n*************************************************************\n"<< endl;
+        cout << "1.\tInsert Student" << endl;
+        cout << "2.\tLook Up Student" << endl;
+        cout << "3.\tDelete Student" << endl;
+        cout << "4.\tSearch Remaining Students In Year" << endl;
+        cout << "5.\tFind Top N Students For Given Year" << endl;
+        cout << "6.\tCompute Given Years Average" << endl;
+        cout << "7.\tFor Given Year Find Student With Worst Average" << endl;
+        cout << "8.\tCount Students Per Year" << endl;
+        cout << "9.\tFind *rank* Most Popular Zip Code" << endl;
+        cout << "10.\tExit" << endl;
+        cout << "\n*************************************************************\n"<< endl;
         cout << "Enter your choice: ";
         cin >> choice;
         switch (choice)
