@@ -183,7 +183,9 @@ int main(int argc, char *argv[])
     string stuToBe_id, stuToBe_last_name, stuToBe_first_name;
 
     int year, numberOfStudents;
-    
+
+    Student *newStudentInsert;
+
     while (1)
     {
         cout << "1.Insert Student" << endl;
@@ -203,9 +205,9 @@ int main(int argc, char *argv[])
         case 1:
             cout << "Enter Student In The Following Format:  studentid lastname firstname zip year gpa  "<<endl;
             cin >> stuToBe_id >> stuToBe_last_name >> stuToBe_first_name >> stuToBe_zip_code >> stuToBe_entry_year >> stuToBe_lesson_average;
-            // cout << "Enter key at which element to be inserted: ";
-            // cin >> k;
-            // HashTable.InsertStudent();
+            newStudentInsert = new Student();
+            newStudentInsert->SetStudent(stuToBe_id, stuToBe_last_name, stuToBe_first_name, stuToBe_zip_code, stuToBe_entry_year, stuToBe_lesson_average);
+            HashTable.InsertStudent(newStudentInsert);
             break;
         case 2:
             cout << "Enter The Student's ID: ";
