@@ -131,9 +131,8 @@ int main(int argc, char *argv[])
     infile.close();
 
     StudentHashTable HashTable;
-
-    string studentsIdArray[studentSum];                                                         // array used for checking for student duplicates
-    // Student * newStudent = NULL;
+    Student*  newStudent = new Student();
+    string studentsIdArray[studentSum]; // array used for checking for student duplicates
 
     infile.open(inputFile);
     while (infile >> __studentId >> __studentLastName >> __student_Name >> __zipcode >> __studentEntryYear >> __lessonsAverage)
@@ -159,11 +158,12 @@ int main(int argc, char *argv[])
         }
         else
         {
-            // newStudent = new Student(__studentId, __studentLastName, __student_Name, __zipcode, __studentEntryYear, __lessonsAverage);
-            Student newStudent(__studentId, __studentLastName, __student_Name, __zipcode, __studentEntryYear, __lessonsAverage);
-            cout << "newStudent id is +++++> " << newStudent.getStudentId() << endl;
+
+            // Student newStudent(__studentId, __studentLastName, __student_Name, __zipcode, __studentEntryYear, __lessonsAverage);
+            newStudent->SetStudent(__studentId, __studentLastName, __student_Name, __zipcode, __studentEntryYear, __lessonsAverage);
+
             // here we need to implement adding the student to our hashtable
-            HashTable.insert_student(&newStudent);
+            HashTable.InsertStudent(newStudent);
             studentsIdArray[counter] = __studentId;
             ++counter;
         }
@@ -205,12 +205,12 @@ int main(int argc, char *argv[])
             cin >> stuToBe_id >> stuToBe_last_name >> stuToBe_first_name >> stuToBe_zip_code >> stuToBe_entry_year >> stuToBe_lesson_average;
             // cout << "Enter key at which element to be inserted: ";
             // cin >> k;
-            // HashTable.insert_student();
+            // HashTable.InsertStudent();
             break;
         case 2:
             cout << "Enter The Student's ID: ";
             cin >> stuToBe_id;
-            // HashTable.SearchKey(k);
+            HashTable.LookUpStudent(stuToBe_id);
             break;
         case 3:
             cout << "Enter The Student's ID: ";
@@ -218,8 +218,9 @@ int main(int argc, char *argv[])
             // HashTable.Remove(k);
             break;
         case 4:
-            cout << "Enter Year: ";
-            cin >> year;
+            HashTable.ShowAllStudents();
+            // cout << "Enter Year: ";
+            // cin >> year;
             // HashTable.Remove(k);
             break;
         case 5:

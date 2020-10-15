@@ -19,13 +19,12 @@ private:
 
 public:
     // Student(string __studentId, string __studentLastName, string __student_Name,
-    //         int __zipcode, int __studentEntryYear, float __lessonsAverage) : studentID(__studentId), studentLastName(__studentLastName), studentFirstName(__student_Name), studentZipCode(__zipcode), studentEntryYear(__studentEntryYear), studentLessonAverage(__lessonsAverage) {};
-
-    Student(string __studentId, string __studentLastName, string __student_Name,
-            int __zipcode, int __studentEntryYear, float __lessonsAverage);
-
+    //         int __zipcode, int __studentEntryYear, float __lessonsAverage);
+    Student();
     ~Student();
 
+    void SetStudent(string __studentId, string __studentLastName, string __student_Name,
+            int __zipcode, int __studentEntryYear, float __lessonsAverage);
 
     string getStudentId() { return studentID; }
     string getStudentLastName() { return studentLastName; }

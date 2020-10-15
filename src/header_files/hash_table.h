@@ -11,7 +11,7 @@
 
 struct StudentHashTableEntry
 {
-    Student studentValue;
+    Student* studentData;
     int key;
     StudentHashTableEntry *n;
     StudentHashTableEntry *p;
@@ -32,7 +32,10 @@ public:
 
     int HashFunc(string key);
 
-    void insert_student(Student* student);
+    void InsertStudent(Student* student);
+    void LookUpStudent(string id);
+
+    void ShowAllStudents();
 };
 
 #endif
