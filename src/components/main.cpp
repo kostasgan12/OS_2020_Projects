@@ -219,7 +219,7 @@ int main(int argc, char *argv[])
         case 3:
             cout << "Enter The Student's ID: ";
             cin >> stuToBe_id;
-            // HashTable.Remove(k);
+            HashTable.DeleteStudent(stuToBe_id);
             break;
         case 4:
             HashTable.ShowAllStudents();

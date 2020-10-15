@@ -64,11 +64,8 @@ void StudentHashTable::InsertStudent(Student * student)
 
 void StudentHashTable::LookUpStudent(string id)
 {
-
     int key = transform_id(id);
-
     int hash_v = HashFunc(id);
-
     bool flag = false;
 
     StudentHashTableEntry *en = studentHashTable[hash_v];
@@ -94,6 +91,32 @@ void StudentHashTable::LookUpStudent(string id)
     if (!flag)
         cout << "No Element found at key " << key << endl;
     cout << "\n########################################################################\n" << endl;
+}
+
+//TODO Delete needs refactoring
+
+void StudentHashTable::DeleteStudent(string id)
+{
+    int key = transform_id(id);
+    int hash_v = HashFunc(id);
+    StudentHashTableEntry *en = studentHashTable[hash_v];
+    StudentHashTableEntry *p = NULL;
+    if (en == NULL || en->key != key)
+    {
+        cout << "No Element found at key " << key << endl;
+        return;
+    }
+    while (en->nextSt != NULL)
+    {
+        p = en;
+        en = en->nextSt;
+    }
+    if (p != NULL)
+    {
+        p->nextSt = en->nextSt;
+    }
+    delete en;
+    cout << "Element Deleted" << endl;
 }
 
 void StudentHashTable::ShowAllStudents(){

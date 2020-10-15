@@ -35,7 +35,7 @@ public:
 
     void InsertStudent(Student* student);
     void LookUpStudent(string id);
-
+    void DeleteStudent(string id);
     void ShowAllStudents();
 };
 
