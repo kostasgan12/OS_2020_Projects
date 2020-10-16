@@ -13,7 +13,7 @@ InvertedIndexEntry::InvertedIndexEntry(int yearPassed, StudentHashTableEntry *st
         studentLocationP(studentPassed),
         nextInvIndexEntry(NULL)
 {
-        // cout << "studentLocationP is ==>:\t" << studentLocationP << endl;
+        cout << "studentLocationP is ==>:\t" << studentLocationP << endl;
 }
 
 
@@ -84,6 +84,95 @@ void InvertedIndex::FindActiveUsersInAcademicYear(int academicYear)
         }
     }
     cout << counter << " Students Were Found Active In Their:\t" << academicYear<<"\tAcademic Year" << endl;
+}
+
+void InvertedIndex::FindNBestStudentsOfYear(int num, int yearRequested)
+{
+    int yearPositionInIndexTable = yearRequested - invertedStartYear;
+    int counter = 0;
+
+    float bestNGPA[num];
+
+    for (int i = 0; i < num; i++)
+    {
+        bestNGPA[i]=0;
+    }
+    
+    float tmpGPA = 0;
+    bool flag=false;
+    int innerStarterVal=0;
+    InvertedIndexEntry *currentEntry = invertedIndex[yearPositionInIndexTable];
+
+    cout << "\n########################################################################\n"<< endl;
+
+    currentEntry = currentEntry->nextInvIndexEntry;
+    if (currentEntry != NULL)
+    {
+        while (currentEntry != NULL)
+        {
+            // counter++;
+            tmpGPA = currentEntry->studentLocationP->studentData.getStudentLessonAverage();
+
+            for (int i = 0; i < num; i++)
+            {
+                if (tmpGPA > bestNGPA[i] && bestNGPA[i + 1] > 0)
+                // if (tmpGPA > bestNGPA[i] &&  counter <= num)
+                {
+                    flag = false;
+                    if(num - counter >=0){
+                        innerStarterVal = num - counter;
+                    }
+                    for (int j = innerStarterVal; j < num; j++)
+                    {
+                        cout<<"j ===\t"<<j<<endl;
+                        if (bestNGPA[j] == tmpGPA){
+                            flag = true;
+                        }
+                    }
+                    if(!flag){
+                        bestNGPA[i] = tmpGPA;
+                    }
+                    break;
+                }
+
+
+                // if (tmpGPA > bestNGPA[i] && counter <= num)
+                // {
+                //     bestNGPA[i] = tmpGPA;
+                //     counter++;
+                //     break;
+                // }
+            }
+            counter++;
+            currentEntry = currentEntry->nextInvIndexEntry;
+        }
+    }
+
+
+    cout<<"best\t"<<num<<"\tGPAs,for year\t"<<yearRequested<<endl;
+
+    float  __gpa;
+    for (int i = 0; i < num; i++)
+    {
+        __gpa = 0;
+
+        cout << bestNGPA[i] <<"\t";
+        if (bestNGPA[i] != 0){
+
+            currentEntry = invertedIndex[yearPositionInIndexTable]->nextInvIndexEntry;
+
+            while (currentEntry != NULL)
+            {
+                __gpa = currentEntry->studentLocationP->studentData.getStudentLessonAverage();
+                
+                if (__gpa == bestNGPA[i]){
+                    cout << currentEntry->studentLocationP->studentData.getStudentLastName() << "\t";
+                }
+                currentEntry = currentEntry->nextInvIndexEntry;
+            }
+            cout<<"\n";
+        }
+    }
 }
 
 void InvertedIndex::CountStudentsInYear(int yearRequested)

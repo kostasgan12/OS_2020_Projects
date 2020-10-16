@@ -11,7 +11,6 @@
 
 struct StudentHashTableEntry
 {
-    // Student* studentData;
     Student studentData;
     int key;
     StudentHashTableEntry *nextSt;

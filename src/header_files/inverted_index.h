@@ -10,9 +10,10 @@
 #include "hash_table.h"
 #include "../helpers/helper_functions.h"
 
+struct StudentHashTableEntry;
+
 struct InvertedIndexEntry
 {
-    // Student  studentLocationP;
     int year;
     StudentHashTableEntry *studentLocationP; //we want to store a pointer to a student, actually we want to store the student record location
     InvertedIndexEntry *nextInvIndexEntry;
@@ -21,9 +22,6 @@ struct InvertedIndexEntry
     // InvertedIndexEntry(Student *studentPassed);
     InvertedIndexEntry(int yearPassed);
     InvertedIndexEntry(int yearPassed, StudentHashTableEntry *studentPassed);
-
-    int getIndexYear() { return year; }
-    StudentHashTableEntry *getStudentLocationP() { return studentLocationP; }
 };
 
 class InvertedIndex
@@ -39,6 +37,7 @@ public:
     void DeleteStudentReference(string id);
     void ShowAllStudentsInYear(int yearRequested);
     void FindActiveUsersInAcademicYear(int academicYear);
+    void FindNBestStudentsOfYear(int num, int yearRequested);
     void CountStudentsInYear(int yearRequested);
 };
 
