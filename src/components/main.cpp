@@ -187,10 +187,10 @@ int main(int argc, char *argv[])
             newStudent->SetStudent(__studentId, __studentLastName, __student_Name, __zipcode, __studentEntryYear, __lessonsAverage);
 
             studentLocation = HashTable.InsertStudent(newStudent);
-            cout << "studentLocation:\t" << studentLocation << endl;
-            
-            InvertedIndexTable.InsertStudentReference(__studentEntryYear, studentLocation);
 
+            cout << "****** Attempting to enter:\t" << __studentLastName << "******" << endl;
+            InvertedIndexTable.InsertStudentReference(__studentEntryYear, studentLocation);
+            cout << "########################################################################" << endl;
             studentsIdArray[counter] = __studentId;
             ++counter;
         }
@@ -253,11 +253,11 @@ int main(int argc, char *argv[])
             // HashTable.Remove(k);
             break;
         case 5:
-            cout << "Enter Number of Students: ";
-            cin >> numberOfStudents;
+            // cout << "Enter Number of Students: ";
+            // cin >> numberOfStudents;
             cout << "Enter Year To Search: ";
             cin >> year;
-            // HashTable.Remove(k);
+            InvertedIndexTable.ShowAllStudentsInYear(year);
             break;
         case 6:
             cout << "Enter Year: ";
