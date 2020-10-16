@@ -30,15 +30,15 @@ void StudentHashTable::InsertStudent(Student * student)
     StudentHashTableEntry* p = NULL;                                    //initialize p with NULL
     StudentHashTableEntry* en = studentHashTable[hash_v];               //initialize en with the first object contained in the list at position hash_v of our hashtable, it either contains an object or NULL as initialized
     
-    cout << "########################################################################" << endl;
-    cout << "Student we want to insert is :\t" << student->getStudentLastName() << endl;
+    // cout << "########################################################################" << endl;
+    // cout << "Student we want to insert is :\t" << student->getStudentLastName() << endl;
 
     while (en != NULL)                                                  //searching chained list at hashtable position given by hash function until we find available entry space
     {
         p = en;                                                         //p is assigned en value of chained list
         en = en->nextSt;                                                // en is assinged next value of chained list
     
-        cout << "++ Looping Over Chained List Items ++ p is ====> " << p->studentData.getStudentLastName() << endl;
+        // cout << "++ Looping Over Chained List Items ++ p is ====> " << p->studentData.getStudentLastName() << endl;
     }
     
     if (en == NULL)                                                     // if en == NULL, which means that
@@ -56,10 +56,10 @@ void StudentHashTable::InsertStudent(Student * student)
     }
     else
     {
-        cout<<"in en else condition en should not be NULL, it is ==> "<<en<<endl;
+        // cout<<"in en else condition en should not be NULL, it is ==> "<<en<<endl;
         en->studentData = * student;
     }
-    cout << "########################################################################" << endl;
+    // cout << "########################################################################" << endl;
 }
 
 void StudentHashTable::LookUpStudent(string id)
@@ -82,7 +82,7 @@ void StudentHashTable::LookUpStudent(string id)
                      << "\nSurname->\t" << en->studentData.getStudentLastName()
                      << "\nName->\t\t" << en->studentData.getStudentFirstName()
                      << "\nZipCode->\t" << en->studentData.getStudentZipCode()
-                     << "\nEntry Year->\t" << en->studentData.getsStudentEntryYear()
+                     << "\nEntry Year->\t" << en->studentData.getStudentEntryYear()
                      << "\nGPA->\t\t" << en->studentData.getStudentLessonAverage() << endl;
             }
             en = en->nextSt;
@@ -129,8 +129,7 @@ void StudentHashTable::ShowAllStudents(){
             while(en != NULL){
                 cout << "found student with id:\t"<<en->studentData.getStudentId();
                 cout << "\tand name:\t" << en->studentData.getStudentLastName()<< "\t" << en->studentData.getStudentFirstName() << endl;
-                // cout << "found student with id:\t"<<en->studentData->getStudentId();
-                // cout << "\tand name:\t" << en->studentData->getStudentLastName()<< "\t" << en->studentData->getStudentFirstName() << endl;
+                cout<< "at location ===>\t"<<en<<endl;
                 en = en->nextSt;
             }
         }

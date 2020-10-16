@@ -13,9 +13,12 @@
 #include "linked_list.h"
 #include "student_class.h"
 #include "hash_table.h"
-
+#include "inverted_index.h"
 
 extern int hashTableSize;
+extern int invertedStartYear;
+extern int invertedEndYear;
+extern int invertedTableSize;
 
 using namespace std;
 

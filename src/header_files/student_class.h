@@ -30,7 +30,7 @@ public:
     string getStudentLastName() { return studentLastName; }
     string getStudentFirstName() { return studentFirstName; }
     int getStudentZipCode() { return studentZipCode; }
-    int getsStudentEntryYear() { return studentEntryYear; }
+    int getStudentEntryYear() { return studentEntryYear; }
     float getStudentLessonAverage() { return studentLessonAverage; }
 };
 

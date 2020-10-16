@@ -1,6 +1,9 @@
 #include "../header_files/main.h"
 
 int hashTableSize;
+int invertedStartYear;
+int invertedEndYear;
+int invertedTableSize;
 
 int main(int argc, char *argv[])
 {
@@ -95,12 +98,30 @@ int main(int argc, char *argv[])
     /////////////////////////////// C O N F I G  F I L E /////////////////////////////////
 
     string __htsizeFlag;
+    string __invertedStartYearFlag;
+    string __invertedEndYearFlag;
+    
 
     infile.open(configFile); //opening input file to count number of students in file
-    while (infile >> __htsizeFlag >> hashTableSize)
+    while (infile >> __htsizeFlag >> hashTableSize >> __invertedStartYearFlag >> invertedStartYear >> __invertedEndYearFlag >> invertedEndYear)
     {
         if (__htsizeFlag == "-hts"){
             cout<<"hash table size is =====> "<<hashTableSize<<endl;
+        }
+        if (__invertedStartYearFlag == "-startYear")
+        {
+            cout<<"start year for inverted is =====> "<<invertedStartYear<<endl;
+        }
+        if (__invertedEndYearFlag == "-endYear")
+        {
+            cout << "end year for inverted is =====> " << invertedEndYear << endl;
+        }
+        if (invertedStartYear > 0 &&
+                invertedEndYear > 0 &&
+            invertedStartYear < invertedEndYear)
+        {
+            invertedTableSize = invertedEndYear - invertedStartYear + 1;
+            cout << "invertedTableSize is =====> " << invertedTableSize << endl;
         }
     }
     infile.close();
@@ -131,7 +152,9 @@ int main(int argc, char *argv[])
     infile.close();
 
     StudentHashTable HashTable;
-    Student*  newStudent = new Student();
+    InvertedIndex InvertedIndexTable;
+
+    Student *newStudent = new Student();
     string studentsIdArray[studentSum]; // array used for checking for student duplicates
 
     infile.open(inputFile);
@@ -153,7 +176,8 @@ int main(int argc, char *argv[])
 
         if (found > 0)
         {
-            cout << "Duplicate Student Found With ID: " << __studentId << " And Was Dismissed." << endl;
+            cout << "Duplicate Student Found With ID:\t" << __studentId << "\t" << __studentLastName << "\t" << __student_Name << "\t"
+                 << " And Was Dismissed." << endl;
             continue;
         }
         else
@@ -161,9 +185,9 @@ int main(int argc, char *argv[])
 
             // Student newStudent(__studentId, __studentLastName, __student_Name, __zipcode, __studentEntryYear, __lessonsAverage);
             newStudent->SetStudent(__studentId, __studentLastName, __student_Name, __zipcode, __studentEntryYear, __lessonsAverage);
-
             // here we need to implement adding the student to our hashtable
             HashTable.InsertStudent(newStudent);
+            InvertedIndexTable.InsertStudentReference(newStudent);
             studentsIdArray[counter] = __studentId;
             ++counter;
         }
@@ -171,8 +195,6 @@ int main(int argc, char *argv[])
     infile.close(); //closing text file
 
     //////////////////////////////////////////////////////////////////////////////////////
-
-    cout<<"we have now closed the file. all students have entered the hashtable."<<endl;
 
     ////////stuToBe == student to be inserted////////
 
