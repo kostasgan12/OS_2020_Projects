@@ -25,8 +25,6 @@ InvertedIndex::InvertedIndex()
         ;
         int _yearToBePassed = i + invertedStartYear;
         invertedIndex[i] = new InvertedIndexEntry(_yearToBePassed);
-
-        cout << "invertedIndex[" << i << "]->year is:\t" << invertedIndex[i]->getIndexYear() << endl;
     }
 }
 
@@ -41,44 +39,51 @@ void InvertedIndex::InsertStudentReference(int yearToBeInserted, StudentHashTabl
     //That only contains our Header Year, so we check if a next Entry Exists, 
     //which would mean there is a student entered.
 
-    // while (currentEntry != NULL)
-    // {
-    //     if(currentEntry->studentLocationP == NULL && currentEntry->nextInvIndexEntry == NULL){
-    //         cout << "This Is Empty Header File for year:\t" << currentEntry->year << endl;
-    //     }else{
-    //         cout << "space at:\t" << currentEntry->studentLocationP << "\tocupied by:\t";
-    //         cout << currentEntry->studentLocationP->studentData.getStudentLastName() << endl;
-    //     }
-    //     p = currentEntry;
-    //     currentEntry = currentEntry->nextInvIndexEntry;
-    // }
-
-
-    // if (currentEntry == NULL)
-    // {
-    //     cout << " After While currentEntry is NULL" << endl;
-    //     currentEntry = new InvertedIndexEntry(yearToBeInserted, student);
-    // }else{
-    //     cout << " After While currentEntry **NOT** NULL" << endl;
-    // }
-
-    if (currentEntry->nextInvIndexEntry == NULL)    
+    if (currentEntry->nextInvIndexEntry == NULL)   
+    //table for this year hasnt got any student records 
     {
+        cout<<"first element for year:\t"<<yearToBeInserted<<endl;
         currentEntry->nextInvIndexEntry = new InvertedIndexEntry(yearToBeInserted, student);
-        cout << "student entered and currentEntry->nextInvIndexEntry is:\t" << currentEntry->nextInvIndexEntry->studentLocationP->studentData.getStudentLastName() << endl;
+        // cout << "student entered and currentEntry->nextInvIndexEntry is:\t" << currentEntry->nextInvIndexEntry->studentLocationP->studentData.getStudentLastName() << endl;
     }
     else
-    {   
-        while (currentEntry->nextInvIndexEntry != NULL){
-            p = currentEntry;
-            currentEntry = currentEntry->nextInvIndexEntry;
-
-            cout << "space at:\t" << currentEntry->studentLocationP <<"\tocupied by:\t";
+    //table for this year already has student records
+    {
+        p = currentEntry;
+        currentEntry = currentEntry->nextInvIndexEntry;
+        while (currentEntry != NULL)
+        {
+            cout << "space at:\t" << currentEntry->studentLocationP <<"\toccupied by:\t";
             cout << currentEntry->studentLocationP->studentData.getStudentLastName() << endl;
             
+            p = currentEntry;
+            currentEntry = currentEntry->nextInvIndexEntry;
         }
-        currentEntry = new InvertedIndexEntry(yearToBeInserted, student);
-        cout << "student entered and currentEntry is:\t" << currentEntry->studentLocationP->studentData.getStudentLastName() << endl;
+
+        p->nextInvIndexEntry = new InvertedIndexEntry(yearToBeInserted, student);
+    }
+}
+
+void InvertedIndex::CountStudentsInYear(int yearRequested)
+{
+    int yearPositionInIndexTable = yearRequested - invertedStartYear;
+    int counter = 0;
+
+    InvertedIndexEntry *currentEntry = invertedIndex[yearPositionInIndexTable];
+
+    cout << "########################################################################\n" << endl;
+
+    currentEntry = currentEntry->nextInvIndexEntry;
+    if (currentEntry != NULL)
+    {
+        while (currentEntry != NULL)
+        {
+            counter++;
+            currentEntry = currentEntry->nextInvIndexEntry;
+        }
+        cout << "\n"<<counter<<" Students Were Found With Entry Year:\t" << yearRequested << endl;
+    }else{
+        cout << "No Students Were Found With Entry Year:\t"<<yearRequested<<endl;
     }
 }
 
@@ -88,8 +93,8 @@ void InvertedIndex::ShowAllStudentsInYear(int yearRequested)
 
     InvertedIndexEntry *currentEntry = invertedIndex[yearPositionInIndexTable];
 
-    cout << "########################################################################" << endl;
-    cout << "Searching for Student in year:\t"<< yearRequested << endl;
+    cout << "########################################################################\n"
+         << endl;
 
     currentEntry = currentEntry->nextInvIndexEntry;
     if (currentEntry != NULL)
@@ -97,18 +102,18 @@ void InvertedIndex::ShowAllStudentsInYear(int yearRequested)
         while (currentEntry != NULL)
         {
             cout << "found student with id:\t" << currentEntry->studentLocationP->studentData.getStudentId();
-            cout << "\tand name:\t" << currentEntry->studentLocationP->studentData.getStudentLastName() <<"\t";
+            cout << "\tand name:\t" << currentEntry->studentLocationP->studentData.getStudentLastName() << "\t";
             cout << currentEntry->studentLocationP->studentData.getStudentFirstName();
             cout << "\tat location ===>\t" << currentEntry << endl;
 
             currentEntry = currentEntry->nextInvIndexEntry;
-            cout << "currentEntry before while end loop:\t" << currentEntry<<endl;
         }
-    }else{
-        cout << "currentEntry->nextInvIndexEntry is NULL"<<endl;
+    }
+    else
+    {
+        cout << "No Students Were Found With Entry Year:\t" << yearRequested << endl;
     }
 }
-
 
 InvertedIndex::~InvertedIndex(){
     delete[] invertedIndex;

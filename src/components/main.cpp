@@ -270,7 +270,9 @@ int main(int argc, char *argv[])
             // HashTable.Remove(k);
             break;
         case 8:
-            // HashTable.Remove(k);
+            cout << "Enter Year To Search: ";
+            cin >> year;
+            InvertedIndexTable.CountStudentsInYear(year);
             break;
         case 9:
             cout << "Enter rank: ";
