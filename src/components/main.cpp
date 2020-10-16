@@ -157,6 +157,8 @@ int main(int argc, char *argv[])
     Student *newStudent = new Student();
     string studentsIdArray[studentSum]; // array used for checking for student duplicates
 
+    StudentHashTableEntry *studentLocation = NULL;
+
     infile.open(inputFile);
     while (infile >> __studentId >> __studentLastName >> __student_Name >> __zipcode >> __studentEntryYear >> __lessonsAverage)
     {
@@ -182,12 +184,13 @@ int main(int argc, char *argv[])
         }
         else
         {
-
-            // Student newStudent(__studentId, __studentLastName, __student_Name, __zipcode, __studentEntryYear, __lessonsAverage);
             newStudent->SetStudent(__studentId, __studentLastName, __student_Name, __zipcode, __studentEntryYear, __lessonsAverage);
-            // here we need to implement adding the student to our hashtable
-            HashTable.InsertStudent(newStudent);
-            InvertedIndexTable.InsertStudentReference(newStudent);
+
+            studentLocation = HashTable.InsertStudent(newStudent);
+            cout << "studentLocation:\t" << studentLocation << endl;
+            
+            InvertedIndexTable.InsertStudentReference(__studentEntryYear, studentLocation);
+
             studentsIdArray[counter] = __studentId;
             ++counter;
         }

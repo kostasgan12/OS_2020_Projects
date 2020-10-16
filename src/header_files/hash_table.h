@@ -33,7 +33,7 @@ public:
 
     int HashFunc(string key);
 
-    void InsertStudent(Student* student);
+    StudentHashTableEntry * InsertStudent(Student *student);
     void LookUpStudent(string id);
     void DeleteStudent(string id);
     void ShowAllStudents();

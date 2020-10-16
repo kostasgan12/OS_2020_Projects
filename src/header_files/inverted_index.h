@@ -7,22 +7,23 @@
 
 #include "main.h"
 #include "student_class.h"
+#include "hash_table.h"
 #include "../helpers/helper_functions.h"
 
 struct InvertedIndexEntry
 {
     // Student  studentLocationP;
     int year;
-    Student * studentLocationP; //we want to store a pointer to a student, actually we want to store the student record location
+    StudentHashTableEntry *studentLocationP; //we want to store a pointer to a student, actually we want to store the student record location
     InvertedIndexEntry *nextInvIndexEntry;
     InvertedIndexEntry *p;
 
     // InvertedIndexEntry(Student *studentPassed);
     InvertedIndexEntry(int yearPassed);
-    InvertedIndexEntry(int yearPassed, Student *studentPassed);
+    InvertedIndexEntry(int yearPassed, StudentHashTableEntry *studentPassed);
 
     int getIndexYear() { return year; }
-    Student *getStudentLocationP() { return studentLocationP; }
+    StudentHashTableEntry *getStudentLocationP() { return studentLocationP; }
 };
 
 class InvertedIndex
@@ -34,7 +35,7 @@ public:
     InvertedIndex();
     ~InvertedIndex();
 
-    void InsertStudentReference(Student *student);
+    void InsertStudentReference(int yearToBeInserted, StudentHashTableEntry *student);
     void DeleteStudentReference(string id);
     void ShowAllStudentsInYear(int yearRequested);
 };

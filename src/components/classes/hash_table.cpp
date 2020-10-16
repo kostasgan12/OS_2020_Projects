@@ -22,8 +22,7 @@ StudentHashTable::StudentHashTable()
         studentHashTable[i] = NULL;
 }
 
-
-void StudentHashTable::InsertStudent(Student * student)
+StudentHashTableEntry * StudentHashTable::InsertStudent(Student *student)
 {
     int hash_v = HashFunc(student->getStudentId());
 
@@ -60,6 +59,7 @@ void StudentHashTable::InsertStudent(Student * student)
         en->studentData = * student;
     }
     // cout << "########################################################################" << endl;
+    return en;
 }
 
 void StudentHashTable::LookUpStudent(string id)

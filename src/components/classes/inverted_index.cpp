@@ -8,14 +8,12 @@ InvertedIndexEntry::InvertedIndexEntry(int yearPassed)
         nextInvIndexEntry(NULL)
     {}
 
-InvertedIndexEntry::InvertedIndexEntry(int yearPassed, Student *studentPassed)
-    : year(yearPassed),
-        studentLocationP(studentPassed),
-        nextInvIndexEntry(NULL)
-{
-    cout << "In InvertedIndexEntry for student construction"<<endl;
-    // cout << "studentPassed is ==>:\t" << studentPassed << endl;
-    cout << "studentLocationP is ==>:\t" << studentLocationP << endl;
+    InvertedIndexEntry::InvertedIndexEntry(int yearPassed, StudentHashTableEntry *studentPassed)
+        : year(yearPassed),
+          studentLocationP(studentPassed),
+          nextInvIndexEntry(NULL)
+    {
+        // cout << "studentLocationP is ==>:\t" << studentLocationP << endl;
 }
 
 
@@ -32,30 +30,30 @@ InvertedIndex::InvertedIndex()
     }
 }
 
-void InvertedIndex::InsertStudentReference(Student *student){
-    int yearToBeInserted = student->getStudentEntryYear();
-    // cout<<student->getStudentLastName()<<"\tshould be entered at year:\t"<<yearToBeInserted<<endl;
-    int yearPositionInIndexTable = student->getStudentEntryYear() - invertedStartYear;
-    // cout << "yearToBeInserted is at position:\t" << yearPositionInIndexTable << endl;
+void InvertedIndex::InsertStudentReference(int yearToBeInserted, StudentHashTableEntry *student)
+{
+    int yearPositionInIndexTable = yearToBeInserted - invertedStartYear;
 
     InvertedIndexEntry *p = NULL; //initialize p with NULL
     InvertedIndexEntry *currentEntry = invertedIndex[yearPositionInIndexTable];
 
-    if (currentEntry->nextInvIndexEntry == NULL)
+    //currentEntry when initialized, should point at an empty Entry, 
+    //That only contains our Header Year, so we check if a next Entry Exists, 
+    //which would mean there is a student entered.
+    if (currentEntry->nextInvIndexEntry == NULL)    
     {
-        cout<<"first instance of year\t"<<yearToBeInserted<<endl;
         cout<<"student location TO BE INSERTED:\t"<<student<<endl;
         currentEntry->nextInvIndexEntry = new InvertedIndexEntry(yearToBeInserted, student);
     }
     else
     {   
         while (currentEntry->nextInvIndexEntry != NULL){
-            // cout << "currentEntry already has student with reference pointer:\t";
-            // cout << currentEntry->getStudentLocationP() << endl;
             p = currentEntry;
             currentEntry = currentEntry->nextInvIndexEntry;
 
-            cout << p->studentLocationP << endl;
+            cout << "space at:\t" << currentEntry->studentLocationP <<"\tocupied by:\t";
+            cout << currentEntry->studentLocationP->studentData.getStudentLastName() << endl;
+            
         }
     }
 }
