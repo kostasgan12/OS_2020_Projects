@@ -64,6 +64,28 @@ void InvertedIndex::InsertStudentReference(int yearToBeInserted, StudentHashTabl
     }
 }
 
+void InvertedIndex::FindActiveUsersInAcademicYear(int academicYear)
+{
+    int entryYearRetrieved = invertedEndYear - academicYear +1;
+    int yearPositionInIndexTable = entryYearRetrieved - invertedStartYear;
+    int counter = 0;
+
+    InvertedIndexEntry *currentEntry = invertedIndex[yearPositionInIndexTable];
+
+    cout << "\n########################################################################\n"<< endl;
+
+    currentEntry = currentEntry->nextInvIndexEntry;
+    if (currentEntry != NULL)
+    {
+        while (currentEntry != NULL)
+        {
+            counter++;
+            currentEntry = currentEntry->nextInvIndexEntry;
+        }
+    }
+    cout << counter << " Students Were Found Active In Their:\t" << academicYear<<"\tAcademic Year" << endl;
+}
+
 void InvertedIndex::CountStudentsInYear(int yearRequested)
 {
     int yearPositionInIndexTable = yearRequested - invertedStartYear;
@@ -71,7 +93,7 @@ void InvertedIndex::CountStudentsInYear(int yearRequested)
 
     InvertedIndexEntry *currentEntry = invertedIndex[yearPositionInIndexTable];
 
-    cout << "########################################################################\n" << endl;
+    cout << "\n########################################################################\n" << endl;
 
     currentEntry = currentEntry->nextInvIndexEntry;
     if (currentEntry != NULL)
@@ -93,7 +115,7 @@ void InvertedIndex::ShowAllStudentsInYear(int yearRequested)
 
     InvertedIndexEntry *currentEntry = invertedIndex[yearPositionInIndexTable];
 
-    cout << "########################################################################\n"
+    cout << "\n########################################################################\n"
          << endl;
 
     currentEntry = currentEntry->nextInvIndexEntry;
@@ -104,7 +126,6 @@ void InvertedIndex::ShowAllStudentsInYear(int yearRequested)
             cout << "found student with id:\t" << currentEntry->studentLocationP->studentData.getStudentId();
             cout << "\tand name:\t" << currentEntry->studentLocationP->studentData.getStudentLastName() << "\t";
             cout << currentEntry->studentLocationP->studentData.getStudentFirstName();
-            cout << "\tat location ===>\t" << currentEntry << endl;
 
             currentEntry = currentEntry->nextInvIndexEntry;
         }

@@ -247,10 +247,10 @@ int main(int argc, char *argv[])
             HashTable.DeleteStudent(stuToBe_id);
             break;
         case 4:
-            HashTable.ShowAllStudents();
-            // cout << "Enter Year: ";
-            // cin >> year;
-            // HashTable.Remove(k);
+            // HashTable.ShowAllStudents();
+            cout << "Enter Year: ";
+            cin >> year;
+            InvertedIndexTable.FindActiveUsersInAcademicYear(year);
             break;
         case 5:
             // cout << "Enter Number of Students: ";

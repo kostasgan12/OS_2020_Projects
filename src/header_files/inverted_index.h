@@ -38,6 +38,7 @@ public:
     void InsertStudentReference(int yearToBeInserted, StudentHashTableEntry *student);
     void DeleteStudentReference(string id);
     void ShowAllStudentsInYear(int yearRequested);
+    void FindActiveUsersInAcademicYear(int academicYear);
     void CountStudentsInYear(int yearRequested);
 };
 
