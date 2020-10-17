@@ -110,12 +110,10 @@ int StudentHashTable::DeleteStudent(string id)
     {
         while (en->nextSt != NULL)
         {
-            cout << "studnet is\t" << en->studentData.getStudentLastName() << endl;
             p = en;
             en = en->nextSt;
             if (en->studentData.getStudentId() == id)
             {
-                cout << "Student found!!!\t" << en->studentData.getStudentLastName() << endl;
                 flag = true;
             }
         }
@@ -128,12 +126,15 @@ int StudentHashTable::DeleteStudent(string id)
     {
         studentEntryYearToReturn = en->studentData.getStudentEntryYear();
         p->nextSt = en->nextSt;
-        cout << "Student with id:\t" << id << "\tDeleted" << endl;
+        cout << "Student with id:\t" << id << "\tSuccessfully Deleted From Our Hash Table" << endl;
     }
     else
     {
         cout << "No Student found with id " << id << endl;
     }
+    cout << "\n########################################################################\n"
+         << endl;
+
     delete en;
 
     return studentEntryYearToReturn;
@@ -172,8 +173,7 @@ int StudentHashTable::FindStudentEntryYear(string id)
     int entryYearToReturn = 0;
 
     StudentHashTableEntry *en = studentHashTable[hash_v];
-    cout << "\n########################################################################\n"
-         << endl;
+    
     if (en != NULL)
     {
         while (en != NULL)
@@ -181,23 +181,11 @@ int StudentHashTable::FindStudentEntryYear(string id)
             if (en->key == key)
             {
                 flag = true;
-                cout << "Student Found With Details:\n\n";
-                cout << "ID-> \t\t" << en->studentData.getStudentId()
-                     << "\nSurname->\t" << en->studentData.getStudentLastName()
-                     << "\nName->\t\t" << en->studentData.getStudentFirstName()
-                     << "\nZipCode->\t" << en->studentData.getStudentZipCode()
-                     << "\nEntry Year->\t" << en->studentData.getStudentEntryYear()
-                     << "\nGPA->\t\t" << en->studentData.getStudentLessonAverage() << endl;
-
                 entryYearToReturn = en->studentData.getStudentEntryYear();
             }
             en = en->nextSt;
         }
     }
-    if (!flag)
-        cout << "No Element found at key " << key << endl;
-    cout << "\n########################################################################\n"
-         << endl;
 
     delete en;
 

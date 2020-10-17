@@ -246,9 +246,16 @@ int main(int argc, char *argv[])
 
             year = HashTable.FindStudentEntryYear(stuToBe_id);
 
-            InvertedIndexTable.DeleteStudentReference(year, stuToBe_id);
-
-            HashTable.DeleteStudent(stuToBe_id);
+            if (year > 0){
+                InvertedIndexTable.DeleteStudentReference(year, stuToBe_id);
+                HashTable.DeleteStudent(stuToBe_id);
+            }else{
+                cout << "\n########################################################################\n"
+                     << endl;
+                cout << "No Student Found With ID:\t"<<stuToBe_id<<"\tTry Again."<<endl;
+                cout << "\n########################################################################\n"
+                     << endl;
+            }
             break;
         case 4:
             // HashTable.ShowAllStudents();

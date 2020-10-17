@@ -75,23 +75,18 @@ void InvertedIndex::DeleteStudentReference(int entryYear, string id)
 
     cout << "\n########################################################################\n"
          << endl;
-    cout<<"before if"<<endl;
-
+         
     currentEntry = currentEntry->nextInvIndexEntry;
     if (currentEntry != NULL) //check if first entry of this position in the hashtable is null, if not then we can search for the item, if its there
     {
-        cout << "in if, before while" << endl;
         while (currentEntry != NULL)
         {
-            cout << "studnet is\t" << currentEntry->studentLocationP->studentData.getStudentLastName() << endl;
-            
             p = currentEntry;
             currentEntry = currentEntry->nextInvIndexEntry;
 
 
             if (currentEntry->studentLocationP->studentData.getStudentId() == id)
             {
-                cout << "Student found!!!\t" << currentEntry->studentLocationP->studentData.getStudentLastName() << endl;
                 flag = true;
                 break;
             }
@@ -106,7 +101,7 @@ void InvertedIndex::DeleteStudentReference(int entryYear, string id)
     if (flag)
     {
         p->nextInvIndexEntry = currentEntry->nextInvIndexEntry;
-        cout << "Student with id:\t" << id << "\tDeleted" << endl;
+        cout << "Student with id:\t" << id << "\t Successfully Removed Reference From Our Inverted Index Table" << endl;
     }
     else
     {
