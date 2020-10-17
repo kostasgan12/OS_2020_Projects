@@ -16,7 +16,7 @@ Student::Student(){};
 // Student::Student(){}
 
 void Student::SetStudent(string __studentId, string __studentLastName, string __student_Name,
-                         int __zipcode, int __studentEntryYear, float __lessonsAverage)
+                         string __zipcode, int __studentEntryYear, float __lessonsAverage)
 {
     studentID = __studentId;
     studentLastName = __studentLastName;

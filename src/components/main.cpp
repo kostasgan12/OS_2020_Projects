@@ -4,6 +4,7 @@ int hashTableSize;
 int invertedStartYear;
 int invertedEndYear;
 int invertedTableSize;
+int studentSum;
 
 int main(int argc, char *argv[])
 {
@@ -129,10 +130,10 @@ int main(int argc, char *argv[])
 
     /////////////////////////////// I N P U T  F I L E /////////////////////////////////
 
-    int __zipcode, __studentEntryYear;
-    string __studentId, __studentLastName, __student_Name;
+    int __studentEntryYear;
+    string __studentId, __studentLastName, __student_Name, __zipcode;
     float __lessonsAverage;
-    int studentSum = 0;
+    int inputFileStudentSum = 0;
 
     int counter = 0;
 
@@ -141,7 +142,7 @@ int main(int argc, char *argv[])
     {
         if (buffer.length() != 0)
         {                                                                                       //check if empty line
-            ++studentSum;
+            ++inputFileStudentSum;
         }
         else
         {
@@ -155,7 +156,7 @@ int main(int argc, char *argv[])
     InvertedIndex InvertedIndexTable;
 
     Student *newStudent = new Student();
-    string studentsIdArray[studentSum]; // array used for checking for student duplicates
+    string studentsIdArray[inputFileStudentSum]; // array used for checking for student duplicates
 
     StudentHashTableEntry *studentLocation = NULL;
 
@@ -195,19 +196,18 @@ int main(int argc, char *argv[])
         }
     }
     infile.close(); //closing text file
-
+    cout << "studentSum IN MAIN AFTER ENTERING:\t" << studentSum << endl;
     //////////////////////////////////////////////////////////////////////////////////////
 
     ////////stuToBe == student to be inserted////////
 
     int choice;
 
-    int stuToBe_zip_code, stuToBe_entry_year; 
+    int stuToBe_entry_year; 
     float stuToBe_lesson_average;
-    string stuToBe_id, stuToBe_last_name, stuToBe_first_name;
+    string stuToBe_id, stuToBe_last_name, stuToBe_first_name, stuToBe_zip_code;
 
-    int year, numberOfStudents;
-
+    int year, numberOfStudents,rank;
     Student *newStudentInsert;
 
     while (1)
@@ -286,8 +286,8 @@ int main(int argc, char *argv[])
             break;
         case 9:
             cout << "Enter rank: ";
-            cin >> year;
-            // HashTable.Remove(k);
+            cin >> rank;
+            InvertedIndexTable.FindNMostPopularZipCode(rank);
             break;
         case 10:
             exit(1);

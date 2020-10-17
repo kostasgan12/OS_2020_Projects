@@ -19,6 +19,7 @@ extern int hashTableSize;
 extern int invertedStartYear;
 extern int invertedEndYear;
 extern int invertedTableSize;
+extern int studentSum;
 
 using namespace std;
 

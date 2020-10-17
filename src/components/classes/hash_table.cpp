@@ -60,6 +60,8 @@ StudentHashTableEntry * StudentHashTable::InsertStudent(Student *student)
     }
     // cout << "########################################################################" << endl;
     // delete en;
+    studentSum++;
+    cout << "studentSum in hashtable insert:\t" << studentSum << endl;
     return en;
 }
 
@@ -126,6 +128,7 @@ int StudentHashTable::DeleteStudent(string id)
     {
         studentEntryYearToReturn = en->studentData.getStudentEntryYear();
         p->nextSt = en->nextSt;
+        studentSum--;
         cout << "Student with id:\t" << id << "\tSuccessfully Deleted From Our Hash Table" << endl;
     }
     else
@@ -140,29 +143,14 @@ int StudentHashTable::DeleteStudent(string id)
     return studentEntryYearToReturn;
 }
 
-void StudentHashTable::ShowAllStudents(){
-    for (int i = 0; i < hashTableSize; i++)
-    {
-        if(studentHashTable[i]!= NULL){
-            cout << "########################################################################" << endl;
-            cout<<"for index: "<<i<< " we have students. Lets See Them"<<endl;
-            StudentHashTableEntry *en = studentHashTable[i];
-            while(en != NULL){
-                cout << "found student with id:\t"<<en->studentData.getStudentId();
-                cout << "\tand name:\t" << en->studentData.getStudentLastName()<< "\t" << en->studentData.getStudentFirstName() << endl;
-                cout<< "at location ===>\t"<<en<<endl;
-                en = en->nextSt;
-            }
-        }
-    }
-
-    // delete en;
+StudentHashTable::~StudentHashTable()
+{
+    delete[] studentHashTable;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////// H E L P E R S ////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////
-
 
 int StudentHashTable::FindStudentEntryYear(string id)
 {
@@ -192,7 +180,24 @@ int StudentHashTable::FindStudentEntryYear(string id)
     return entryYearToReturn;
 }
 
-StudentHashTable::~StudentHashTable()
+void StudentHashTable::ShowAllStudents()
 {
-    delete[] studentHashTable;
+    for (int i = 0; i < hashTableSize; i++)
+    {
+        if (studentHashTable[i] != NULL)
+        {
+            cout << "########################################################################" << endl;
+            cout << "for index: " << i << " we have students. Lets See Them" << endl;
+            StudentHashTableEntry *en = studentHashTable[i];
+            while (en != NULL)
+            {
+                cout << "found student with id:\t" << en->studentData.getStudentId();
+                cout << "\tand name:\t" << en->studentData.getStudentLastName() << "\t" << en->studentData.getStudentFirstName() << endl;
+
+                en = en->nextSt;
+            }
+        }
+    }
+
+    // delete en;
 }

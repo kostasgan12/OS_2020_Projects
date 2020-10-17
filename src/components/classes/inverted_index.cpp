@@ -37,7 +37,8 @@ void InvertedIndex::InsertStudentReference(int yearToBeInserted, StudentHashTabl
     //That only contains our Header Year, so we check if a next Entry Exists, 
     //which would mean there is a student entered.
 
-    if (currentEntry->nextInvIndexEntry == NULL)   
+    // currentEntry = currentEntry->nextInvIndexEntry;
+    if (currentEntry->nextInvIndexEntry == NULL)
     //table for this year hasnt got any student records 
     {
         currentEntry->nextInvIndexEntry = new InvertedIndexEntry(yearToBeInserted, student);
@@ -46,8 +47,16 @@ void InvertedIndex::InsertStudentReference(int yearToBeInserted, StudentHashTabl
     else
     //table for this year already has student records
     {
-        p = currentEntry;
-        currentEntry = currentEntry->nextInvIndexEntry;
+        // p = currentEntry;
+        // currentEntry = currentEntry->nextInvIndexEntry;
+        // while (currentEntry != NULL)
+        // {
+        //     p = currentEntry;
+        //     currentEntry = currentEntry->nextInvIndexEntry;
+        // }
+
+        // p->nextInvIndexEntry = new InvertedIndexEntry(yearToBeInserted, student);
+        
         while (currentEntry != NULL)
         {
             p = currentEntry;
@@ -57,7 +66,7 @@ void InvertedIndex::InsertStudentReference(int yearToBeInserted, StudentHashTabl
         p->nextInvIndexEntry = new InvertedIndexEntry(yearToBeInserted, student);
     }
 
-    delete p;
+    // delete p;
 }
 
 void InvertedIndex::DeleteStudentReference(int entryYear, string id)
@@ -72,20 +81,26 @@ void InvertedIndex::DeleteStudentReference(int entryYear, string id)
     cout << "\n########################################################################\n"
          << endl;
 
-    currentEntry = currentEntry->nextInvIndexEntry;
+
+    currentEntry = currentEntry->nextInvIndexEntry; //first item of invertedindx contains only the year, student items start from the second
     if (currentEntry != NULL) //check if first entry of this position in the hashtable is null, if not then we can search for the item, if its there
     {
         while (currentEntry != NULL)
         {
-            p = currentEntry;
-            currentEntry = currentEntry->nextInvIndexEntry;
+            // p = currentEntry;
+            // currentEntry = currentEntry->nextInvIndexEntry;
 
+            cout << "comparing " << currentEntry->studentLocationP->studentData.getStudentId() << " with given id: " << id << endl;
 
             if (currentEntry->studentLocationP->studentData.getStudentId() == id)
             {
                 flag = true;
+                cout << "student found" << endl;
                 break;
             }
+
+            p = currentEntry;
+            currentEntry = currentEntry->nextInvIndexEntry;
         }
     }
     else
@@ -97,6 +112,7 @@ void InvertedIndex::DeleteStudentReference(int entryYear, string id)
     if (flag)
     {
         p->nextInvIndexEntry = currentEntry->nextInvIndexEntry;
+        // p->nextInvIndexEntry = currentEntry;
         cout << "Student with id:\t" << id << "\t Successfully Removed Reference From Our Inverted Index Table" << endl;
     }
     else
@@ -333,6 +349,127 @@ void InvertedIndex::MinGPAStudentOfYear(int yearRequested)
     delete currentEntry;
 }
 
+void InvertedIndex::FindNMostPopularZipCode(int rank){
+
+    cout << "studentSum:\t"<< studentSum << endl;
+
+    int isArrayFilledCounter = 0;
+
+    // string popularZipCodePerYear[invertedTableSize];
+
+    // for (int i = 0; i < invertedTableSize; i++)
+    // {
+    //     popularZipCodePerYear[i] = "null";
+    // }
+
+    InvertedIndexEntry *currentEntry;
+
+    ZipCodeEntry zipCodeArray[studentSum];
+
+    for (int j = 0; j < studentSum; j++)
+    {
+        zipCodeArray[j].zipCode="null";
+        zipCodeArray[j].zipCodeCount=0;
+    }
+
+    string tmpZipCode;
+
+        for (int i = 0; i < invertedTableSize; i++)
+    {
+        //we want to loop for every year!
+        currentEntry = invertedIndex[i];
+        cout << "\n########################################################################\n"
+             << endl;
+        cout << "Searching for year ->\t" << currentEntry->year << endl;
+        cout << "\n########################################################################\n"
+             << endl;
+
+        currentEntry = currentEntry->nextInvIndexEntry;
+        if (currentEntry != NULL)
+        {
+            //check if this year is empty of students
+
+            int whileCounter = 0;
+            int isArrayFilledCounter = 0;
+            bool foundDuplicate;
+            while (currentEntry != NULL)
+            {
+                //looping over every student in i year
+
+                tmpZipCode = currentEntry->studentLocationP->studentData.getStudentZipCode();
+
+                cout << "this students zipcode is\t"<<tmpZipCode<<endl;
+
+                //check if zipcode already exists in zipCodeArray
+                foundDuplicate=false;
+                for (int k = 0; k < studentSum; k++)
+                {
+                    if (zipCodeArray[k].zipCode == tmpZipCode)
+                    {
+                        cout<<"zipcode: "<<tmpZipCode<<" already exists, we increase counter"<<endl;
+                        zipCodeArray[k].zipCodeCount++;
+                        foundDuplicate =true;
+                    }
+                }
+
+                //else if the zipcode doesnt alredy exist we must add
+                if(!foundDuplicate){
+                    while(zipCodeArray[whileCounter].zipCodeCount != 0){
+                        whileCounter++;
+                    }
+                    cout<<"found first available slot at position: "<<whileCounter<<endl;
+                    zipCodeArray[whileCounter].zipCode = tmpZipCode;
+                    zipCodeArray[whileCounter].zipCodeCount++;
+                }
+
+                isArrayFilledCounter++;
+                currentEntry = currentEntry->nextInvIndexEntry;
+            }
+        }
+    }
+
+    int arrayIndex = 0;
+    while (zipCodeArray[arrayIndex].zipCodeCount != 0)
+    {
+        cout << "Zip Code: " << zipCodeArray[arrayIndex].zipCode << " Was Found: " << zipCodeArray[arrayIndex].zipCodeCount << " Times." << endl;
+        arrayIndex++;
+    }
+
+    // cout << "Top\t" << rank << "\tGPAs Students For Year\t" << yearRequested << "\n"
+    //      << endl;
+
+    // float __gpa;
+    // for (int i = 0; i < rank; i++)
+    // {
+    //     __gpa = 0;
+
+    //     if (bestNGPA[i] != -1)
+    //     {
+
+    //         cout << "Students With GPA Equal To:\t" << bestNGPA[i] << "\n\n";
+
+    //         currentEntry = invertedIndex[0]->nextInvIndexEntry;
+
+    //         while (currentEntry != NULL)
+    //         {
+    //             __gpa = currentEntry->studentLocationP->studentData.getStudentLessonAverage();
+
+    //             if (__gpa == bestNGPA[i])
+    //             {
+    //                 cout << "Student Details\nID->\t" << currentEntry->studentLocationP->studentData.getStudentId();
+    //                 cout << "\nName->\t" << currentEntry->studentLocationP->studentData.getStudentLastName() << " ";
+    //                 cout << currentEntry->studentLocationP->studentData.getStudentFirstName() << "\n";
+    //                 cout << "ZipCode->\t" << currentEntry->studentLocationP->studentData.getStudentZipCode() << "\n"
+    //                      << endl;
+    //             }
+    //             currentEntry = currentEntry->nextInvIndexEntry;
+    //         }
+    //         cout << "\n";
+    //     }
+    // }
+
+}
+
 void InvertedIndex::CountStudentsPerYear()
 {
     int counter;
@@ -340,7 +477,7 @@ void InvertedIndex::CountStudentsPerYear()
 
     int yearSearching = 0;
     
-    for (int i = 0; i < invertedTableSize; i++)
+    for (int i = 0; i < invertedTableSize; i++ )    //loop every year
     {
         counter = 0;
             cout
@@ -351,7 +488,7 @@ void InvertedIndex::CountStudentsPerYear()
 
         currentEntry = invertedIndex[i];
 
-        currentEntry = currentEntry->nextInvIndexEntry;
+        currentEntry = currentEntry->nextInvIndexEntry;     //initialize with second item in inverted index because the first always contains the yaer
 
         if (currentEntry != NULL)
         {

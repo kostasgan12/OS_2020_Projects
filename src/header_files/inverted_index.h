@@ -10,6 +10,8 @@
 #include "hash_table.h"
 #include "../helpers/helper_functions.h"
 
+// #include "linked_list.h"
+
 struct StudentHashTableEntry;
 
 struct InvertedIndexEntry
@@ -22,6 +24,12 @@ struct InvertedIndexEntry
     // InvertedIndexEntry(Student *studentPassed);
     InvertedIndexEntry(int yearPassed);
     InvertedIndexEntry(int yearPassed, StudentHashTableEntry *studentPassed);
+};
+
+struct ZipCodeEntry
+{
+    string zipCode;
+    int zipCodeCount;
 };
 
 class InvertedIndex

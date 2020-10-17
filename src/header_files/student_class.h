@@ -13,7 +13,7 @@ private:
     string studentID;
     string studentLastName;
     string studentFirstName;
-    int studentZipCode;
+    string studentZipCode;
     int studentEntryYear;
     float studentLessonAverage;
 
@@ -24,12 +24,12 @@ public:
     ~Student();
 
     void SetStudent(string __studentId, string __studentLastName, string __student_Name,
-            int __zipcode, int __studentEntryYear, float __lessonsAverage);
+            string __zipcode, int __studentEntryYear, float __lessonsAverage);
 
     string getStudentId() { return studentID; }
     string getStudentLastName() { return studentLastName; }
     string getStudentFirstName() { return studentFirstName; }
-    int getStudentZipCode() { return studentZipCode; }
+    string getStudentZipCode() { return studentZipCode; }
     int getStudentEntryYear() { return studentEntryYear; }
     float getStudentLessonAverage() { return studentLessonAverage; }
 };
