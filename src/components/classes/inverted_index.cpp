@@ -12,9 +12,7 @@ InvertedIndexEntry::InvertedIndexEntry(int yearPassed, StudentHashTableEntry *st
     : year(yearPassed),
         studentLocationP(studentPassed),
         nextInvIndexEntry(NULL)
-{
-        cout << "studentLocationP is ==>:\t" << studentLocationP << endl;
-}
+{}
 
 
 InvertedIndex::InvertedIndex()
@@ -42,7 +40,6 @@ void InvertedIndex::InsertStudentReference(int yearToBeInserted, StudentHashTabl
     if (currentEntry->nextInvIndexEntry == NULL)   
     //table for this year hasnt got any student records 
     {
-        cout<<"first element for year:\t"<<yearToBeInserted<<endl;
         currentEntry->nextInvIndexEntry = new InvertedIndexEntry(yearToBeInserted, student);
         // cout << "student entered and currentEntry->nextInvIndexEntry is:\t" << currentEntry->nextInvIndexEntry->studentLocationP->studentData.getStudentLastName() << endl;
     }
@@ -53,9 +50,6 @@ void InvertedIndex::InsertStudentReference(int yearToBeInserted, StudentHashTabl
         currentEntry = currentEntry->nextInvIndexEntry;
         while (currentEntry != NULL)
         {
-            cout << "space at:\t" << currentEntry->studentLocationP <<"\toccupied by:\t";
-            cout << currentEntry->studentLocationP->studentData.getStudentLastName() << endl;
-            
             p = currentEntry;
             currentEntry = currentEntry->nextInvIndexEntry;
         }
@@ -257,15 +251,20 @@ void InvertedIndex::FindNBestStudentsOfYear(int num, int yearRequested)
                         bestNGPA[i] = tmpGPA;
                         cout << "bestNGPA[" << i << "] set as:\t" << bestNGPA[i]<<"\n" << endl;
 
-                        minGPA = bestNGPA[0];
+
+                        //looking for new minGPA
+                        minGPA = bestNGPA[0];   //set it as the first students GPA nad start seaching from the second
                         for (int j = 1; j < num; j++)
                         {
                             if(bestNGPA[j]<minGPA){
-                                cout<<"in min searchhhhhh bestNGPA["<<j<<"] is\t"<<bestNGPA[j]<<endl;
-                                minGPA = tmpGPA;
+                                cout << "in min searchhhhhh bestNGPA[" << j << "] is\t" << bestNGPA[j] << "\tand minGpa -> " << minGPA << endl;
+                                minGPA = bestNGPA[j];
+                            }else{
+                                cout << "bestNGPA[" << j << "] -> " << bestNGPA[j] << "\tand minGpa -> " << minGPA<< endl;
                             }
+                            
+                            cout << "\nminGPA set as:\t" << minGPA << endl;
                         }
-                        cout << "\nminGPA set as:\t" << minGPA << endl;
 
                         break;
                     }
