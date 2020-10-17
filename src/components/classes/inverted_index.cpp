@@ -75,7 +75,7 @@ void InvertedIndex::DeleteStudentReference(int entryYear, string id)
 
     cout << "\n########################################################################\n"
          << endl;
-         
+
     currentEntry = currentEntry->nextInvIndexEntry;
     if (currentEntry != NULL) //check if first entry of this position in the hashtable is null, if not then we can search for the item, if its there
     {
@@ -223,26 +223,39 @@ void InvertedIndex::FindNBestStudentsOfYear(int num, int yearRequested)
     }
 }
 
-void InvertedIndex::CountStudentsInYear(int yearRequested)
+void InvertedIndex::CountStudentsPerYear()
 {
-    int yearPositionInIndexTable = yearRequested - invertedStartYear;
-    int counter = 0;
+    int counter;
+    InvertedIndexEntry *currentEntry;
 
-    InvertedIndexEntry *currentEntry = invertedIndex[yearPositionInIndexTable];
-
-    cout << "\n########################################################################\n" << endl;
-
-    currentEntry = currentEntry->nextInvIndexEntry;
-    if (currentEntry != NULL)
+    int yearSearching = 0;
+    
+    for (int i = 0; i < invertedTableSize; i++)
     {
-        while (currentEntry != NULL)
+        counter = 0;
+            cout
+        << "\n########################################################################\n"
+        << endl;
+
+        yearSearching = i + invertedStartYear;
+
+        currentEntry = invertedIndex[i];
+
+        currentEntry = currentEntry->nextInvIndexEntry;
+
+        if (currentEntry != NULL)
         {
-            counter++;
-            currentEntry = currentEntry->nextInvIndexEntry;
+            while (currentEntry != NULL)
+            {
+                counter++;
+                currentEntry = currentEntry->nextInvIndexEntry;
+            }
+            cout << yearSearching << ":\t" << counter << "\tStudents Were Found." << endl;
         }
-        cout << "\n"<<counter<<" Students Were Found With Entry Year:\t" << yearRequested << endl;
-    }else{
-        cout << "No Students Were Found With Entry Year:\t"<<yearRequested<<endl;
+        else
+        {
+            cout << yearSearching << ":\t" << "\tNo Students Were Found." << endl;
+        }
     }
 }
 

@@ -281,9 +281,7 @@ int main(int argc, char *argv[])
             cin >> year;
             break;
         case 8:
-            cout << "Enter Year To Search: ";
-            cin >> year;
-            InvertedIndexTable.CountStudentsInYear(year);
+            InvertedIndexTable.CountStudentsPerYear();
             break;
         case 9:
             cout << "Enter rank: ";
