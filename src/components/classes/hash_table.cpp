@@ -59,6 +59,7 @@ StudentHashTableEntry * StudentHashTable::InsertStudent(Student *student)
         en->studentData = * student;
     }
     // cout << "########################################################################" << endl;
+    // delete en;
     return en;
 }
 
@@ -91,11 +92,11 @@ void StudentHashTable::LookUpStudent(string id)
     if (!flag)
         cout << "No Element found at key " << key << endl;
     cout << "\n########################################################################\n" << endl;
+    delete en;
 }
 
-//TODO Delete needs refactoring
 
-void StudentHashTable::DeleteStudent(string id)
+int StudentHashTable::DeleteStudent(string id)
 {
     int key = transform_id(id);
     int hash_v = HashFunc(id);
@@ -103,6 +104,7 @@ void StudentHashTable::DeleteStudent(string id)
     StudentHashTableEntry *p = NULL;
     
     bool flag= false;
+    int studentEntryYearToReturn = 0;
 
     if (en != NULL) //check if first entry of this position in the hashtable is null, if not then we can search for the item, if its there
     {
@@ -119,11 +121,12 @@ void StudentHashTable::DeleteStudent(string id)
         }
     }else{
         cout << "No Student found with id " << id << endl;
-        return;
+        return studentEntryYearToReturn;
     }
-    
+
     if (flag && p != NULL)
     {
+        studentEntryYearToReturn = en->studentData.getStudentEntryYear();
         p->nextSt = en->nextSt;
         cout << "Student with id:\t" << id << "\tDeleted" << endl;
     }
@@ -132,6 +135,8 @@ void StudentHashTable::DeleteStudent(string id)
         cout << "No Student found with id " << id << endl;
     }
     delete en;
+
+    return studentEntryYearToReturn;
 }
 
 void StudentHashTable::ShowAllStudents(){
@@ -149,6 +154,54 @@ void StudentHashTable::ShowAllStudents(){
             }
         }
     }
+
+    // delete en;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////// H E L P E R S ////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////
+
+
+int StudentHashTable::FindStudentEntryYear(string id)
+{
+    int key = transform_id(id);
+    int hash_v = HashFunc(id);
+    bool flag = false;
+
+    int entryYearToReturn = 0;
+
+    StudentHashTableEntry *en = studentHashTable[hash_v];
+    cout << "\n########################################################################\n"
+         << endl;
+    if (en != NULL)
+    {
+        while (en != NULL)
+        {
+            if (en->key == key)
+            {
+                flag = true;
+                cout << "Student Found With Details:\n\n";
+                cout << "ID-> \t\t" << en->studentData.getStudentId()
+                     << "\nSurname->\t" << en->studentData.getStudentLastName()
+                     << "\nName->\t\t" << en->studentData.getStudentFirstName()
+                     << "\nZipCode->\t" << en->studentData.getStudentZipCode()
+                     << "\nEntry Year->\t" << en->studentData.getStudentEntryYear()
+                     << "\nGPA->\t\t" << en->studentData.getStudentLessonAverage() << endl;
+
+                entryYearToReturn = en->studentData.getStudentEntryYear();
+            }
+            en = en->nextSt;
+        }
+    }
+    if (!flag)
+        cout << "No Element found at key " << key << endl;
+    cout << "\n########################################################################\n"
+         << endl;
+
+    delete en;
+
+    return entryYearToReturn;
 }
 
 StudentHashTable::~StudentHashTable()

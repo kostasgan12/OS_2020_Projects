@@ -34,8 +34,10 @@ public:
 
     StudentHashTableEntry * InsertStudent(Student *student);
     void LookUpStudent(string id);
-    void DeleteStudent(string id);
+    int DeleteStudent(string id);
     void ShowAllStudents();
+
+    int FindStudentEntryYear(string id);
 };
 
 #endif

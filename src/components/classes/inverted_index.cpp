@@ -64,6 +64,59 @@ void InvertedIndex::InsertStudentReference(int yearToBeInserted, StudentHashTabl
     }
 }
 
+void InvertedIndex::DeleteStudentReference(int entryYear, string id)
+{
+    int yearPositionInIndexTable = entryYear - invertedStartYear;
+
+    InvertedIndexEntry *p = NULL;
+    InvertedIndexEntry *currentEntry = invertedIndex[yearPositionInIndexTable];
+
+    bool flag = false;
+
+    cout << "\n########################################################################\n"
+         << endl;
+    cout<<"before if"<<endl;
+
+    currentEntry = currentEntry->nextInvIndexEntry;
+    if (currentEntry != NULL) //check if first entry of this position in the hashtable is null, if not then we can search for the item, if its there
+    {
+        cout << "in if, before while" << endl;
+        while (currentEntry != NULL)
+        {
+            cout << "studnet is\t" << currentEntry->studentLocationP->studentData.getStudentLastName() << endl;
+            
+            p = currentEntry;
+            currentEntry = currentEntry->nextInvIndexEntry;
+
+
+            if (currentEntry->studentLocationP->studentData.getStudentId() == id)
+            {
+                cout << "Student found!!!\t" << currentEntry->studentLocationP->studentData.getStudentLastName() << endl;
+                flag = true;
+                break;
+            }
+        }
+    }
+    else
+    {
+        cout << "No Student found with id " << id << endl;
+        return;
+    }
+
+    if (flag)
+    {
+        p->nextInvIndexEntry = currentEntry->nextInvIndexEntry;
+        cout << "Student with id:\t" << id << "\tDeleted" << endl;
+    }
+    else
+    {
+        cout << "No Student found with id " << id << endl;
+    }
+    delete currentEntry;
+    cout << "\n########################################################################\n"
+         << endl;
+}
+
 void InvertedIndex::FindActiveUsersInAcademicYear(int academicYear)
 {
     int entryYearRetrieved = invertedEndYear - academicYear +1;
