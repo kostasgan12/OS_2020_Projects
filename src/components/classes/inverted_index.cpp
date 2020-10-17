@@ -150,57 +150,6 @@ void InvertedIndex::FindNBestStudentsOfYear(int num, int yearRequested)
     currentEntry = currentEntry->nextInvIndexEntry;
     if (currentEntry != NULL)
     {
-        // while (currentEntry != NULL)
-        // {
-        //     //looping over every item in given year
-
-        //     // isArrayFilledCounter++;
-        //     tmpGPA = currentEntry->studentLocationP->studentData.getStudentLessonAverage();
-            
-        //     for (int i = 0; i < num; i++)
-        //     {
-        //         //for every item in the given year, we now loop over every item in our bestGPA array
-                
-        //         if (tmpGPA > bestNGPA[i] && bestNGPA[i + 1] != -1)
-        //         {
-        //             cout << "in first if " << "\ttmpGPA is:\t" << tmpGPA << endl;
-        //             flag = false;
-
-        //             if(num - isArrayFilledCounter >=0){
-        //                 innerStarterVal = num - isArrayFilledCounter;
-        //             }
-        //             for (int j = innerStarterVal; j < num; j++)
-        //             {
-        //                 cout << "Searching if "
-        //                      << "\ttmpGPA:\t" << tmpGPA << "\t is a bigger GPA Than:\t" << bestNGPA[j] << endl;
-        //                 if (bestNGPA[j] == tmpGPA){
-        //                     flag = true;
-        //                 }
-        //             }
-        //             // for (int j = 0; j <num; j++)
-        //             // {
-        //             //     //looping to see if we find duplicate GPA value. If so we flag it so that we dont save it again.
-        //             //     cout << "Searching for an EQUAL GPA TO:\t" << tmpGPA << "\tbestNGPA["<<i<<"] is:\t" << bestNGPA[j] << "\n"
-        //             //          << endl;
-        //             //     if (bestNGPA[j] == tmpGPA)
-        //             //     {
-        //             //         flag = true;
-        //             //     }
-        //             // }
-        //             if(!flag){
-        //                 bestNGPA[i] = tmpGPA;
-        //                 cout << "bestNGPA["<<i<<"]\t set to:\t" << bestNGPA[i] << endl;
-        //             }
-        //             break;
-        //         }
-
-        //         cout << "\ttmpGPA is:\t" << tmpGPA << "\tbestNGPA[" << i << "] is:\t" << bestNGPA[i] << endl;
-        //     }
-        //     isArrayFilledCounter++;
-        //     currentEntry = currentEntry->nextInvIndexEntry;
-        //     cout << "\n########################################################################\n" << endl;
-        // }
-
         float minGPA = 10;
         int whileCounter =0;
         int isArrayFilledCounter = 0;
@@ -216,8 +165,6 @@ void InvertedIndex::FindNBestStudentsOfYear(int num, int yearRequested)
                 {
                     minGPA = tmpGPA;
                 }
-
-                // bestNGPA[isArrayFilledCounter] = tmpGPA;
 
                 //need to check if value already exists in bestNGPA array
                 for (int l = 0; l < isArrayFilledCounter; l++)

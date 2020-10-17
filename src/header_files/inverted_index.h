@@ -38,6 +38,7 @@ public:
     void ShowAllStudentsInYear(int yearRequested);
     void FindActiveUsersInAcademicYear(int academicYear);
     void FindNBestStudentsOfYear(int num, int yearRequested);
+    void FindAverageGPAOfYear(int yearRequested);
     void CountStudentsPerYear();
 };
 
