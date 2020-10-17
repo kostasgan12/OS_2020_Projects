@@ -237,6 +237,40 @@ void InvertedIndex::FindNBestStudentsOfYear(int num, int yearRequested)
     }
 }
 
+void InvertedIndex::FindAverageGPAOfYear(int yearRequested){
+    int yearPositionInIndexTable = yearRequested - invertedStartYear;
+
+    InvertedIndexEntry *currentEntry = invertedIndex[yearPositionInIndexTable];
+    
+    int gpaSum = 0;
+    int studentCounter = 0;
+    int gpaAverage=0;
+
+    cout
+        << "\n########################################################################\n"
+        << endl;
+
+    if (currentEntry->nextInvIndexEntry != NULL)
+    {
+        currentEntry = currentEntry->nextInvIndexEntry;
+
+        while (currentEntry != NULL){
+            gpaSum += currentEntry->studentLocationP->studentData.getStudentLessonAverage();
+            studentCounter++;
+            currentEntry = currentEntry->nextInvIndexEntry;
+        }
+
+        gpaAverage = gpaSum / studentCounter;
+
+        cout<<"Average GPA For Year: "<<yearRequested<<" is: "<<gpaAverage<<endl;
+    }else{
+        cout << "Year: " << yearRequested << " Hasnt Got Any Active Students. So GPA Average is 0."<< endl;
+    }
+    cout
+        << "\n########################################################################\n"
+        << endl;
+}
+
 void InvertedIndex::CountStudentsPerYear()
 {
     int counter;

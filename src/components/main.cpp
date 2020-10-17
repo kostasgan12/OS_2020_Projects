@@ -274,7 +274,7 @@ int main(int argc, char *argv[])
         case 6:
             cout << "Enter Year: ";
             cin >> year;
-            // HashTable.Remove(k);
+            InvertedIndexTable.FindAverageGPAOfYear(year);
             break;
         case 7:
             cout << "Enter Year: ";
