@@ -137,13 +137,13 @@ void InvertedIndex::FindActiveUsersInAcademicYear(int academicYear)
 void InvertedIndex::FindNBestStudentsOfYear(int num, int yearRequested)
 {
     int yearPositionInIndexTable = yearRequested - invertedStartYear;
-    int counter = 0;
+    int isArrayFilledCounter = 0;
 
     float bestNGPA[num];
 
     for (int i = 0; i < num; i++)
     {
-        bestNGPA[i]=0;
+        bestNGPA[i]=-1;
     }
     
     float tmpGPA = 0;
@@ -156,43 +156,130 @@ void InvertedIndex::FindNBestStudentsOfYear(int num, int yearRequested)
     currentEntry = currentEntry->nextInvIndexEntry;
     if (currentEntry != NULL)
     {
+        // while (currentEntry != NULL)
+        // {
+        //     //looping over every item in given year
+
+        //     // isArrayFilledCounter++;
+        //     tmpGPA = currentEntry->studentLocationP->studentData.getStudentLessonAverage();
+            
+        //     for (int i = 0; i < num; i++)
+        //     {
+        //         //for every item in the given year, we now loop over every item in our bestGPA array
+                
+        //         if (tmpGPA > bestNGPA[i] && bestNGPA[i + 1] != -1)
+        //         {
+        //             cout << "in first if " << "\ttmpGPA is:\t" << tmpGPA << endl;
+        //             flag = false;
+
+        //             if(num - isArrayFilledCounter >=0){
+        //                 innerStarterVal = num - isArrayFilledCounter;
+        //             }
+        //             for (int j = innerStarterVal; j < num; j++)
+        //             {
+        //                 cout << "Searching if "
+        //                      << "\ttmpGPA:\t" << tmpGPA << "\t is a bigger GPA Than:\t" << bestNGPA[j] << endl;
+        //                 if (bestNGPA[j] == tmpGPA){
+        //                     flag = true;
+        //                 }
+        //             }
+        //             // for (int j = 0; j <num; j++)
+        //             // {
+        //             //     //looping to see if we find duplicate GPA value. If so we flag it so that we dont save it again.
+        //             //     cout << "Searching for an EQUAL GPA TO:\t" << tmpGPA << "\tbestNGPA["<<i<<"] is:\t" << bestNGPA[j] << "\n"
+        //             //          << endl;
+        //             //     if (bestNGPA[j] == tmpGPA)
+        //             //     {
+        //             //         flag = true;
+        //             //     }
+        //             // }
+        //             if(!flag){
+        //                 bestNGPA[i] = tmpGPA;
+        //                 cout << "bestNGPA["<<i<<"]\t set to:\t" << bestNGPA[i] << endl;
+        //             }
+        //             break;
+        //         }
+
+        //         cout << "\ttmpGPA is:\t" << tmpGPA << "\tbestNGPA[" << i << "] is:\t" << bestNGPA[i] << endl;
+        //     }
+        //     isArrayFilledCounter++;
+        //     currentEntry = currentEntry->nextInvIndexEntry;
+        //     cout << "\n########################################################################\n" << endl;
+        // }
+
+        float minGPA = 10;
+        int whileCounter =0;
+        int isArrayFilledCounter = 0;
         while (currentEntry != NULL)
         {
-            // counter++;
+            //looping over every item in given year
+
+            // isArrayFilledCounter++;
             tmpGPA = currentEntry->studentLocationP->studentData.getStudentLessonAverage();
+            // isArrayFilledCounter = 0;
 
-            for (int i = 0; i < num; i++)
+            // whileCounter =0;
+            cout << "isArrayFilledCounter is:\t" << isArrayFilledCounter << endl;
+
+            if (isArrayFilledCounter < num)
             {
-                if (tmpGPA > bestNGPA[i] && bestNGPA[i + 1] > 0)
-                // if (tmpGPA > bestNGPA[i] &&  counter <= num)
+                if (tmpGPA < minGPA)
                 {
-                    flag = false;
-                    if(num - counter >=0){
-                        innerStarterVal = num - counter;
-                    }
-                    for (int j = innerStarterVal; j < num; j++)
-                    {
-                        cout<<"j ===\t"<<j<<endl;
-                        if (bestNGPA[j] == tmpGPA){
-                            flag = true;
-                        }
-                    }
-                    if(!flag){
-                        bestNGPA[i] = tmpGPA;
-                    }
-                    break;
+                    minGPA = tmpGPA;
                 }
-
-
-                // if (tmpGPA > bestNGPA[i] && counter <= num)
-                // {
-                //     bestNGPA[i] = tmpGPA;
-                //     counter++;
-                //     break;
-                // }
+                bestNGPA[isArrayFilledCounter] = tmpGPA;
+                // isArrayFilledCounter++;
             }
-            counter++;
+
+            // while (whileCounter < num)
+            // {
+            //     if(tmpGPA < minGPA )
+            //     {
+            //         minGPA = tmpGPA;
+            //         cout << "minGPA set as:\t" << tmpGPA << endl;
+            //     }
+            //     bestNGPA[whileCounter] = tmpGPA;
+
+            //     cout << "bestNGPA[" << whileCounter << "] set as:\t" << tmpGPA << endl;
+            //     whileCounter++;
+            // }
+            // isArrayFilledCounter= whileCounter;
+
+            if (isArrayFilledCounter >= num)
+            {
+                cout<<"BestGPA Array is full, so now we check if any other tmpGPA is bigger than one of our current values\n"<<endl;
+                
+                for (int i = 0; i < num; i++)   //loopinh over bestGPA array sized num
+                {
+                    cout << "tmpGPA is:\t" << tmpGPA << "\tMIN is:\t" << minGPA<<"\n" << endl;
+                    if (tmpGPA > minGPA && bestNGPA[i] == minGPA)
+                    {
+                        bestNGPA[i] = tmpGPA;
+                        cout << "bestNGPA[" << i << "] set as:\t" << bestNGPA[i]<<"\n" << endl;
+
+                        minGPA = bestNGPA[0];
+                        for (int j = 1; j < num; j++)
+                        {
+                            if(bestNGPA[j]<minGPA){
+                                cout<<"in min searchhhhhh bestNGPA["<<j<<"] is\t"<<bestNGPA[j]<<endl;
+                                minGPA = tmpGPA;
+                            }
+                        }
+                        cout << "\nminGPA set as:\t" << minGPA << endl;
+
+                        break;
+                    }
+                }
+            }
+
+            cout << "\n\nbestNGPA[0] set as:\t" << bestNGPA[0] << endl;
+            cout << "bestNGPA[1] set as:\t" << bestNGPA[1] << endl;
+            cout << "bestNGPA[2] set as:\t" << bestNGPA[2] << endl;
+
+            isArrayFilledCounter++;
             currentEntry = currentEntry->nextInvIndexEntry;
+            cout << "\n########################################################################\n"
+                 << endl;
         }
     }
 
