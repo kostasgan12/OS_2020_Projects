@@ -101,22 +101,37 @@ void StudentHashTable::DeleteStudent(string id)
     int hash_v = HashFunc(id);
     StudentHashTableEntry *en = studentHashTable[hash_v];
     StudentHashTableEntry *p = NULL;
-    if (en == NULL || en->key != key)
+    
+    bool flag= false;
+
+    if (en != NULL) //check if first entry of this position in the hashtable is null, if not then we can search for the item, if its there
     {
-        cout << "No Element found at key " << key << endl;
+        while (en->nextSt != NULL)
+        {
+            cout << "studnet is\t" << en->studentData.getStudentLastName() << endl;
+            p = en;
+            en = en->nextSt;
+            if (en->studentData.getStudentId() == id)
+            {
+                cout << "Student found!!!\t" << en->studentData.getStudentLastName() << endl;
+                flag = true;
+            }
+        }
+    }else{
+        cout << "No Student found with id " << id << endl;
         return;
     }
-    while (en->nextSt != NULL)
-    {
-        p = en;
-        en = en->nextSt;
-    }
-    if (p != NULL)
+    
+    if (flag && p != NULL)
     {
         p->nextSt = en->nextSt;
+        cout << "Student with id:\t" << id << "\tDeleted" << endl;
+    }
+    else
+    {
+        cout << "No Student found with id " << id << endl;
     }
     delete en;
-    cout << "Element Deleted" << endl;
 }
 
 void StudentHashTable::ShowAllStudents(){

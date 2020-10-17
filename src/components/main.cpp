@@ -280,6 +280,8 @@ int main(int argc, char *argv[])
             break;
         case 10:
             exit(1);
+        case 11:
+            HashTable.ShowAllStudents();
         default:
             cout << "\nEnter correct option"<<endl;
         }

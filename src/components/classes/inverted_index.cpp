@@ -214,7 +214,7 @@ void InvertedIndex::ShowAllStudentsInYear(int yearRequested)
         {
             cout << "found student with id:\t" << currentEntry->studentLocationP->studentData.getStudentId();
             cout << "\tand name:\t" << currentEntry->studentLocationP->studentData.getStudentLastName() << "\t";
-            cout << currentEntry->studentLocationP->studentData.getStudentFirstName();
+            cout << currentEntry->studentLocationP->studentData.getStudentFirstName()<<endl;
 
             currentEntry = currentEntry->nextInvIndexEntry;
         }
