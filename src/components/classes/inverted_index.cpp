@@ -351,16 +351,7 @@ void InvertedIndex::MinGPAStudentOfYear(int yearRequested)
 
 void InvertedIndex::FindNMostPopularZipCode(int rank){
 
-    cout << "studentSum:\t"<< studentSum << endl;
-
     int isArrayFilledCounter = 0;
-
-    // string popularZipCodePerYear[invertedTableSize];
-
-    // for (int i = 0; i < invertedTableSize; i++)
-    // {
-    //     popularZipCodePerYear[i] = "null";
-    // }
 
     InvertedIndexEntry *currentEntry;
 
@@ -373,16 +364,13 @@ void InvertedIndex::FindNMostPopularZipCode(int rank){
     }
 
     string tmpZipCode;
+    int zipCodeArraySize =0;
+    int rankPositionInZipCodeArray, rankPositionValue;
 
-        for (int i = 0; i < invertedTableSize; i++)
+    for (int i = 0; i < invertedTableSize; i++)
     {
         //we want to loop for every year!
         currentEntry = invertedIndex[i];
-        cout << "\n########################################################################\n"
-             << endl;
-        cout << "Searching for year ->\t" << currentEntry->year << endl;
-        cout << "\n########################################################################\n"
-             << endl;
 
         currentEntry = currentEntry->nextInvIndexEntry;
         if (currentEntry != NULL)
@@ -398,15 +386,12 @@ void InvertedIndex::FindNMostPopularZipCode(int rank){
 
                 tmpZipCode = currentEntry->studentLocationP->studentData.getStudentZipCode();
 
-                cout << "this students zipcode is\t"<<tmpZipCode<<endl;
-
                 //check if zipcode already exists in zipCodeArray
                 foundDuplicate=false;
                 for (int k = 0; k < studentSum; k++)
                 {
                     if (zipCodeArray[k].zipCode == tmpZipCode)
                     {
-                        cout<<"zipcode: "<<tmpZipCode<<" already exists, we increase counter"<<endl;
                         zipCodeArray[k].zipCodeCount++;
                         foundDuplicate =true;
                     }
@@ -417,7 +402,7 @@ void InvertedIndex::FindNMostPopularZipCode(int rank){
                     while(zipCodeArray[whileCounter].zipCodeCount != 0){
                         whileCounter++;
                     }
-                    cout<<"found first available slot at position: "<<whileCounter<<endl;
+
                     zipCodeArray[whileCounter].zipCode = tmpZipCode;
                     zipCodeArray[whileCounter].zipCodeCount++;
                 }
@@ -428,10 +413,21 @@ void InvertedIndex::FindNMostPopularZipCode(int rank){
         }
     }
 
+    zipCodeArraySize = sortZipCodeArray(zipCodeArray);
+
+    rankPositionInZipCodeArray = zipCodeArraySize - rank;
+
+    rankPositionValue = zipCodeArray[rankPositionInZipCodeArray].zipCodeCount;
+
+    cout << "Zip Code: " << zipCodeArray[rankPositionInZipCodeArray].zipCode << " Was Found: " << zipCodeArray[rankPositionInZipCodeArray].zipCodeCount << " Times.\n\n"
+         << endl;
+
     int arrayIndex = 0;
     while (zipCodeArray[arrayIndex].zipCodeCount != 0)
     {
-        cout << "Zip Code: " << zipCodeArray[arrayIndex].zipCode << " Was Found: " << zipCodeArray[arrayIndex].zipCodeCount << " Times." << endl;
+        if (zipCodeArray[arrayIndex].zipCodeCount == rankPositionValue){
+            cout << "Zip Code: " << zipCodeArray[arrayIndex].zipCode << " Was Found: " << zipCodeArray[arrayIndex].zipCodeCount << " Times." << endl;
+        }
         arrayIndex++;
     }
 
@@ -536,3 +532,27 @@ void InvertedIndex::ShowAllStudentsInYear(int yearRequested)
 InvertedIndex::~InvertedIndex(){
     delete[] invertedIndex;
 };
+
+int InvertedIndex::sortZipCodeArray(ZipCodeEntry *givenArray)
+{
+    int arraySize = 0;
+    while (givenArray[arraySize].zipCode != "null")
+    {
+        arraySize++;
+    }
+
+    int i, j, min;
+    ZipCodeEntry temp;
+    for (i = 0; i < arraySize - 1; i++) //loop every zipcode in array
+    {
+        min = i;    //initialize min with i
+        for (j = i + 1; j < arraySize; j++)
+            if (givenArray[j].zipCodeCount < givenArray[min].zipCodeCount)
+                min = j;
+        temp = givenArray[i];
+        givenArray[i]= givenArray[min];
+        givenArray[min] = temp;
+    }
+
+    return arraySize;
+}

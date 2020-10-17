@@ -50,6 +50,7 @@ public:
     void MinGPAStudentOfYear(int yearRequested);
     void FindNMostPopularZipCode(int num);
     void CountStudentsPerYear();
+    int sortZipCodeArray(ZipCodeEntry * givenArray);
 };
 
 #endif
