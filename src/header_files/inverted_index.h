@@ -40,6 +40,7 @@ public:
     void FindNBestStudentsOfYear(int num, int yearRequested);
     void FindAverageGPAOfYear(int yearRequested);
     void MinGPAStudentOfYear(int yearRequested);
+    void FindNMostPopularZipCode(int num);
     void CountStudentsPerYear();
 };
 

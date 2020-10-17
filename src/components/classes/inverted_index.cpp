@@ -56,6 +56,8 @@ void InvertedIndex::InsertStudentReference(int yearToBeInserted, StudentHashTabl
 
         p->nextInvIndexEntry = new InvertedIndexEntry(yearToBeInserted, student);
     }
+
+    delete p;
 }
 
 void InvertedIndex::DeleteStudentReference(int entryYear, string id)
@@ -318,7 +320,6 @@ void InvertedIndex::MinGPAStudentOfYear(int yearRequested)
                 cout << "ZipCode->\t" << currentEntry->studentLocationP->studentData.getStudentZipCode() << "\n\n"
                      << endl;
             }
-
             currentEntry = currentEntry->nextInvIndexEntry;
         }
     }
@@ -329,6 +330,7 @@ void InvertedIndex::MinGPAStudentOfYear(int yearRequested)
     cout
         << "\n########################################################################\n"
         << endl;
+    delete currentEntry;
 }
 
 void InvertedIndex::CountStudentsPerYear()
