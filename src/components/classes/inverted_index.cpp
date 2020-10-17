@@ -252,8 +252,9 @@ void InvertedIndex::FindNBestStudentsOfYear(int num, int yearRequested)
     {
         __gpa = 0;
 
-        cout << bestNGPA[i] <<"\t";
-        if (bestNGPA[i] != 0){
+        if (bestNGPA[i] != -1){
+
+            cout<<"Students With GPA Equal To:\t" << bestNGPA[i] <<"\n\n";
 
             currentEntry = invertedIndex[yearPositionInIndexTable]->nextInvIndexEntry;
 
@@ -262,7 +263,10 @@ void InvertedIndex::FindNBestStudentsOfYear(int num, int yearRequested)
                 __gpa = currentEntry->studentLocationP->studentData.getStudentLessonAverage();
                 
                 if (__gpa == bestNGPA[i]){
-                    cout << currentEntry->studentLocationP->studentData.getStudentLastName() << "\t";
+                    cout << "Student Details\nID->\t" << currentEntry->studentLocationP->studentData.getStudentId();
+                    cout << "\nName->\t" << currentEntry->studentLocationP->studentData.getStudentLastName() << " ";
+                    cout << currentEntry->studentLocationP->studentData.getStudentFirstName() << "\n";
+                    cout << "ZipCode->\t" << currentEntry->studentLocationP->studentData.getStudentZipCode()<<"\n"<< endl;
                 }
                 currentEntry = currentEntry->nextInvIndexEntry;
             }
