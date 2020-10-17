@@ -242,9 +242,9 @@ void InvertedIndex::FindAverageGPAOfYear(int yearRequested){
 
     InvertedIndexEntry *currentEntry = invertedIndex[yearPositionInIndexTable];
     
-    int gpaSum = 0;
+    float gpaSum = 0;
     int studentCounter = 0;
-    int gpaAverage=0;
+    float gpaAverage=0;
 
     cout
         << "\n########################################################################\n"
@@ -265,6 +265,66 @@ void InvertedIndex::FindAverageGPAOfYear(int yearRequested){
         cout<<"Average GPA For Year: "<<yearRequested<<" is: "<<gpaAverage<<endl;
     }else{
         cout << "Year: " << yearRequested << " Hasnt Got Any Active Students. So GPA Average is 0."<< endl;
+    }
+    cout
+        << "\n########################################################################\n"
+        << endl;
+}
+
+void InvertedIndex::MinGPAStudentOfYear(int yearRequested)
+{
+    int yearPositionInIndexTable = yearRequested - invertedStartYear;
+
+    InvertedIndexEntry *currentEntry = invertedIndex[yearPositionInIndexTable];
+
+    float minGPA = 10;
+    float tmpGPA;
+
+    // InvertedIndexEntry *minStudent;
+
+    cout
+        << "\n########################################################################\n"
+        << endl;
+
+    if (currentEntry->nextInvIndexEntry != NULL)
+    {
+        currentEntry = currentEntry->nextInvIndexEntry;
+
+        while (currentEntry != NULL)
+        {
+            tmpGPA = currentEntry->studentLocationP->studentData.getStudentLessonAverage();
+
+            if(tmpGPA < minGPA){
+                // minStudent = currentEntry;
+                minGPA = tmpGPA;
+            }
+
+            currentEntry = currentEntry->nextInvIndexEntry;
+        }
+
+        cout << "Min GPA For Year: " << yearRequested << " is: " << minGPA<< "\n" << endl;
+
+        currentEntry = invertedIndex[yearPositionInIndexTable]->nextInvIndexEntry;
+
+        while (currentEntry != NULL)
+        {
+            tmpGPA = currentEntry->studentLocationP->studentData.getStudentLessonAverage();
+
+            if (tmpGPA  == minGPA)
+            {
+                cout << "Student Details:\n\nID->\t" << currentEntry->studentLocationP->studentData.getStudentId();
+                cout << "\nName->\t" << currentEntry->studentLocationP->studentData.getStudentLastName() << " ";
+                cout << currentEntry->studentLocationP->studentData.getStudentFirstName() << "\n";
+                cout << "ZipCode->\t" << currentEntry->studentLocationP->studentData.getStudentZipCode() << "\n\n"
+                     << endl;
+            }
+
+            currentEntry = currentEntry->nextInvIndexEntry;
+        }
+    }
+    else
+    {
+        cout << "Year: " << yearRequested << " Hasnt Got Any Active Students" << endl;
     }
     cout
         << "\n########################################################################\n"

@@ -279,6 +279,7 @@ int main(int argc, char *argv[])
         case 7:
             cout << "Enter Year: ";
             cin >> year;
+            InvertedIndexTable.MinGPAStudentOfYear(year);
             break;
         case 8:
             InvertedIndexTable.CountStudentsPerYear();
