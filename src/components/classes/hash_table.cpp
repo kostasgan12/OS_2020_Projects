@@ -61,7 +61,6 @@ StudentHashTableEntry * StudentHashTable::InsertStudent(Student *student)
     // cout << "########################################################################" << endl;
     // delete en;
     studentSum++;
-    cout << "studentSum in hashtable insert:\t" << studentSum << endl;
     return en;
 }
 

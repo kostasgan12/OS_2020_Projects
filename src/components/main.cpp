@@ -40,24 +40,24 @@ int main(int argc, char *argv[])
             if (argc > i+1 && string(argv[i+1]) == "inputfile")
             {
                 inputFile = argv[i+1];
-                cout << "########### Successfully Loaded Input File ###########" << endl;
+                cout << "########### Successfully Loaded Input File ###########\n" << endl;
             }
             else
             {
                 if(argc <= i+1){
-                    cout << "########### Expected Input File Not Given ###########" << endl;
+                    cout << "########### Expected Input File Not Given ###########\n" << endl;
                 }
                 else if (string(argv[i + 1]) != "inputfile"){
                     if (string(argv[i + 1]) == "-c"){
-                        cout << "########### Expected Input File Not Given ###########" << endl;
+                        cout << "########### Expected Input File Not Given ###########\n" << endl;
                     }
                     else
                     {
-                        cout << "########### Wrong Input File Given ###########" << endl;
+                        cout << "########### Wrong Input File Given ###########\n" << endl;
                     }
                 }else
                 {
-                    cout << "########### Unknown Error With Input File ###########" << endl;
+                    cout << "########### Unknown Error With Input File ###########\n" << endl;
                 }
             }
         }
@@ -67,21 +67,21 @@ int main(int argc, char *argv[])
             if (argc > i+1 && string(argv[i+1]) == "configfile")
             {
                 configFile = argv[i+1];
-                cout << "########### Successfully Loaded Config File ###########" << endl;
+                cout << "########### Successfully Loaded Config File ###########\n" << endl;
             }
             else
             {
                 if (argc <= i + 1)
                 {
-                    cout << "########### Expected Config File Not Given ###########" << endl;
+                    cout << "########### Expected Config File Not Given ###########\n" << endl;
                 }
                 else if (string(argv[i + 1]) != "configfile")
                 {
-                    cout << "########### Wrong Config File Given ###########" << endl;
+                    cout << "########### Wrong Config File Given ###########\n" << endl;
                 }
                 else
                 {
-                    cout << "########### Unknown Error With Config File ###########" << endl;
+                    cout << "########### Unknown Error With Config File ###########\n" << endl;
                 }
             }
         }
@@ -107,22 +107,21 @@ int main(int argc, char *argv[])
     while (infile >> __htsizeFlag >> hashTableSize >> __invertedStartYearFlag >> invertedStartYear >> __invertedEndYearFlag >> invertedEndYear)
     {
         if (__htsizeFlag == "-hts"){
-            cout<<"hash table size is =====> "<<hashTableSize<<endl;
+            cout<<"\nHash Table Size Is =====> "<<hashTableSize<<endl;
         }
         if (__invertedStartYearFlag == "-startYear")
         {
-            cout<<"start year for inverted is =====> "<<invertedStartYear<<endl;
+            cout<<"\nStart Year For Inverted Is =====> "<<invertedStartYear<<endl;
         }
         if (__invertedEndYearFlag == "-endYear")
         {
-            cout << "end year for inverted is =====> " << invertedEndYear << endl;
+            cout << "\nEnd Year For Inverted Is =====> " << invertedEndYear << endl;
         }
         if (invertedStartYear > 0 &&
                 invertedEndYear > 0 &&
             invertedStartYear < invertedEndYear)
         {
             invertedTableSize = invertedEndYear - invertedStartYear + 1;
-            cout << "invertedTableSize is =====> " << invertedTableSize << endl;
         }
     }
     infile.close();
@@ -179,7 +178,7 @@ int main(int argc, char *argv[])
 
         if (found > 0)
         {
-            cout << "Duplicate Student Found With ID:\t" << __studentId << "\t" << __studentLastName << "\t" << __student_Name << "\t"
+            cout << "\nDuplicate Student Found With ID:\t" << __studentId << "\t" << __studentLastName << "\t" << __student_Name << "\t"
                  << " And Was Dismissed." << endl;
             continue;
         }
@@ -196,7 +195,6 @@ int main(int argc, char *argv[])
         }
     }
     infile.close(); //closing text file
-    cout << "studentSum IN MAIN AFTER ENTERING:\t" << studentSum << endl;
     //////////////////////////////////////////////////////////////////////////////////////
 
     ////////stuToBe == student to be inserted////////

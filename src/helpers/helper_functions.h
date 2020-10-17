@@ -9,6 +9,6 @@ using namespace std;
 
 int transform_id(string id);
 
-// void sortArray(int givenArray[]);
+void sortArray(float * givenArray);
 
 #endif

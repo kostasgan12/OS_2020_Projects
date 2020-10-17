@@ -227,6 +227,8 @@ void InvertedIndex::FindNBestStudentsOfYear(int num, int yearRequested)
 
     cout<<"Top\t"<<num<<"\tGPAs Students For Year\t"<<yearRequested<<"\n"<<endl;
 
+    // sortArray(bestNGPA);
+
     float  __gpa;
     for (int i = 0; i < num; i++)
     {
@@ -417,22 +419,25 @@ void InvertedIndex::FindNMostPopularZipCode(int rank){
 
     int uniqueValues[zipCodeArraySize];
     int uniqueFlag =false;
+    int uCounter;
 
     for (int i = 0; i < zipCodeArraySize; i++)
     {
         uniqueValues[i] = 0;
     }
 
-    for (int j = 0; j < zipCodeArraySize; j++)
+    for (int j = 0; j < zipCodeArraySize; j++) //loop over zipCodeArray
     {
-        for (int k = 0; k < zipCodeArraySize; k++)
+        uCounter = 0;
+        while (uCounter < zipCodeArraySize)
         {
-            if (uniqueValues[j] == zipCodeArray[j].zipCodeCount)
+            if (uniqueValues[uCounter] == zipCodeArray[j].zipCodeCount)
             {
                 uniqueFlag=true;
             }
+            uCounter++;
         }
-
+        
         if (!uniqueFlag)
         {
             uniqueValues[j] = zipCodeArray[j].zipCodeCount;
@@ -442,7 +447,7 @@ void InvertedIndex::FindNMostPopularZipCode(int rank){
     int uIndex =0;
     while (uIndex < zipCodeArraySize)
     {
-        cout << "uniqueValues element: " << uIndex << " is: " << uniqueValues[uIndex] << endl;
+        // cout << "uniqueValues element: " << uIndex << " is: " << uniqueValues[uIndex] << endl;
         uIndex++;
     }
     
@@ -457,14 +462,9 @@ void InvertedIndex::FindNMostPopularZipCode(int rank){
         if (zipCodeArray[arrayIndex].zipCodeCount == zipCodeArray[arrayIndex + 1].zipCodeCount )
         {
             rank++;
-            cout<<"rank is "<<rank<<endl;
         }
         arrayIndex++;
     }
-
-    // rankPositionInZipCodeArray = zipCodeArraySize - rank;
-
-    // rankPositionValue = zipCodeArray[rankPositionInZipCodeArray].zipCodeCount;
 
     arrayIndex = 0;
     while (zipCodeArray[arrayIndex].zipCodeCount != 0)
@@ -475,39 +475,6 @@ void InvertedIndex::FindNMostPopularZipCode(int rank){
         }
         arrayIndex++;
     }
-    // cout << "Top\t" << rank << "\tGPAs Students For Year\t" << yearRequested << "\n"
-    //      << endl;
-
-    // float __gpa;
-    // for (int i = 0; i < rank; i++)
-    // {
-    //     __gpa = 0;
-
-    //     if (bestNGPA[i] != -1)
-    //     {
-
-    //         cout << "Students With GPA Equal To:\t" << bestNGPA[i] << "\n\n";
-
-    //         currentEntry = invertedIndex[0]->nextInvIndexEntry;
-
-    //         while (currentEntry != NULL)
-    //         {
-    //             __gpa = currentEntry->studentLocationP->studentData.getStudentLessonAverage();
-
-    //             if (__gpa == bestNGPA[i])
-    //             {
-    //                 cout << "Student Details\nID->\t" << currentEntry->studentLocationP->studentData.getStudentId();
-    //                 cout << "\nName->\t" << currentEntry->studentLocationP->studentData.getStudentLastName() << " ";
-    //                 cout << currentEntry->studentLocationP->studentData.getStudentFirstName() << "\n";
-    //                 cout << "ZipCode->\t" << currentEntry->studentLocationP->studentData.getStudentZipCode() << "\n"
-    //                      << endl;
-    //             }
-    //             currentEntry = currentEntry->nextInvIndexEntry;
-    //         }
-    //         cout << "\n";
-    //     }
-    // }
-
 }
 
 void InvertedIndex::CountStudentsPerYear()
