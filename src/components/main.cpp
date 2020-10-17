@@ -151,8 +151,8 @@ int main(int argc, char *argv[])
     }
     infile.close();
 
-    StudentHashTable HashTable;
-    InvertedIndex InvertedIndexTable;
+    StudentHashTable *HashTable = new StudentHashTable();
+    InvertedIndex * InvertedIndexTable = new InvertedIndex();
 
     Student *newStudent = new Student();
     string studentsIdArray[inputFileStudentSum]; // array used for checking for student duplicates
@@ -186,9 +186,9 @@ int main(int argc, char *argv[])
         {
             newStudent->SetStudent(__studentId, __studentLastName, __student_Name, __zipcode, __studentEntryYear, __lessonsAverage);
 
-            studentLocation = HashTable.InsertStudent(newStudent);
+            studentLocation = HashTable->InsertStudent(newStudent);
 
-            InvertedIndexTable.InsertStudentReference(__studentEntryYear, studentLocation);
+            InvertedIndexTable->InsertStudentReference(__studentEntryYear, studentLocation);
 
             studentsIdArray[counter] = __studentId;
             ++counter;
@@ -231,22 +231,22 @@ int main(int argc, char *argv[])
             cin >> stuToBe_id >> stuToBe_last_name >> stuToBe_first_name >> stuToBe_zip_code >> stuToBe_entry_year >> stuToBe_lesson_average;
             newStudentInsert = new Student();
             newStudentInsert->SetStudent(stuToBe_id, stuToBe_last_name, stuToBe_first_name, stuToBe_zip_code, stuToBe_entry_year, stuToBe_lesson_average);
-            HashTable.InsertStudent(newStudentInsert);
+            HashTable->InsertStudent(newStudentInsert);
             break;
         case 2:
             cout << "Enter The Student's ID: ";
             cin >> stuToBe_id;
-            HashTable.LookUpStudent(stuToBe_id);
+            HashTable->LookUpStudent(stuToBe_id);
             break;
         case 3:
             cout << "Enter The Student's ID: ";
             cin >> stuToBe_id;
 
-            year = HashTable.FindStudentEntryYear(stuToBe_id);
+            year = HashTable->FindStudentEntryYear(stuToBe_id);
 
             if (year > 0){
-                InvertedIndexTable.DeleteStudentReference(year, stuToBe_id);
-                HashTable.DeleteStudent(stuToBe_id);
+                InvertedIndexTable->DeleteStudentReference(year, stuToBe_id);
+                HashTable->DeleteStudent(stuToBe_id);
             }else{
                 cout << "\n########################################################################\n"
                      << endl;
@@ -256,44 +256,44 @@ int main(int argc, char *argv[])
             }
             break;
         case 4:
-            // HashTable.ShowAllStudents();
+            // HashTable->ShowAllStudents();
             cout << "Enter Academic Year: ";
             cin >> year;
-            InvertedIndexTable.FindActiveUsersInAcademicYear(year);
+            InvertedIndexTable->FindActiveUsersInAcademicYear(year);
             break;
         case 5:
             cout << "Enter N To Search: ";
             cin >> numberOfStudents;
             cout << "Enter Year To Search: ";
             cin >> year;
-            InvertedIndexTable.FindNBestStudentsOfYear(numberOfStudents, year);
-            // InvertedIndexTable.ShowAllStudentsInYear(year);
+            InvertedIndexTable->FindNBestStudentsOfYear(numberOfStudents, year);
+            // InvertedIndexTable->ShowAllStudentsInYear(year);
             break;
         case 6:
             cout << "Enter Year: ";
             cin >> year;
-            InvertedIndexTable.FindAverageGPAOfYear(year);
+            InvertedIndexTable->FindAverageGPAOfYear(year);
             break;
         case 7:
             cout << "Enter Year: ";
             cin >> year;
-            InvertedIndexTable.MinGPAStudentOfYear(year);
+            InvertedIndexTable->MinGPAStudentOfYear(year);
             break;
         case 8:
-            InvertedIndexTable.CountStudentsPerYear();
+            InvertedIndexTable->CountStudentsPerYear();
             break;
         case 9:
             cout << "Enter rank: ";
             cin >> rank;
-            InvertedIndexTable.FindNMostPopularZipCode(rank);
+            InvertedIndexTable->FindNMostPopularZipCode(rank);
             break;
         case 10:
+            delete newStudent;
+            delete InvertedIndexTable;
+            delete HashTable;
             exit(1);
-        case 11:
-            HashTable.ShowAllStudents();
         default:
             cout << "\nEnter correct option"<<endl;
         }
     }
-
 }

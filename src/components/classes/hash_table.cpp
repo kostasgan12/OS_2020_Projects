@@ -144,6 +144,7 @@ int StudentHashTable::DeleteStudent(string id)
 
 StudentHashTable::~StudentHashTable()
 {
+    cout<<"in hashtable destructor"<<endl;
     delete[] studentHashTable;
 }
 

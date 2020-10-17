@@ -65,8 +65,6 @@ void InvertedIndex::InsertStudentReference(int yearToBeInserted, StudentHashTabl
 
         p->nextInvIndexEntry = new InvertedIndexEntry(yearToBeInserted, student);
     }
-
-    // delete p;
 }
 
 void InvertedIndex::DeleteStudentReference(int entryYear, string id)
@@ -541,6 +539,7 @@ void InvertedIndex::ShowAllStudentsInYear(int yearRequested)
 }
 
 InvertedIndex::~InvertedIndex(){
+    cout << "in InvertedIndex destructor" << endl;
     delete[] invertedIndex;
 };
 
