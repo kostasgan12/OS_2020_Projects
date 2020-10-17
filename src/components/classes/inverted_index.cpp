@@ -415,22 +415,66 @@ void InvertedIndex::FindNMostPopularZipCode(int rank){
 
     zipCodeArraySize = sortZipCodeArray(zipCodeArray);
 
+    int uniqueValues[zipCodeArraySize];
+    int uniqueFlag =false;
+
+    for (int i = 0; i < zipCodeArraySize; i++)
+    {
+        uniqueValues[i] = 0;
+    }
+
+    for (int j = 0; j < zipCodeArraySize; j++)
+    {
+        for (int k = 0; k < zipCodeArraySize; k++)
+        {
+            if (uniqueValues[j] == zipCodeArray[j].zipCodeCount)
+            {
+                uniqueFlag=true;
+            }
+        }
+
+        if (!uniqueFlag)
+        {
+            uniqueValues[j] = zipCodeArray[j].zipCodeCount;
+        }
+    }
+
+    int uIndex =0;
+    while (uIndex < zipCodeArraySize)
+    {
+        cout << "uniqueValues element: " << uIndex << " is: " << uniqueValues[uIndex] << endl;
+        uIndex++;
+    }
+    
+
     rankPositionInZipCodeArray = zipCodeArraySize - rank;
 
     rankPositionValue = zipCodeArray[rankPositionInZipCodeArray].zipCodeCount;
 
-    cout << "Zip Code: " << zipCodeArray[rankPositionInZipCodeArray].zipCode << " Was Found: " << zipCodeArray[rankPositionInZipCodeArray].zipCodeCount << " Times.\n\n"
-         << endl;
-
     int arrayIndex = 0;
     while (zipCodeArray[arrayIndex].zipCodeCount != 0)
     {
-        if (zipCodeArray[arrayIndex].zipCodeCount == rankPositionValue){
-            cout << "Zip Code: " << zipCodeArray[arrayIndex].zipCode << " Was Found: " << zipCodeArray[arrayIndex].zipCodeCount << " Times." << endl;
+        if (zipCodeArray[arrayIndex].zipCodeCount == zipCodeArray[arrayIndex + 1].zipCodeCount )
+        {
+            rank++;
+            cout<<"rank is "<<rank<<endl;
         }
         arrayIndex++;
     }
 
+    // rankPositionInZipCodeArray = zipCodeArraySize - rank;
+
+    // rankPositionValue = zipCodeArray[rankPositionInZipCodeArray].zipCodeCount;
+
+    arrayIndex = 0;
+    while (zipCodeArray[arrayIndex].zipCodeCount != 0)
+    {
+        if (zipCodeArray[arrayIndex].zipCodeCount == rankPositionValue)
+        {
+            cout << "Zip Code: " << zipCodeArray[arrayIndex].zipCode << " Was Found: " << zipCodeArray[arrayIndex].zipCodeCount << " Times." << endl;
+        }
+        arrayIndex++;
+    }
     // cout << "Top\t" << rank << "\tGPAs Students For Year\t" << yearRequested << "\n"
     //      << endl;
 
