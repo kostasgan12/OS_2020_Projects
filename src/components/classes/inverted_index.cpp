@@ -204,23 +204,38 @@ void InvertedIndex::FindNBestStudentsOfYear(int num, int yearRequested)
         float minGPA = 10;
         int whileCounter =0;
         int isArrayFilledCounter = 0;
+        bool foundDuplicate;
         while (currentEntry != NULL)
         {
             //looping over every item in given year
             tmpGPA = currentEntry->studentLocationP->studentData.getStudentLessonAverage();
-
+            foundDuplicate = false;
             if (isArrayFilledCounter < num)
             {
                 if (tmpGPA < minGPA)
                 {
                     minGPA = tmpGPA;
                 }
-                bestNGPA[isArrayFilledCounter] = tmpGPA;
+
+                // bestNGPA[isArrayFilledCounter] = tmpGPA;
+
+                //need to check if value already exists in bestNGPA array
+                for (int l = 0; l < isArrayFilledCounter; l++)
+                {
+                    if (bestNGPA[l] == tmpGPA)
+                    {
+                        foundDuplicate = true;
+                    }
+                }
+
+                if(!foundDuplicate){
+                    bestNGPA[isArrayFilledCounter] = tmpGPA;
+                }
             }
 
             if (isArrayFilledCounter >= num)
             {   
-                for (int i = 0; i < num; i++)   //loopinh over bestGPA array sized num
+                for (int i = 0; i < num; i++)   //looping over bestGPA array sized num
                 {
                     if (tmpGPA > minGPA && bestNGPA[i] == minGPA)
                     {
