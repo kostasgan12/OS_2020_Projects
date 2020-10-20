@@ -83,13 +83,24 @@ void InvertedIndex::DeleteStudentReference(int entryYear, string id)
     currentEntry = currentEntry->nextInvIndexEntry; //first item of invertedindx contains only the year, student items start from the second
     if (currentEntry != NULL) //check if first entry of this position in the hashtable is null, if not then we can search for the item, if its there
     {
+        if(currentEntry->studentLocationP->studentData.getStudentId() == id)    //check if first item is the one we are looking for
+        {
+
+            if (currentEntry->nextInvIndexEntry != NULL)
+            {
+                invertedIndex[yearPositionInIndexTable] = currentEntry->nextInvIndexEntry;
+            }
+            else
+            {
+                invertedIndex[yearPositionInIndexTable] = NULL;
+            }
+
+            cout << "Student with id:\t" << id << "\t Successfully Removed Reference From Our Inverted Index Table" << endl;
+            delete currentEntry;
+            return;
+        }
         while (currentEntry != NULL)
         {
-            // p = currentEntry;
-            // currentEntry = currentEntry->nextInvIndexEntry;
-
-            cout << "comparing " << currentEntry->studentLocationP->studentData.getStudentId() << " with given id: " << id << endl;
-
             if (currentEntry->studentLocationP->studentData.getStudentId() == id)
             {
                 flag = true;
@@ -110,7 +121,6 @@ void InvertedIndex::DeleteStudentReference(int entryYear, string id)
     if (flag)
     {
         p->nextInvIndexEntry = currentEntry->nextInvIndexEntry;
-        // p->nextInvIndexEntry = currentEntry;
         cout << "Student with id:\t" << id << "\t Successfully Removed Reference From Our Inverted Index Table" << endl;
     }
     else

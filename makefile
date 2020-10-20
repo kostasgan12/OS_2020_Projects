@@ -1,5 +1,4 @@
 CFLAGS=-std=c++11 
-CFLAGS+=-stdlib=libc++
 
 mngstd: main.o linked_list.o student_class.o hash_table.o inverted_index.o helper_functions.o
 	g++ $(CFLAGS) -o mngstd main.o linked_list.o student_class.o hash_table.o inverted_index.o helper_functions.o

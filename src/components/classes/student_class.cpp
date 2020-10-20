@@ -34,5 +34,5 @@ void Student::SetStudent(string __studentId, string __studentLastName, string __
 
 Student::~Student()
 {
-    cout<<"Deleting Student"<<endl;
+    cout<<"Deleting Student Pointer"<<endl;
 }

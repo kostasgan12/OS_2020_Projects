@@ -30,7 +30,8 @@ int main(int argc, char *argv[])
     //     return 0;
     // }
 
-    string inputFile, configFile;
+    string inputFile="";
+    string configFile = "";
 
     for (int i = 1; i < argc; i++)
     {
@@ -84,6 +85,10 @@ int main(int argc, char *argv[])
                     cout << "########### Unknown Error With Config File ###########\n" << endl;
                 }
             }
+        }else{
+            if(string(argv[i]) != "configfile" && string(argv[i]) != "inputfile"){
+                cout << "########### Unrecognised Flag ###########\n" << endl;
+            }
         }
     }
 
@@ -101,30 +106,51 @@ int main(int argc, char *argv[])
     string __htsizeFlag;
     string __invertedStartYearFlag;
     string __invertedEndYearFlag;
-    
 
-    infile.open(configFile); //opening input file to count number of students in file
-    while (infile >> __htsizeFlag >> hashTableSize >> __invertedStartYearFlag >> invertedStartYear >> __invertedEndYearFlag >> invertedEndYear)
+    if (configFile != "")
     {
-        if (__htsizeFlag == "-hts"){
-            cout<<"\nHash Table Size Is =====> "<<hashTableSize<<endl;
-        }
-        if (__invertedStartYearFlag == "-startYear")
+        infile.open(configFile); //opening input file to count number of students in file
+        while (infile >> __htsizeFlag >> hashTableSize >> __invertedStartYearFlag >> invertedStartYear >> __invertedEndYearFlag >> invertedEndYear)
         {
-            cout<<"\nStart Year For Inverted Is =====> "<<invertedStartYear<<endl;
+            if (__htsizeFlag == "-hts"){
+                cout<<"\nHash Table Size Is =====> "<<hashTableSize<<endl;
+            }else{
+
+            }
+            if (__invertedStartYearFlag == "-startYear")
+            {
+                cout<<"\nStart Year For Inverted Is =====> "<<invertedStartYear<<endl;
+            }
+            if (__invertedEndYearFlag == "-endYear")
+            {
+                cout << "\nEnd Year For Inverted Is =====> " << invertedEndYear << endl;
+            }
+            if (invertedStartYear > 0 &&
+                    invertedEndYear > 0 &&
+                invertedStartYear < invertedEndYear)
+            {
+                invertedTableSize = invertedEndYear - invertedStartYear + 1;
+            }
         }
-        if (__invertedEndYearFlag == "-endYear")
+        infile.close();
+    }else{
+        cout << "Enter Hash Table Size: ";
+        cin >> hashTableSize;
+
+        cout << "Enter Program Start Year (ex.2000): ";
+        cin >> invertedStartYear;
+        
+        invertedEndYear = 2020;
+
+        while (invertedStartYear > 2020 || invertedStartYear < 1900)
         {
-            cout << "\nEnd Year For Inverted Is =====> " << invertedEndYear << endl;
+            cout << "Enter Correct Start Year : ";
+            cin >> invertedStartYear;
         }
-        if (invertedStartYear > 0 &&
-                invertedEndYear > 0 &&
-            invertedStartYear < invertedEndYear)
-        {
-            invertedTableSize = invertedEndYear - invertedStartYear + 1;
-        }
+
+        invertedTableSize = invertedEndYear - invertedStartYear + 1;
     }
-    infile.close();
+
     //////////////////////////////////////////////////////////////////////////////////////
 
     /////////////////////////////// I N P U T  F I L E /////////////////////////////////
@@ -135,6 +161,8 @@ int main(int argc, char *argv[])
     int inputFileStudentSum = 0;
 
     int counter = 0;
+
+    
 
     infile.open(inputFile);                                                                     //opening input file to count number of students in file
     while (getline(infile, buffer))
@@ -151,32 +179,34 @@ int main(int argc, char *argv[])
     }
     infile.close();
 
+
     StudentHashTable *HashTable = new StudentHashTable();
     InvertedIndex * InvertedIndexTable = new InvertedIndex();
 
-    Student *newStudent = new Student();
-    string studentsIdArray[inputFileStudentSum]; // array used for checking for student duplicates
+    Student *newStudent;
+    string studentsIdArray[inputFileStudentSum];                                                 // array used for checking for student duplicates
 
-    StudentHashTableEntry *studentLocation = NULL;
+    StudentHashTableEntry *studentLocation;
+    
 
     infile.open(inputFile);
+    bool found;
     while (infile >> __studentId >> __studentLastName >> __student_Name >> __zipcode >> __studentEntryYear >> __lessonsAverage)
     {
-        int found;
+        found = false;
         if (counter > 0)
         {
-            found = 0;
             for (int i = 0; i < counter; i++)                                                   //we scan our studentIdArray for possible duplicates
             {
                 if (studentsIdArray[i] == __studentId)
                 {
-                    found++;
+                    found = true;
                     break;
                 }
             }
         }
 
-        if (found > 0)
+        if (found)
         {
             cout << "\nDuplicate Student Found With ID:\t" << __studentId << "\t" << __studentLastName << "\t" << __student_Name << "\t"
                  << " And Was Dismissed." << endl;
@@ -184,8 +214,11 @@ int main(int argc, char *argv[])
         }
         else
         {
+            newStudent = new Student();
             newStudent->SetStudent(__studentId, __studentLastName, __student_Name, __zipcode, __studentEntryYear, __lessonsAverage);
+            
 
+            studentLocation = NULL;
             studentLocation = HashTable->InsertStudent(newStudent);
 
             InvertedIndexTable->InsertStudentReference(__studentEntryYear, studentLocation);
@@ -194,9 +227,9 @@ int main(int argc, char *argv[])
             ++counter;
         }
     }
-    infile.close(); //closing text file
+    infile.close();                                                                 //closing text file
     //////////////////////////////////////////////////////////////////////////////////////
-
+    
     ////////stuToBe == student to be inserted////////
 
     int choice;
@@ -256,7 +289,6 @@ int main(int argc, char *argv[])
             }
             break;
         case 4:
-            // HashTable->ShowAllStudents();
             cout << "Enter Academic Year: ";
             cin >> year;
             InvertedIndexTable->FindActiveUsersInAcademicYear(year);
@@ -267,7 +299,6 @@ int main(int argc, char *argv[])
             cout << "Enter Year To Search: ";
             cin >> year;
             InvertedIndexTable->FindNBestStudentsOfYear(numberOfStudents, year);
-            // InvertedIndexTable->ShowAllStudentsInYear(year);
             break;
         case 6:
             cout << "Enter Year: ";
@@ -288,7 +319,9 @@ int main(int argc, char *argv[])
             InvertedIndexTable->FindNMostPopularZipCode(rank);
             break;
         case 10:
-            delete newStudent;
+            if(inputFile!=""){
+                delete newStudent;
+            }
             delete InvertedIndexTable;
             delete HashTable;
             exit(1);

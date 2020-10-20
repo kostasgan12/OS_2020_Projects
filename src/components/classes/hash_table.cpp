@@ -28,38 +28,31 @@ StudentHashTableEntry * StudentHashTable::InsertStudent(Student *student)
 
     StudentHashTableEntry* p = NULL;                                    //initialize p with NULL
     StudentHashTableEntry* en = studentHashTable[hash_v];               //initialize en with the first object contained in the list at position hash_v of our hashtable, it either contains an object or NULL as initialized
-    
-    // cout << "########################################################################" << endl;
-    // cout << "Student we want to insert is :\t" << student->getStudentLastName() << endl;
 
     while (en != NULL)                                                  //searching chained list at hashtable position given by hash function until we find available entry space
     {
         p = en;                                                         //p is assigned en value of chained list
         en = en->nextSt;                                                // en is assinged next value of chained list
-    
-        // cout << "++ Looping Over Chained List Items ++ p is ====> " << p->studentData.getStudentLastName() << endl;
     }
     
-    if (en == NULL)                                                     // if en == NULL, which means that
+    if (en == NULL)                                                     // if en == NULL, which means that the chained list for that key is empty
     {
         en = new StudentHashTableEntry(student);                        // we assign en with a new entry
-       
+
         if (p == NULL)                                                  // p is null when our chained list at position hash_v is empty
         {
-            studentHashTable[hash_v] = en;                              //so we assign the first item in that list with our en value 
+            studentHashTable[hash_v] = en;                              //so we assign the first item in that list with our en value
         }
-        else
+        else    
         {
             p->nextSt = en;                                                  //else if the list isnt empty, we assign our value to the next element of the last one that is represented by p
         }
     }
     else
     {
-        // cout<<"in en else condition en should not be NULL, it is ==> "<<en<<endl;
         en->studentData = * student;
     }
-    // cout << "########################################################################" << endl;
-    // delete en;
+    
     studentSum++;
     return en;
 }
@@ -105,18 +98,41 @@ int StudentHashTable::DeleteStudent(string id)
     StudentHashTableEntry *p = NULL;
     
     bool flag= false;
+    bool isFirstItem = false;
     int studentEntryYearToReturn = 0;
 
     if (en != NULL) //check if first entry of this position in the hashtable is null, if not then we can search for the item, if its there
     {
-        while (en->nextSt != NULL)
+        if(en->studentData.getStudentId() == id)    //checking if first student in hashtable is the one we are looking for
         {
-            p = en;
-            en = en->nextSt;
+            isFirstItem = true;
+            studentEntryYearToReturn = en->studentData.getStudentEntryYear();
+
+            if(en->nextSt!=NULL){
+                studentHashTable[hash_v] = en->nextSt;
+            }else{
+                studentHashTable[hash_v] = NULL;
+            }
+
+            cout << "Student with id:\t" << id << "\tSuccessfully Deleted From Our Hash Table" << endl;
+            cout << "\n########################################################################\n"
+                 << endl;
+
+            delete en;
+            return studentEntryYearToReturn;
+        }
+
+        while (en!= NULL)
+        {
+
             if (en->studentData.getStudentId() == id)
             {
                 flag = true;
+                break;
             }
+
+            p = en;
+            en = en->nextSt;
         }
     }else{
         cout << "No Student found with id " << id << endl;
@@ -126,7 +142,13 @@ int StudentHashTable::DeleteStudent(string id)
     if (flag && p != NULL)
     {
         studentEntryYearToReturn = en->studentData.getStudentEntryYear();
-        p->nextSt = en->nextSt;
+
+        if(en->nextSt!=NULL){
+            p->nextSt = en->nextSt;
+        }else{
+            p->nextSt = NULL;
+        }
+
         studentSum--;
         cout << "Student with id:\t" << id << "\tSuccessfully Deleted From Our Hash Table" << endl;
     }
@@ -182,6 +204,7 @@ int StudentHashTable::FindStudentEntryYear(string id)
 
 void StudentHashTable::ShowAllStudents()
 {
+    bool found = false;
     for (int i = 0; i < hashTableSize; i++)
     {
         if (studentHashTable[i] != NULL)
@@ -193,11 +216,15 @@ void StudentHashTable::ShowAllStudents()
             {
                 cout << "found student with id:\t" << en->studentData.getStudentId();
                 cout << "\tand name:\t" << en->studentData.getStudentLastName() << "\t" << en->studentData.getStudentFirstName() << endl;
-
+                found = true;
                 en = en->nextSt;
             }
         }
     }
 
+    if (!found)
+    {
+       cout<<"Hash Table Is Empty"<<endl;
+    }
     // delete en;
 }
