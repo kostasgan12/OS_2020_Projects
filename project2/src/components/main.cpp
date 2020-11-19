@@ -33,38 +33,40 @@ int main(int argc, char *argv[])
         }
         else
         {   
+            //check whether we previous argument to i, was Not a valide flag
             if(!strcmp(argv[i-1], "-l") && !strcmp(argv[i-1], "-u") && !strcmp(argv[i-1], "-w")  ){
                 cout << "########### Unrecognised Flag ###########\n"<< endl;
             }
+            //initially check whether i argument is a valid numeric
             else if (!isNumeric(argv[i])){
                 string msg = "";
                 if(strcmp(argv[i-1], "-l") == 0){
-                    cout << "###########\tLowest Value\tIs Not Numeric:\t '"<< argv[i] <<"' ###########\n"<< endl;
-                    cout << "###########\tEnter Valid Lowest Value: ";
+                    cout << "\n\tLowest Value\tIs Not Numeric:\t '"<< argv[i] <<"'"<< endl;
+                    cout << "\tEnter Valid Lowest Value: ";
                     string temp;
                     cin >> temp;
                     while ( !isNumeric(temp) ) {
-                        cout << "###########\tWRONG!\tEnter Valid Lowest Value: ";
+                        cout << "\tWRONG!\tEnter Valid Lowest Value: ";
                         cin >> temp;
                     }
                     lowestNumToCheck = stoi(temp);
                 }else if(strcmp(argv[i-1], "-u") == 0){
-                    cout << "###########\tUpper Value\tIs Not Numeric:\t '"<< argv[i] <<"' ###########\n"<< endl;
-                    cout << "###########\tEnter Valid Upper Value: ";
+                    cout << "\n\tUpper Value\tIs Not Numeric:\t '"<< argv[i] <<"'"<< endl;
+                    cout << "\tEnter Valid Upper Value: ";
                     string temp;
                     cin >> temp;
                     while ( !isNumeric(temp) ) {
-                        cout << "###########\tWRONG!\tEnter Valid Upper Value: ";
+                        cout << "\tWRONG!\tEnter Valid Upper Value: ";
                         cin >> temp;
                     }
                     upperNumToCheck = stoi(temp);
                 }else if(strcmp(argv[i-1], "-w") == 0){
-                    cout << "###########\tNumber Of Children Value\tIs Not Numeric:\t '"<< argv[i] <<"' ###########\n"<< endl;
-                    cout << "###########\tEnter Valid Number Of Children Value: ";
+                    cout << "\n\tNumber Of Children Value\tIs Not Numeric:\t '"<< argv[i] <<"'"<< endl;
+                    cout << "\tEnter Valid Number Of Children Value: ";
                     string temp;
                     cin >> temp;
                     while ( !isNumeric(temp) ) {
-                        cout << "###########\tWRONG!\tEnter Valid Number Of Children Value: ";
+                        cout << "\tWRONG!\tEnter Valid Number Of Children Value: ";
                         cin >> temp;
                     }
                     numOfChildren = stoi(temp);
@@ -76,6 +78,15 @@ int main(int argc, char *argv[])
                 continue;
             }
         }
+    }
+
+    if (lowestNumToCheck > upperNumToCheck){
+        int swapTemp = lowestNumToCheck;
+        lowestNumToCheck = upperNumToCheck;
+        upperNumToCheck = swapTemp;
+
+        cout << "\n\tSwapped Lowest & Upper Value Because, Lowest Was Greater\n"<<endl;
+        cout << "\tLowest: " << lowestNumToCheck << "\t&\tUpper: " << upperNumToCheck << "\n"<< endl;
     }
 
     //////////////////////////////////////////////////////////////////////////////////////
