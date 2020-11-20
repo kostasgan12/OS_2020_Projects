@@ -1,14 +1,14 @@
 #include "../header_files/main.h"
 
+int lowestNumToCheck = 0;
+int upperNumToCheck = 0;
+int numOfChildren = 0;
+
 int main(int argc, char *argv[])
 {
     //////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////// INITIALIZING PARSED DATA  //////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////
-
-    int lowestNumToCheck = 0;
-    int upperNumToCheck = 0;
-    int numOfChildren = 0;
 
     for (int i = 1; i < argc; i++)
     {
@@ -91,6 +91,43 @@ int main(int argc, char *argv[])
 
     //////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////
+
+    for (int i = 0; i < numOfChildren; i++) // loop to create numOfChildren number of children for  level 1
+    {
+        //forking root into numOfChildren children processes
+        pid_t pid = fork();
+        if (pid < 0){
+            cout << "Root Fork Failed!"<<endl;
+            return 1;
+        }
+
+        if (pid == 0)   //children
+        {
+            cout << "\tChild -- > pid = " << getpid() << " and ppid = " << getppid() << "\n"
+                << endl;
+            for (int y = 0; y < numOfChildren; y++) //loop to create numOfChildren number of grandchildren for  level 2
+            {
+                //forking children into numOfChildren grandchildren processes
+                pid_t child_pid = fork();
+                if (child_pid < 0)
+                {
+                    cout << "Child Fork Failed!" << endl;
+                    return 1;
+                }
+                if (child_pid == 0) //grandchildren
+                {
+                    cout << "\tGrandchild -- > pid = " << getpid() << " and ppid = " << getppid() << "\n"
+                         << endl;
+                    exit(0);
+                }
+            }
+            exit(0);
+        }
+    }
+
+    // for (int i = 0; i < pow(2.0,numOfChildren); i++) // loop will run 2^numOfChildren times
+    for (int i = 0; i < numOfChildren * numOfChildren; i++) // loop will run numOfChildren*numOfChildren times
+    wait(NULL);
 
     return 0;
 }
