@@ -92,6 +92,44 @@ int main(int argc, char *argv[])
     //////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////
 
+    int childrenRangeValues[numOfChildren];
+
+    int rangeSize = upperNumToCheck - lowestNumToCheck + 1;
+    int individualRangeSize = rangeSize / numOfChildren;
+    if (individualRangeSize < 1){
+        cout << "rangeSize / numOfChildren is:\t" << individualRangeSize << " so each child will get either 1 or 0 values to check." << endl;
+    }else{
+        cout << "individualRangeSize is:\t" << individualRangeSize << endl;
+    }
+    int remainder = 0;
+
+    if (rangeSize % numOfChildren == 0)
+    {
+        // cout << "rangeSize: " << rangeSize << " can be divided equally." << endl;
+        for (int i = 0; i < numOfChildren; i++)
+        {
+            childrenRangeValues[i] = individualRangeSize;
+        }
+        
+    }else{
+        remainder = rangeSize % numOfChildren;
+        // cout << "remainder is: " << remainder << endl;
+        for (int i = 0; i < numOfChildren; i++)
+        {
+            if(remainder > 0){
+                childrenRangeValues[i] = individualRangeSize + 1;
+                remainder--;
+            }else{
+                childrenRangeValues[i] = individualRangeSize;
+            }
+        }
+    }
+
+    // for (int i = 0; i < numOfChildren; i++)
+    // {
+    //     cout << "childrenRangeValues["<<i<<"] is:" << childrenRangeValues[i]<<endl;
+    // }
+
     for (int i = 0; i < numOfChildren; i++) // loop to create numOfChildren number of children for  level 1
     {
         //forking root into numOfChildren children processes
