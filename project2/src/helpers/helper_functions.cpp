@@ -46,7 +46,7 @@ void calculateChildrenAllocation(int **  valuesRangeArray, int arraySize, int lo
     else
     {
         remainder = rangeSize % numOfChildren;
-        cout << "remainder is: " << remainder << endl;
+        // cout << "remainder is: " << remainder << endl;
         for (int i = 0; i < numOfChildren; i++)
         {
             if (remainder > 0)
@@ -144,35 +144,27 @@ void calculateGrandchildrenAllocation(int **  valuesRangeArray, int arraySize, i
     // }
 }
 
+string convertToString(char *a, int size)
+{
+    int i;
+    string s = "";
+    for (i = 0; i < size; i++)
+    {
+        s = s + a[i];
+    }
+    return s;
+}
 
-// template <size_t N>
-// int myExecvp(const char* file, const char* const (&argv)[N])
-// {
-//   assert((N > 0) && (argv[N - 1] == nullptr));
+int extractNumOfPrimes(string a)
+{
+    int i = 0;
+    string s = "";
 
-//   return execvp(file, const_cast<char* const*>(argv));
-// }
+    while (a[i] != ' ')
+    {
+        s = s + a[i];
+        i++;
+    }
 
-// int myExecvp(const char *file, const char *const argv[])
-// {
-//     size_t argc = 0;
-//     size_t len = 0;
-
-//     /* measure the inputs */
-//     for (auto *p = argv;  *p;  ++p) {
-//         ++argc;
-//         len += strlen(*p) + 1;
-//     }
-//     /* allocate copies */
-//     auto const arg_string = make_unique<char[]>(len);
-//     auto const args = make_unique<char*[]>(argc+1);
-//     /* copy the inputs */
-//     len = 0;                    // re-use for position in arg_string
-//     for (auto i = 0u;  i < argc;  ++i) {
-//         len += strlen(args[i] = strcpy(&arg_string[len], argv[i]))
-//             + 1; /* advance to one AFTER the nul */
-//     }
-//     args[argc] = nullptr;
-//     return execvp(file, args.get());
-// }
-
+    return stoi(s);
+}

@@ -25,4 +25,7 @@ void calculateGrandchildrenAllocation(int **  valuesRangeArray, int arraySize, i
 
 // int myExecvp(const char *file, const char *const argv[]);
 
+string convertToString(char *a, int size);
+int extractNumOfPrimes(string a);
+
 #endif

@@ -6,14 +6,14 @@ int upperValue;
 
 #define MSGSIZE 65
 #define fifo "child_grandchild_fifo"
+#define root_child_fifo "root_child_fifo"
 
 int main(int argc, char *argv[])
 {
     //////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////// INITIALIZING PARSED DATA  //////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////
-    int fd, i, nwrite;
-    char msgbuf[MSGSIZE + 1];
+    int fd, nwrite;
 
     mknod(fifo, S_IFIFO | 0640, 0);
 
@@ -70,9 +70,6 @@ int main(int argc, char *argv[])
 
     char array1[MSGSIZE + 1];
 
-    ///////////////////////////////////////
-    //////////////////////////////////
-    // string stringConvertedPrimeArray;
     string stringConvertedPrimeArray[numOfGrandChilds];
 
     int k = 0;
@@ -118,9 +115,9 @@ int main(int argc, char *argv[])
         k++;
     }
 
-    for(int i=0; i < childPrimesCounter; i++){
-        cout<<"for i = "<<i<<" intConvertedPrimeArray = "<<intConvertedPrimeArray[i]<<endl;
-    }
+
+
+
 
     char const *childNumOfPrimesAsChar;
     string childNumOfPrimes;
@@ -138,7 +135,6 @@ int main(int argc, char *argv[])
     int counter = 0;
     while(counter < childPrimesCounter)
     {
-        cout<<"intConvertedPrimeArray[counter]"<<intConvertedPrimeArray[counter]<<endl;
         primeToAppend = to_string(intConvertedPrimeArray[counter]);
         ourNumAsChar = primeToAppend.c_str();
   
@@ -146,10 +142,19 @@ int main(int argc, char *argv[])
         strncat(childMessageBuffer, ourNumAsChar, (sizeof(childMessageBuffer) - strlen(ourNumAsChar) - 1));
         counter++;
     }
-    cout << childMessageBuffer << endl;
-    
-    
 
+    // cout << childMessageBuffer << endl;
+
+    int fdChildParent;
+
+    if ((fdChildParent = open(root_child_fifo, O_CREAT | O_WRONLY)) < 0)
+    {
+        cout << "File Open Error" << endl;
+    }
+
+    write(fdChildParent, childMessageBuffer, MSGSIZE + 1);
+    close(fdChildParent);
+    exit(0);
 
     return 0;
 }

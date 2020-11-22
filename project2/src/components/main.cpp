@@ -4,11 +4,17 @@ int lowestNumToCheck = 0;
 int upperNumToCheck = 0;
 int numOfChildren = 0;
 
+#define root_child_fifo "root_child_fifo"
+
+#define MSGSIZE 65
+
 int main(int argc, char *argv[])
 {
     //////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////// INITIALIZING PARSED DATA  //////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////
+    int fdChildParent;
+    mknod(root_child_fifo, S_IFIFO | 0640, 0);
 
     for (int i = 1; i < argc; i++)
     {
@@ -110,6 +116,12 @@ int main(int argc, char *argv[])
             return 1;
         }
 
+        if ((fdChildParent = open(root_child_fifo, O_RDONLY | O_NDELAY)) < 0)
+        {
+            perror("root fifo open problem");
+            exit(3);
+        }
+
         if (pid == 0)   //children
         {
             childLowestArg = to_string(childrenRangeValues[i][0]);    //copy lowest value for argument purposes
@@ -128,7 +140,67 @@ int main(int argc, char *argv[])
         wait(NULL);
     }
 
-    cout<<"PARENT DOING STUFF"<<endl;
+    char childMessageBuffer[MSGSIZE + 1];
+
+    string stringConvertedPrimeArray[numOfChildren];
+    
+    int k = 0;
+    int rootPrimesCounter = 0;
+    while (k < numOfChildren)
+    {
+        read(fdChildParent, childMessageBuffer, MSGSIZE + 1);
+
+        stringConvertedPrimeArray[k] = convertToString(childMessageBuffer, strlen(childMessageBuffer));
+
+        // REMINDER FIRST VALUE OF PIPE ARRAY IS THE TOTAL PRIMES THAT LEAF NODE HAS FOUND
+        rootPrimesCounter = rootPrimesCounter + extractNumOfPrimes(stringConvertedPrimeArray[k]);
+
+        k++;
+    }
+    close(fdChildParent);
+
+
+    int intConvertedPrimeArray[rootPrimesCounter];
+
+    k = 0;
+    int arrayIndex;
+    int intArrayIndex = 0;
+    while (k < numOfChildren)
+    {
+        arrayIndex = 0;
+        while (stringConvertedPrimeArray[k][arrayIndex] != ' ')
+        {
+            arrayIndex++;
+        }
+
+        string s = "";
+        for (int i = 0; i < extractNumOfPrimes(stringConvertedPrimeArray[k]); i++)
+        {
+            s = "";
+            arrayIndex++;
+            while (stringConvertedPrimeArray[k][arrayIndex] != ' ')
+            {
+                s = s + stringConvertedPrimeArray[k][arrayIndex];
+                // s.push_back(stringConvertedPrimeArray[k][arrayIndex]);
+                arrayIndex++;
+            }
+            s.push_back('\0');
+            intConvertedPrimeArray[intArrayIndex] = stoi(s);
+            intArrayIndex++;
+        }
+        k++;
+    }
+
+    cout << "For The Given Range: [" << lowestNumToCheck << "," << upperNumToCheck << "]:\t" << rootPrimesCounter << " Primes Were Found."<< endl;
+
+    int l = 0;
+    while (l < rootPrimesCounter)
+    {
+        cout << intConvertedPrimeArray[l]<<endl;
+        l++;
+    }
+
+
 
     return 0;
 }
