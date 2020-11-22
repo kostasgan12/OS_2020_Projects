@@ -16,13 +16,13 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
-#include "../header_files/helper_functions.h"
+#include "../header_files/child_helper_functions.h"
+
 
 using namespace std;
 
-extern int lowestNumToCheck;
-extern int upperNumToCheck;
-extern int numOfChildren;
-
+extern int numOfGrandChilds;
+extern int lowestValue;
+extern int upperValue;
 
 #endif

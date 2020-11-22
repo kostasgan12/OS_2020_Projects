@@ -1,5 +1,5 @@
-#ifndef MAIN_H
-#define MAIN_H
+#ifndef GRANDCHILD_MAIN_H
+#define GRANDCHILD_MAIN_H
 
 #include <cstdlib>
 #include <iostream>
@@ -16,13 +16,11 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
-#include "../header_files/helper_functions.h"
+#include "../header_files/grandchild_helper_functions.h"
 
 using namespace std;
 
-extern int lowestNumToCheck;
-extern int upperNumToCheck;
-extern int numOfChildren;
-
+extern int lowestValue;
+extern int upperValue;
 
 #endif

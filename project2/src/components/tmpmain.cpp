@@ -92,14 +92,37 @@ int main(int argc, char *argv[])
     //////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////
 
+
     int** childrenRangeValues = new int*[numOfChildren];
     for(int i = 0; i < numOfChildren; ++i)
         childrenRangeValues[i] = new int[2];
 
     calculateChildrenAllocation(childrenRangeValues, numOfChildren, lowestNumToCheck, upperNumToCheck);
 
-    string childLowestArg, childUpperArg;
-    string numOfChildrenArg = to_string(numOfChildren);
+    for (int i = 0; i < numOfChildren; i++)
+    {
+        cout << "\tIN MAIN\tchildrenRangeValues["<<i<<"] is:[" << childrenRangeValues[i][0]<< ","<<childrenRangeValues[i][1]<<"]"<<endl;
+    }
+
+    // int totalGrandchildren = pow(numOfChildren, 2.0);
+
+    // int** grandchildrenRangeValues = new int*[totalGrandchildren];   //total of leaf nodes in our tree are numOfChildren ^ 2
+    // for(int i = 0; i < totalGrandchildren; ++i){
+    //     grandchildrenRangeValues[i] = new int[2];
+    // }
+
+    // for(int i = 0; i < numOfChildren; i++){
+    //     cout << "\tallocating grandchildren for range:\t is:[" << childrenRangeValues[i][0]<< ","<<childrenRangeValues[i][1]<<"]"<<endl;
+    //     calculateGrandchildrenAllocation(grandchildrenRangeValues, totalGrandchildren, childrenRangeValues[i][0], childrenRangeValues[i][1]);
+    // }
+
+    // for (int i = 0; i < totalGrandchildren; i++)
+    // {
+    //     cout << "\tIN MAIN\tgrandchildrenRangeValues["<<i<<"] is:[" << grandchildrenRangeValues[i][0]<< ","<<grandchildrenRangeValues[i][1]<<"]"<<endl;
+    // }
+
+
+
 
     for (int i = 0; i < numOfChildren; i++) // loop to create numOfChildren number of children for  level 1
     {
@@ -112,23 +135,41 @@ int main(int argc, char *argv[])
 
         if (pid == 0)   //children
         {
-            childLowestArg = to_string(childrenRangeValues[i][0]);    //copy lowest value for argument purposes
-            childUpperArg = to_string(childrenRangeValues[i][1]); //copy upper value for argument purposes
-            childrenRangeValues[i][0] = 0;  //make them 0 for signaling purposes
-            childrenRangeValues[i][1] = 0;  //make them 0 for signaling purposes
-            
-            char const * programName = "./child_program";  
-            char const * arg1 = numOfChildrenArg.c_str();
-            char const * arg2 = childLowestArg.c_str();
-            char const * arg3 = childUpperArg.c_str();
+            cout << "\tChild -- > pid = " << getpid() << " and ppid = " << getppid() << "\n"
+                << endl;
+            // for (int y = 0; y < numOfChildren; y++) //loop to create numOfChildren number of grandchildren for  level 2
+            // {
+            //     //forking children into numOfChildren grandchildren processes
+            //     pid_t child_pid = fork();
+            //     if (child_pid < 0)
+            //     {
+            //         cout << "Child Fork Failed!" << endl;
+            //         return 1;
+            //     }
+            //     if (child_pid == 0) //grandchildren
+            //     {
+            //         cout << "\tGrandchild -- > pid = " << getpid() << " and ppid = " << getppid() << "\n"
+            //              << endl;
+            //         exit(0);
+            //     }
+            // }
 
-            execlp(programName, programName, arg1, arg2, arg3, NULL);
+            // const char *argv[] = { "ls", "-a", nullptr };
+            // myExecvp(argv[0], argv);
+
+            string programName = "ls";
+            string arg1 = "-lh";
+            string arg2 = "/home";
+            
+            execlp(programName, programName, arg1, arg2, NULL);
+
             exit(0);
         }
-        wait(NULL);
     }
 
-    cout<<"PARENT DOING STUFF"<<endl;
+    // for (int i = 0; i < numOfChildren * numOfChildren; i++) // loop will run numOfChildren*numOfChildren times
+    for (int i = 0; i < numOfChildren ; i++) // loop will run numOfChildren times
+    wait(NULL);
 
     return 0;
 }
