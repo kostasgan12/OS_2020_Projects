@@ -15,22 +15,14 @@ int main(int argc, char *argv[])
     int fd, i, nwrite;
     char msgbuf[MSGSIZE + 1];
 
-    // if (mkfifo(fifo, 0666) == -1)
-    // {
-    //     if (
-    //         errno != EEXIST)
-    //     {
-    //         cout<<"receiver: mkfifo"<<endl;
-    //         exit(6);
-    //     }
-    // }
-
     mknod(fifo, S_IFIFO | 0640, 0);
-
 
     numOfGrandChilds = stoi(argv[1]);
     lowestValue = stoi(argv[2]);
     upperValue = stoi(argv[3]);
+
+    int *childPrimeArray = NULL;  // Pointer to int, initialize to nothing.
+    
 
     //////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////
@@ -61,8 +53,6 @@ int main(int argc, char *argv[])
 
         if (pid == 0)   //GRANDchildren
         {
-            cout << "in Grandchild process!!!! with pid:\t"<<getpid()<<endl;
-
             grandChildLowestArg = to_string(grandchildsRangeValues[i][0]);    //copy lowest value for argument purposes
             grandChildUpperArg = to_string(grandchildsRangeValues[i][1]); //copy upper value for argument purposes
             grandchildsRangeValues[i][0] = 0;  //make them 0 for signaling purposes
@@ -72,8 +62,6 @@ int main(int argc, char *argv[])
             char const * arg1 = grandChildLowestArg.c_str();
             char const * arg2 = grandChildUpperArg.c_str();
 
-            
-
             execlp(programName, programName, arg1, arg2, NULL);
             exit(0);
         }
@@ -82,15 +70,86 @@ int main(int argc, char *argv[])
 
     char array1[MSGSIZE + 1];
 
+    ///////////////////////////////////////
+    //////////////////////////////////
+    // string stringConvertedPrimeArray;
+    string stringConvertedPrimeArray[numOfGrandChilds];
+
     int k = 0;
+    int childPrimesCounter = 0;
     while (k < numOfGrandChilds)
     {
         read(fd, array1, MSGSIZE + 1);
-        cout << "\tMessage Received:" << array1 << endl;
+
+        stringConvertedPrimeArray[k] =  convertToString(array1, strlen(array1));
+
+        // REMINDER FIRST VALUE OF PIPE ARRAY IS THE TOTAL PRIMES THAT LEAF NODE HAS FOUND
+        childPrimesCounter = childPrimesCounter + extractNumOfPrimes(stringConvertedPrimeArray[k]);  
+
         k++;
     }
-    
     close(fd);
+
+    int intConvertedPrimeArray[childPrimesCounter];
+
+    k = 0;
+    int arrayIndex;
+    int intArrayIndex = 0;
+    while (k < numOfGrandChilds)
+    {
+        arrayIndex = 0;
+        while(stringConvertedPrimeArray[k][arrayIndex] != ' '){
+            arrayIndex++;
+        }
+
+        string s = "";
+        for(int i=0; i< extractNumOfPrimes(stringConvertedPrimeArray[k]); i++){
+            s = "";
+            arrayIndex++;
+            while(stringConvertedPrimeArray[k][arrayIndex] != ' '){
+                s = s + stringConvertedPrimeArray[k][arrayIndex];
+                // s.push_back(stringConvertedPrimeArray[k][arrayIndex]);
+                arrayIndex++;
+            }
+            s.push_back('\0');
+            intConvertedPrimeArray[intArrayIndex] = stoi(s);
+            intArrayIndex++;
+        }
+        k++;
+    }
+
+    for(int i=0; i < childPrimesCounter; i++){
+        cout<<"for i = "<<i<<" intConvertedPrimeArray = "<<intConvertedPrimeArray[i]<<endl;
+    }
+
+    char const *childNumOfPrimesAsChar;
+    string childNumOfPrimes;
+
+    childNumOfPrimes = to_string(childPrimesCounter);
+    childNumOfPrimesAsChar = childNumOfPrimes.c_str();
+
+    char childMessageBuffer[MSGSIZE+1];
+    // strncpy(childMessageBuffer, "primes ", sizeof("primes "));
+    strncpy(childMessageBuffer, childNumOfPrimesAsChar, sizeof(childNumOfPrimes));
+
+
+    char const *ourNumAsChar ;
+    string primeToAppend; 
+    int counter = 0;
+    while(counter < childPrimesCounter)
+    {
+        cout<<"intConvertedPrimeArray[counter]"<<intConvertedPrimeArray[counter]<<endl;
+        primeToAppend = to_string(intConvertedPrimeArray[counter]);
+        ourNumAsChar = primeToAppend.c_str();
+  
+        strncat(childMessageBuffer, " ", (sizeof(childMessageBuffer) - strlen(", ") - 1));
+        strncat(childMessageBuffer, ourNumAsChar, (sizeof(childMessageBuffer) - strlen(ourNumAsChar) - 1));
+        counter++;
+    }
+    cout << childMessageBuffer << endl;
+    
+    
+
 
     return 0;
 }

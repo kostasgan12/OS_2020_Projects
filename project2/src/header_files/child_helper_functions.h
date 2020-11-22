@@ -16,4 +16,7 @@ bool isNumeric(string str);
 
 void calculateChildrenAllocation(int **  valuesRangeArray, int numOfGrandchilds, int lowestValue, int upperValue);
 
+string convertToString(char* a, int size) ;
+int extractNumOfPrimes(string a);
+
 #endif

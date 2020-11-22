@@ -76,3 +76,26 @@ void calculateChildrenAllocation(int **  valuesRangeArray, int numOfGrandchilds,
         }
     }
 }
+
+string convertToString(char* a, int size) 
+{ 
+    int i; 
+    string s = ""; 
+    for (i = 0; i < size; i++) { 
+        s = s + a[i]; 
+    } 
+    return s; 
+} 
+
+int extractNumOfPrimes(string a) 
+{ 
+    int i = 0; 
+    string s = ""; 
+
+    while(a[i] != ' '){
+        s = s + a[i]; 
+        i++;
+    }
+
+    return stoi(s); 
+} 
