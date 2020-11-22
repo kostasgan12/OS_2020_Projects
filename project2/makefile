@@ -22,4 +22,4 @@ grandchild_main.o: ./src/components/grandchild_main.cpp ./src/header_files/grand
 grandchild_helper_functions.o: ./src/helpers/grandchild_helper_functions.cpp ./src/header_files/grandchild_helper_functions.h
 	g++ $(CFLAGS) -c ./src/helpers/grandchild_helper_functions.cpp
 clean:
-	rm *.o myprime child_program grandchild_program
+	rm *.o myprime child_program grandchild_program rm -rf child_grandchild_fifo

@@ -19,3 +19,19 @@ bool isPrime_2(int n){
         if ( n % i == 0) return(NO); 
     return(YES);
 }
+
+void addToPrimeArray(int *array, int n){
+    if(array[0] == 0){  //if array is empty
+        array[0] = n;
+        return;
+    }
+
+    int i = 0;
+    while (array[i] != 0) //loop over already added primes
+    {
+        i++;
+    }
+    array[i] = n;
+
+    return;
+}

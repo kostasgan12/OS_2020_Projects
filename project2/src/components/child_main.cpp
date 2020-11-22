@@ -4,13 +4,29 @@ int numOfGrandChilds;
 int lowestValue;
 int upperValue;
 
+#define MSGSIZE 65
+#define fifo "child_grandchild_fifo"
+
 int main(int argc, char *argv[])
 {
     //////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////// INITIALIZING PARSED DATA  //////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////
+    int fd, i, nwrite;
+    char msgbuf[MSGSIZE + 1];
 
-    // cout << "in CHILD CHILD CHILD process!!!! with pid:\t"<<getpid()<<endl;
+    // if (mkfifo(fifo, 0666) == -1)
+    // {
+    //     if (
+    //         errno != EEXIST)
+    //     {
+    //         cout<<"receiver: mkfifo"<<endl;
+    //         exit(6);
+    //     }
+    // }
+
+    mknod(fifo, S_IFIFO | 0640, 0);
+
 
     numOfGrandChilds = stoi(argv[1]);
     lowestValue = stoi(argv[2]);
@@ -36,6 +52,13 @@ int main(int argc, char *argv[])
             return 1;
         }
 
+
+        if ((fd = open(fifo, O_RDONLY | O_NDELAY)) < 0)
+        {
+            perror("fifo open problem");
+            exit(3);
+        }
+
         if (pid == 0)   //GRANDchildren
         {
             cout << "in Grandchild process!!!! with pid:\t"<<getpid()<<endl;
@@ -49,12 +72,25 @@ int main(int argc, char *argv[])
             char const * arg1 = grandChildLowestArg.c_str();
             char const * arg2 = grandChildUpperArg.c_str();
 
+            
+
             execlp(programName, programName, arg1, arg2, NULL);
             exit(0);
         }
         wait(NULL);
     }
 
+    char array1[MSGSIZE + 1];
+
+    int k = 0;
+    while (k < numOfGrandChilds)
+    {
+        read(fd, array1, MSGSIZE + 1);
+        cout << "\tMessage Received:" << array1 << endl;
+        k++;
+    }
     
+    close(fd);
+
     return 0;
 }
