@@ -21,10 +21,10 @@ void calculateChildrenAllocation(int **  valuesRangeArray, int numOfGrandchilds,
     int tmpLowest = lowestValue;
     int tmpUpper = upperValue;
 
-    if (individualRangeSize < 1)
-    {
-        cout << "rangeSize / numOfGrandchilds is:\t" << individualRangeSize << " so each child will get either 1 or 0 values to check." << endl;
-    }
+    // if (individualRangeSize < 1)
+    // {
+    //     cout << "rangeSize / numOfGrandchilds is:\t" << individualRangeSize << " so each child will get either 1 or 0 values to check." << endl;
+    // }
     // else
     // {
     //     cout << "individualRangeSize is:\t" << individualRangeSize << endl;
