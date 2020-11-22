@@ -18,6 +18,7 @@
 
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <cstring>
 
 #include "../header_files/helper_functions.h"
 

@@ -17,6 +17,7 @@
 #include <sys/wait.h>
 #include <sys/stat.h> 
 #include <fcntl.h>
+#include <cstring>
 
 #include "../header_files/grandchild_helper_functions.h"
 
