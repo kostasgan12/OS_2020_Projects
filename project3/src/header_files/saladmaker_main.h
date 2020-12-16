@@ -29,5 +29,6 @@ using namespace std;
 extern int lowerTimeValue;
 extern int UpperTimeValue;
 extern int sharedMemoryId;
+extern string missingVegetable;
 
 #endif

@@ -78,40 +78,89 @@ int main(int argc, char *argv[])
     //////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////
 
-    sem_t *sp; 
-    int retval; 
     int id, err;
 
-    id = shmget(IPC_PRIVATE, SEGMENTSIZE, SEGMENTPERM); /* Make shared memory segment */
-    if (id ==  -1) {
+    /* Make shared memory segment */
+    id = shmget(IPC_PRIVATE, SEGMENTSIZE, SEGMENTPERM);
+    if (id == -1)
+    {
         perror("Creation");
-    }else{
+    }
+    else
+    {
         printf("Allocated %d\n", id);
     }
 
-    /* Attach the segment. */
-    sp = (sem_t *) shmat(id,(void*) 0, 0);
-    if ( sp == (void *) -1) {
+
+    sem_t *tomato_sp;
+    sem_t *pepper_sp;
+    sem_t *onion_sp;
+
+    int tomato_retval;
+    int pepper_retval;
+    int onion_retval;
+
+    /* Attach tomato_sp the segment. */
+    tomato_sp = (sem_t *) shmat(id,(void*) 0, 0);
+    if ( tomato_sp == (void *) -1) {
         perror("Attachment."); 
         exit(2);
     }
 
-     /* Initialize the semaphore. */
-    retval = sem_init(sp,1,2); if (retval != 0) {
+    /* Initialize tomato_sp the semaphore. */
+    tomato_retval = sem_init(tomato_sp,1,2); 
+    if (tomato_retval != 0) {
         perror("Couldn’t initialize."); 
         exit(3);
     }
 
-    retval = sem_trywait(sp);
-    printf("Did trywait. Returned %d >\n", retval); getchar();
+    /* Attach pepper_sp the segment. */
+    pepper_sp = (sem_t *)shmat(id,(void*) sizeof(sem_t), 0);
+    if (pepper_sp == (void *)-1)
+    {
+        perror("Attachment.");
+        exit(2);
+    }
 
-    retval = sem_trywait(sp);
-    printf("Did trywait. Returned %d >\n", retval); getchar();
+    /* Initialize pepper_sp the semaphore. */
+    pepper_retval = sem_init(pepper_sp, 1, 2);
+    if (pepper_retval != 0)
+    {
+        perror("Couldn’t initialize.");
+        exit(3);
+    }
 
-    retval = sem_trywait(sp);
-    printf("Did trywait. Returned %d >\n", retval); getchar();
+    /* Attach onion_sp the segment. */
+    onion_sp = (sem_t *)shmat(id, (void *) (2*sizeof(sem_t)), 0);
+    if (onion_sp == (void *)-1)
+    {
+        perror("Attachment.");
+        exit(2);
+    }
 
-    sem_destroy(sp);
+    /* Initialize onion_sp the semaphore. */
+    onion_retval = sem_init(onion_sp, 1, 2);
+    if (onion_retval != 0)
+    {
+        perror("Couldn’t initialize.");
+        exit(3);
+    }
+
+    tomato_retval = sem_trywait(tomato_sp);
+    printf(" Did trywait . Returned % d >\n ", tomato_retval);
+    getchar();
+
+    tomato_retval = sem_trywait(tomato_sp);
+    printf(" Did trywait . Returned % d >\n ", tomato_retval);
+    getchar();
+
+    tomato_retval = sem_trywait(tomato_sp);
+    printf(" Did trywait . Returned % d >\n ", tomato_retval);
+    getchar();
+
+    sem_destroy(tomato_sp);
+    sem_destroy(pepper_sp);
+    sem_destroy(onion_sp);
 
     /* Remove segment. */
     err = shmctl(id, IPC_RMID , 0);

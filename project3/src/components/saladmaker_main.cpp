@@ -3,6 +3,7 @@
 int lowerTimeValue = 0;
 int upperTimeValue = 0;
 int sharedMemoryId = 0;
+string missingVegetable;
 
 int main(int argc, char *argv[])
 {
@@ -31,6 +32,13 @@ int main(int argc, char *argv[])
             if (i + 1 < argc && isNumeric(argv[i + 1]))
             {
                 sharedMemoryId = stoi(argv[i + 1]);
+            }
+        }
+        else if (string(argv[i]) == "-v")
+        { //then we know that missing vegetable is next
+            if (i + 1 < argc && argv[i + 1])
+            {
+                missingVegetable = argv[i + 1];
             }
         }
         else
@@ -134,15 +142,29 @@ int main(int argc, char *argv[])
     }
 
     cout << "\n\tsharedMemoryId\tIs:\t" << sharedMemoryId << endl;
+    cout << "\n\tmissing Vegetable\tIs:\t" << missingVegetable << endl;
     //////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////
+
+    int vegetableSempaphoreAddress;
+    if(missingVegetable == "tomato"){
+        vegetableSempaphoreAddress = 0;
+    }else if(missingVegetable == "pepper"){
+        vegetableSempaphoreAddress = 1;
+    }else if(missingVegetable == "onion"){
+        vegetableSempaphoreAddress= 2;
+    }else{
+        exit(-1);
+    }
+
+    cout << "\n\tvegetableSempaphoreAddress\tIs:\t" << vegetableSempaphoreAddress << endl;
 
     sem_t *sp;
     int retval; 
     int err;
 
     /* Attach the segment. */
-    sp = (sem_t *) shmat(sharedMemoryId,(void*) 0, 0);
+    sp = (sem_t *)shmat(sharedMemoryId, (void *) (vegetableSempaphoreAddress*sizeof(sem_t)), 0);
     if (sp == (void *) -1) { 
         perror("Attachment."); 
         exit(2);
@@ -155,5 +177,22 @@ int main(int argc, char *argv[])
         exit(3); 
     }
 
+    retval = sem_trywait(sp);
+    printf(" Did trywait . Returned % d >\n ", retval);
+    getchar();
+    
+    retval = sem_trywait(sp);
+    printf(" Did trywait . Returned % d >\n ", retval);
+    getchar();
+    
+    retval = sem_trywait(sp);
+    printf(" Did trywait . Returned % d >\n ", retval);
+    getchar();
+
+
+    /* Remove segment . */
+    err = shmdt((void *)sp);
+    if (err == -1)
+        perror(" Detachment . ");
     return 0;
 }
