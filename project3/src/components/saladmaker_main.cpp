@@ -146,52 +146,52 @@ int main(int argc, char *argv[])
     //////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////
 
-    int vegetableSempaphoreAddress;
-    if(missingVegetable == "tomato"){
-        vegetableSempaphoreAddress = 0;
-    }else if(missingVegetable == "pepper"){
-        vegetableSempaphoreAddress = 1;
-    }else if(missingVegetable == "onion"){
-        vegetableSempaphoreAddress= 2;
-    }else{
-        exit(-1);
-    }
-
-    cout << "\n\tvegetableSempaphoreAddress\tIs:\t" << vegetableSempaphoreAddress << endl;
-
-    sem_t *sp;
+    
+    char item;
+    salad_table_buffer_t *salad_table_buffer;
     int retval; 
     int err;
-
-    /* Attach the segment. */
-    sp = (sem_t *)shmat(sharedMemoryId, (void *) (vegetableSempaphoreAddress*sizeof(sem_t)), 0);
-    if (sp == (void *) -1) { 
-        perror("Attachment."); 
+    
+    salad_table_buffer = (salad_table_buffer_t *)shmat(sharedMemoryId, (void *)0, 0);
+    if (salad_table_buffer == (void *)-1)
+    {
+        perror("Attachment.");
         exit(2);
     }
-    
-    /* Initialize the semaphore. */
-    retval = sem_init(sp,1,1);
-    if (retval != 0) { 
-        perror("Couldn’t initialize."); 
-        exit(3); 
+    else
+    {
+        printf("table buffer attached ok!\n");
     }
 
-    retval = sem_trywait(sp);
-    printf(" Did trywait . Returned % d >\n ", retval);
-    getchar();
-    
-    retval = sem_trywait(sp);
-    printf(" Did trywait . Returned % d >\n ", retval);
-    getchar();
-    
-    retval = sem_trywait(sp);
-    printf(" Did trywait . Returned % d >\n ", retval);
-    getchar();
+    sem_wait(&salad_table_buffer->occupied);
 
+    sem_wait(&salad_table_buffer->chef_muting);
+    
+    item = salad_table_buffer->offered_vegetable[salad_table_buffer->next_out];
+    salad_table_buffer->next_out++;
+    salad_table_buffer->next_out %= BFSIZE;
+
+    
+
+    // if (missingVegetable == "tomato")
+    // {
+        
+    // }
+    // else if (missingVegetable == "pepper")
+    // {
+    // }
+    // if (missingVegetable == "onion"){
+
+    // }else{
+
+    // }
+
+    sem_post(&salad_table_buffer->chef_muting);
+
+    sem_post(&salad_table_buffer->empty);
 
     /* Remove segment . */
-    err = shmdt((void *)sp);
+    err = shmdt((void *)salad_table_buffer);
     if (err == -1)
         perror(" Detachment . ");
     return 0;

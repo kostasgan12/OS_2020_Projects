@@ -8,13 +8,35 @@ bool isNumeric(string str)
     return true;
 }
 
-string convertToString(char *a, int size)
-{
-    int i;
-    string s = "";
-    for (i = 0; i < size; i++)
+char findSaladMaker(int veg1, int veg2){
+    switch (veg1)
     {
-        s = s + a[i];
+        case 1:
+            if(veg2 == 2){
+                return 'o';
+            }else{
+                return 'p';
+            }
+        case 2:
+            if (veg2 == 1)
+            {
+                return 'o';
+            }
+            else
+            {
+                return 't';
+            }
+        case 3:
+            if (veg2 == 1)
+            {
+                return 'p';
+            }
+            else
+            {
+                return 't';
+            }
+        default:
+            break;
     }
-    return s;
+    return 0;
 }

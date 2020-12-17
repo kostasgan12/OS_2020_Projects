@@ -20,8 +20,9 @@
 #include <semaphore.h>
 
 #include "../header_files/chef_helper_functions.h"
+#include "../header_files/common.h"
 
-#define SEGMENTSIZE sizeof(sem_t) 
+#define SEGMENTSIZE sizeof(salad_table_buffer_t)
 #define SEGMENTPERM 0666
 
 using namespace std;

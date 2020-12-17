@@ -16,4 +16,6 @@ using namespace std;
 bool isNumeric(string str);
 // extern int numOfChildren;
 
+char findSaladMaker(int veg1, int veg2);
+
 #endif
