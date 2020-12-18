@@ -165,8 +165,10 @@ int main(int argc, char *argv[])
 
     sem_wait(&salad_table_buffer->occupied);
 
-    sem_wait(&salad_table_buffer->chef_muting);
-    
+    // sem_wait(&salad_table_buffer->chef_muting);
+    sem_wait(&salad_table_buffer->saladmaker_3_Muting);
+    cout<<"after wait!!!"<<endl;
+
     item = salad_table_buffer->offered_vegetable[salad_table_buffer->next_out];
     salad_table_buffer->next_out++;
     salad_table_buffer->next_out %= BFSIZE;
@@ -189,7 +191,7 @@ int main(int argc, char *argv[])
     sem_post(&salad_table_buffer->chef_muting);
 
     sem_post(&salad_table_buffer->empty);
-
+    cout << "after post!!!" << endl;
     /* Remove segment . */
     err = shmdt((void *)salad_table_buffer);
     if (err == -1)

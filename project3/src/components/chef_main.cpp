@@ -106,7 +106,7 @@ int main(int argc, char *argv[])
 
 
     sem_init(&salad_table_buffer->occupied, 0, 0);
-    sem_init(&salad_table_buffer->empty, 0, BFSIZE);
+    sem_init(&salad_table_buffer->empty, 0, 1);
     sem_init(&salad_table_buffer->chef_muting, 0, 1);
     sem_init(&salad_table_buffer->saladmaker_1_muting, 0, 1);
     sem_init(&salad_table_buffer->saladmaker_2_Muting, 0, 1);
@@ -118,8 +118,9 @@ int main(int argc, char *argv[])
     int which_saladmaker;
     while (i <= numOfSlds)
     {
+        // printf("salad_table_buffer->empty:\t%d\n", salad_table_buffer->empty);
         sem_wait(&salad_table_buffer->empty);
-        sem_wait(&salad_table_buffer->chef_muting);
+        // sem_wait(&salad_table_buffer->chef_muting);
 
         random_vegetable_1 = rand() % 3 + 1;
         random_vegetable_2 = rand() % 3 + 1;
@@ -128,7 +129,9 @@ int main(int argc, char *argv[])
             random_vegetable_2 = rand() % 3 + 1;
         }
         
+        cout<<"random 1 : "<<random_vegetable_1<< "\tand random 2: "<<random_vegetable_2<<endl;
         which_saladmaker = findSaladMaker(random_vegetable_1, random_vegetable_2);
+
 
         salad_table_buffer->offered_vegetable[salad_table_buffer->next_in] = which_saladmaker;
         salad_table_buffer->next_in++;
@@ -139,22 +142,28 @@ int main(int argc, char *argv[])
         {
         case 't':
             cout<<"in tomato switch block"<<endl;
+            sem_post(&salad_table_buffer->chef_muting);
+            sem_post(&salad_table_buffer->occupied);
             break;
         case 'p':
             cout << "in pepper switch block" << endl;
+            sem_post(&salad_table_buffer->chef_muting);
+            sem_post(&salad_table_buffer->occupied);
             break;
         case 'o':
             cout << "in onion switch block" << endl;
+            sem_post(&salad_table_buffer->chef_muting);
+            sem_post(&salad_table_buffer->occupied);
             break;
         default:
             cout << "in default switch block" << endl;
             break;
         }
 
-        sem_post(&salad_table_buffer->chef_muting);
-        sem_post(&salad_table_buffer->occupied);
+        
         i++;
     }
+        cout<<"after while"<<endl;
 
     sem_destroy(&salad_table_buffer->occupied);
     sem_destroy(&salad_table_buffer->empty);
