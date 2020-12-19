@@ -185,36 +185,42 @@ int main(int argc, char *argv[])
     ////////////////// S E M A P H O R E S  H A N D L E R S //////////////////
     //////////////////////////////////////////////////////////////////////////
 
-    sem_wait(&salad_table_buffer->occupied);    
     
+    int runningFlag = true;
+    while (runningFlag)
+    {
+        // sem_wait(&salad_table_buffer->occupied);
+        cout<<"passed occupied wait"<<endl;
 
-    cout<<"passed occupied wait"<<endl;
-    sem_wait(&salad_table_buffer->saladmaker_3_muting);
-    
-    int saladmaker3;
-    sem_getvalue(&salad_table_buffer->saladmaker_3_muting, &saladmaker3);
+        if (strcmp(missingVegetable.c_str(), "tomato") == 0)
+        {
+            cout << "waiting for tomato call" << endl;
+            sem_wait(&salad_table_buffer->saladmaker_1_muting);
+        }
+        else if (strcmp(missingVegetable.c_str(), "pepper") == 0)
+        {
+            cout << "waiting for pepper call" << endl;
+            sem_wait(&salad_table_buffer->saladmaker_2_muting);
+        }
+        else if (strcmp(missingVegetable.c_str(), "onion") == 0)
+        {
+            cout << "waiting for onion call" << endl;
+            sem_wait(&salad_table_buffer->saladmaker_3_muting);
+        }
+        else
+        {
+            cout<<"unknown Vegetable"<<endl;
+            break;
+        }
 
-    cout << "passed saladmaker_3_muting wait!!!   saladmaker3:\t" << saladmaker3 << endl;
-
-    item = salad_table_buffer->offered_vegetable[salad_table_buffer->next_out];
-    salad_table_buffer->next_out++;
-    salad_table_buffer->next_out %= BFSIZE;
-
-    // if (missingVegetable == "tomato")
-    // {
         
-    // }
-    // else if (missingVegetable == "pepper")
-    // {
-    // }
-    // if (missingVegetable == "onion"){
+        item = salad_table_buffer->offered_vegetable[salad_table_buffer->next_out];
+        salad_table_buffer->next_out++;
+        salad_table_buffer->next_out %= BFSIZE;
 
-    // }else{
 
-    // }
-
-    sem_post(&salad_table_buffer->chef_muting);
-
+        sem_post(&salad_table_buffer->chef_muting);
+    }
     // sem_post(&salad_table_buffer->empty);
     
     /* Remove segment . */

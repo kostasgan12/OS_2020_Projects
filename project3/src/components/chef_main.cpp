@@ -100,9 +100,8 @@ int main(int argc, char *argv[])
         exit(2);
     }
 
-
-    sem_init(&salad_table_buffer->occupied, 1, 0);
-    sem_init(&salad_table_buffer->empty, 1, 0);
+    sem_init(&salad_table_buffer->occupied, 1, 1);
+    sem_init(&salad_table_buffer->empty, 1, numOfSlds);
     sem_init(&salad_table_buffer->chef_muting, 1, 1);
     sem_init(&salad_table_buffer->saladmaker_1_muting, 1, 0);
     sem_init(&salad_table_buffer->saladmaker_2_muting, 1, 0);
@@ -144,17 +143,17 @@ int main(int argc, char *argv[])
         switch (which_saladmaker)
         {
             case 't':
-                cout << "in tomato switch block" << endl;
+                cout << "looking for a tomato..." << endl;
                 sem_post(&salad_table_buffer->occupied);
-                sem_post(&salad_table_buffer->saladmaker_3_muting);
+                sem_post(&salad_table_buffer->saladmaker_1_muting);
                 break;
             case 'p':
-                cout << "in pepper switch block" << endl;
+                cout << "looking for a pepper..." << endl;
                 sem_post(&salad_table_buffer->occupied);
-                sem_post(&salad_table_buffer->saladmaker_3_muting);
+                sem_post(&salad_table_buffer->saladmaker_2_muting);
                 break;
             case 'o':
-                cout << "in onion switch block" << endl;
+                cout << "looking for an onion..." << endl;
                 sem_post(&salad_table_buffer->occupied);
                 sem_post(&salad_table_buffer->saladmaker_3_muting);
                 break;
@@ -166,7 +165,6 @@ int main(int argc, char *argv[])
         
         i++;
     }
-        cout<<"after while"<<endl;
 
     sem_destroy(&salad_table_buffer->occupied);
     sem_destroy(&salad_table_buffer->empty);
