@@ -185,7 +185,9 @@ int main(int argc, char *argv[])
     ////////////////// S E M A P H O R E S  H A N D L E R S //////////////////
     //////////////////////////////////////////////////////////////////////////
 
-    // sem_wait(&salad_table_buffer->occupied);
+    sem_wait(&salad_table_buffer->occupied);    
+    
+
     cout<<"passed occupied wait"<<endl;
     sem_wait(&salad_table_buffer->saladmaker_3_muting);
     
