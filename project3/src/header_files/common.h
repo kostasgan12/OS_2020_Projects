@@ -13,8 +13,8 @@ typedef struct
     int next_out;               //keep track of which vegetable to take out
     sem_t chef_muting;          //pause chef
     sem_t saladmaker_1_muting;  //pause saladMaker
-    sem_t saladmaker_2_Muting;  //pause saladMaker
-    sem_t saladmaker_3_Muting;  //pause saladMaker
+    sem_t saladmaker_2_muting;  //pause saladMaker
+    sem_t saladmaker_3_muting;  //pause saladMaker
 } salad_table_buffer_t;
 
 #endif

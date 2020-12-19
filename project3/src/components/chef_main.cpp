@@ -81,7 +81,7 @@ int main(int argc, char *argv[])
     int id, err;
 
     /* Make shared memory segment */
-    id = shmget(IPC_PRIVATE, SEGMENTSIZE, SEGMENTPERM);
+    id = shmget(IPC_PRIVATE, SEGMENTSIZE, 0666 | IPC_CREAT | IPC_EXCL);
     if (id == -1)
     {
         perror("Creation");
@@ -99,29 +99,34 @@ int main(int argc, char *argv[])
         perror("Attachment.");
         exit(2);
     }
-    else
-    {
-        printf("table buffer attached ok!\n");
-    }
 
 
-    sem_init(&salad_table_buffer->occupied, 0, 0);
-    sem_init(&salad_table_buffer->empty, 0, 1);
-    sem_init(&salad_table_buffer->chef_muting, 0, 1);
-    sem_init(&salad_table_buffer->saladmaker_1_muting, 0, 1);
-    sem_init(&salad_table_buffer->saladmaker_2_Muting, 0, 1);
-    sem_init(&salad_table_buffer->saladmaker_3_Muting, 0, 1);
-    salad_table_buffer->next_in = salad_table_buffer->next_out = 0;
+    sem_init(&salad_table_buffer->occupied, 1, 0);
+    sem_init(&salad_table_buffer->empty, 1, 0);
+    sem_init(&salad_table_buffer->chef_muting, 1, 1);
+    sem_init(&salad_table_buffer->saladmaker_1_muting, 1, 0);
+    sem_init(&salad_table_buffer->saladmaker_2_muting, 1, 0);
+    sem_init(&salad_table_buffer->saladmaker_3_muting, 1, 0);
+    salad_table_buffer->next_in = salad_table_buffer->next_out = 5;
     
     int i=1;
     int random_vegetable_1, random_vegetable_2;
     int which_saladmaker;
+    int chefMute;
+    
     while (i <= numOfSlds)
     {
-        // printf("salad_table_buffer->empty:\t%d\n", salad_table_buffer->empty);
-        sem_wait(&salad_table_buffer->empty);
-        // sem_wait(&salad_table_buffer->chef_muting);
+        cout << "before chef_muting for i:\t" << i << endl;
+        // sem_wait(&salad_table_buffer->empty);
+        sem_wait(&salad_table_buffer->chef_muting);
 
+        //////////////////////////////////////////////////////////////////////////
+        /////////////////////// B U S I N E S S  L O G I C ///////////////////////
+        //////////////////////////////////////////////////////////////////////////
+        
+        ////////////////////////////////////////////////
+        /////// S E L E C T  V E G E T A B L E S ///////
+        ////////////////////////////////////////////////
         random_vegetable_1 = rand() % 3 + 1;
         random_vegetable_2 = rand() % 3 + 1;
         while (random_vegetable_2 == random_vegetable_1)
@@ -129,37 +134,35 @@ int main(int argc, char *argv[])
             random_vegetable_2 = rand() % 3 + 1;
         }
         
-        cout<<"random 1 : "<<random_vegetable_1<< "\tand random 2: "<<random_vegetable_2<<endl;
-        which_saladmaker = findSaladMaker(random_vegetable_1, random_vegetable_2);
+       which_saladmaker = findSaladMaker(random_vegetable_1, random_vegetable_2);
+       ////////////////////////////////////////////////
 
+       salad_table_buffer->offered_vegetable[salad_table_buffer->next_in] = which_saladmaker;
+       salad_table_buffer->next_in++;
+       salad_table_buffer->next_in %= BFSIZE;       //check whether it exceeds BFSIZE
 
-        salad_table_buffer->offered_vegetable[salad_table_buffer->next_in] = which_saladmaker;
-        salad_table_buffer->next_in++;
-        salad_table_buffer->next_in %= BFSIZE;
-
-        
         switch (which_saladmaker)
         {
-        case 't':
-            cout<<"in tomato switch block"<<endl;
-            sem_post(&salad_table_buffer->chef_muting);
-            sem_post(&salad_table_buffer->occupied);
-            break;
-        case 'p':
-            cout << "in pepper switch block" << endl;
-            sem_post(&salad_table_buffer->chef_muting);
-            sem_post(&salad_table_buffer->occupied);
-            break;
-        case 'o':
-            cout << "in onion switch block" << endl;
-            sem_post(&salad_table_buffer->chef_muting);
-            sem_post(&salad_table_buffer->occupied);
-            break;
-        default:
-            cout << "in default switch block" << endl;
-            break;
+            case 't':
+                cout << "in tomato switch block" << endl;
+                sem_post(&salad_table_buffer->occupied);
+                sem_post(&salad_table_buffer->saladmaker_3_muting);
+                break;
+            case 'p':
+                cout << "in pepper switch block" << endl;
+                sem_post(&salad_table_buffer->occupied);
+                sem_post(&salad_table_buffer->saladmaker_3_muting);
+                break;
+            case 'o':
+                cout << "in onion switch block" << endl;
+                sem_post(&salad_table_buffer->occupied);
+                sem_post(&salad_table_buffer->saladmaker_3_muting);
+                break;
+            default:
+                cout << "in default switch block" << endl;
+                break;
         }
-
+        
         
         i++;
     }
@@ -169,36 +172,9 @@ int main(int argc, char *argv[])
     sem_destroy(&salad_table_buffer->empty);
     sem_destroy(&salad_table_buffer->chef_muting);
     sem_destroy(&salad_table_buffer->saladmaker_1_muting);
-    sem_destroy(&salad_table_buffer->saladmaker_2_Muting);
-    sem_destroy(&salad_table_buffer->saladmaker_3_Muting);
+    sem_destroy(&salad_table_buffer->saladmaker_2_muting);
+    sem_destroy(&salad_table_buffer->saladmaker_3_muting);
 
-    // sem_t *sp;
-
-    // int retval;
-
-    // /* Attach sp the segment. */
-    // printf("semaphore addressfor tomato:\t%lu\n", 0);
-    // sp = (sem_t *)shmat(id, (void *)0, 0);
-    // if ( sp == (void *) -1) {
-    //     perror("Attachment."); 
-    //     exit(2);
-    // }else{
-    //     printf("tomato allocated ok!\n");
-    // }
-
-    // /* Initialize sp the semaphore. */
-    // retval = sem_init(sp, 1, 2);
-    // if (retval != 0)
-    // {
-    //     perror("Couldn’t initialize."); 
-    //     exit(3);
-    // }
-
-    // retval = sem_trywait(sp);
-    // printf(" Did trywait . Returned % d >\n ", retval);
-    // getchar();
-
-    // sem_destroy(sp);
 
     /* Remove segment. */
     err = shmctl(id, IPC_RMID , 0);

@@ -117,7 +117,7 @@ int main(int argc, char *argv[])
         }
         lowerTimeValue = stoi(temp);
     }
-    cout << "\n\tlowerTimeValue\tIs:\t" << lowerTimeValue << endl;
+    // cout << "\n\tlowerTimeValue\tIs:\t" << lowerTimeValue << endl;
 
     if (upperTimeValue == 0)
     {
@@ -133,7 +133,7 @@ int main(int argc, char *argv[])
         upperTimeValue = stoi(temp);
     }
 
-    cout << "\n\tupperTimeValue\tIs:\t" << upperTimeValue << endl;
+    // cout << "\n\tupperTimeValue\tIs:\t" << upperTimeValue << endl;
 
     if (sharedMemoryId == 0)
     {
@@ -141,7 +141,7 @@ int main(int argc, char *argv[])
         exit(-1);
     }
 
-    cout << "\n\tsharedMemoryId\tIs:\t" << sharedMemoryId << endl;
+    // cout << "\n\tsharedMemoryId\tIs:\t" << sharedMemoryId << endl;
     cout << "\n\tmissing Vegetable\tIs:\t" << missingVegetable << endl;
     //////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////
@@ -158,22 +158,45 @@ int main(int argc, char *argv[])
         perror("Attachment.");
         exit(2);
     }
-    else
-    {
-        printf("table buffer attached ok!\n");
-    }
 
-    sem_wait(&salad_table_buffer->occupied);
+    // int jj ;
+    // sem_getvalue(&salad_table_buffer->saladmaker_3_muting, &jj);
+    // cout << "salad_table_buffer->saladmaker_3_muting:\t" << jj << endl;
+    
+    // int chefMute;
+    // sem_getvalue(&salad_table_buffer->chef_muting, &chefMute);
+    // cout << "salad_table_buffer->chef_muting:\t" << chefMute << endl;
 
-    // sem_wait(&salad_table_buffer->chef_muting);
-    sem_wait(&salad_table_buffer->saladmaker_3_Muting);
-    cout<<"after wait!!!"<<endl;
+    // int occupiedSem;
+    // sem_getvalue(&salad_table_buffer->occupied, &occupiedSem);
+    // cout << "salad_table_buffer->occupied:\t" << occupiedSem << endl;
+
+    // cout << "salad_table_buffer->next_in:\t" << salad_table_buffer->next_in << endl;
+
+    //////////////////////////////////////////////////////////////////////////
+    /////////////////////// B U S I N E S S  L O G I C ///////////////////////
+    //////////////////////////////////////////////////////////////////////////
+
+
+
+    //////////////////////////////////////////////////////////////////////////
+
+    //////////////////////////////////////////////////////////////////////////
+    ////////////////// S E M A P H O R E S  H A N D L E R S //////////////////
+    //////////////////////////////////////////////////////////////////////////
+
+    // sem_wait(&salad_table_buffer->occupied);
+    cout<<"passed occupied wait"<<endl;
+    sem_wait(&salad_table_buffer->saladmaker_3_muting);
+    
+    int saladmaker3;
+    sem_getvalue(&salad_table_buffer->saladmaker_3_muting, &saladmaker3);
+
+    cout << "passed saladmaker_3_muting wait!!!   saladmaker3:\t" << saladmaker3 << endl;
 
     item = salad_table_buffer->offered_vegetable[salad_table_buffer->next_out];
     salad_table_buffer->next_out++;
     salad_table_buffer->next_out %= BFSIZE;
-
-    
 
     // if (missingVegetable == "tomato")
     // {
@@ -190,8 +213,8 @@ int main(int argc, char *argv[])
 
     sem_post(&salad_table_buffer->chef_muting);
 
-    sem_post(&salad_table_buffer->empty);
-    cout << "after post!!!" << endl;
+    // sem_post(&salad_table_buffer->empty);
+    
     /* Remove segment . */
     err = shmdt((void *)salad_table_buffer);
     if (err == -1)

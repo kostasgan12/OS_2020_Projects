@@ -23,7 +23,7 @@
 #include "../header_files/common.h"
 
 #define SEGMENTSIZE sizeof(salad_table_buffer_t)
-#define SEGMENTPERM 0666
+#define SEGMENTPERM 0666 
 
 using namespace std;
 
