@@ -134,17 +134,6 @@ int main(int argc, char *argv[])
     struct timeval currentTimeMilliseconds;
     string currentTimeString;
 
-    // time(&currentTimeMain);
-    // gettimeofday(&currentTimeMilliseconds, NULL);
-
-    // currentTimeString = getCurrentTime(currentTimeMain, currentTimeMilliseconds);
-
-    // sleep(2);
-
-    // time(&currentTimeMain);
-    // gettimeofday(&currentTimeMilliseconds, NULL);
-    // currentTimeString = getCurrentTime(currentTimeMain, currentTimeMilliseconds);
-
     while (isEmpty)
     {
         sem_getvalue(&salad_table_buffer->empty, &isEmpty);
