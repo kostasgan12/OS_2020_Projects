@@ -48,87 +48,31 @@ string findPickedVeg(int veg1, int veg2)
     pickedVegArray[1] = "0"; 
     int pos;
 
-    switch (veg1)
+    if(veg1 == 1)
     {
-    case 1:
-        if (veg2 == 2)
-        {
-            if (pickedVegArray[0] == "0")
-            {
-                pos = 0;
-            }
-            else
-            {
-                pos = 1;
-            }
-            pickedVegArray[pos] = "onion";
-            break;
-        }
-        else
-        {
-            if (pickedVegArray[0] == "0")
-            {
-                pos = 0;
-            }
-            else
-            {
-                pos = 1;
-            }
-            pickedVegArray[pos] = "pepper";
-            break;
-        }
-    case 2:
-        if (veg2 == 1)
-        {
-            if (pickedVegArray[0] == "0")
-            {
-                pos = 0;
-            }
-            else
-            {
-                pos = 1;
-            }
-            pickedVegArray[pos] = "onion";
-        }
-        else
-        {
-            if (pickedVegArray[0] == "0")
-            {
-                pos = 0;
-            }
-            else
-            {
-                pos = 1;
-            }
-            pickedVegArray[pos] = "tomato";
-        }
-    case 3:
-        if (veg2 == 1)
-        {
-            if (pickedVegArray[0] == "0")
-            {
-                pos = 0;
-            }
-            else
-            {
-                pos = 1;
-            }
-            pickedVegArray[pos] = "pepper";
-        }
-        else
-        {
-            if (pickedVegArray[0] == "0")
-            {
-                pos = 0;
-            }
-            else
-            {
-                pos = 1;
-            }
-            pickedVegArray[pos] = "tomato";
-        }
-    default:
-        break;
+        pickedVegArray[0] = "tomato";
     }
+    else if( veg1 == 2)
+    {
+        pickedVegArray[0] = "pepper";
+    }
+    else
+    {
+        pickedVegArray[0] = "onion";
+    }
+
+    if (veg2 == 1)
+    {
+        pickedVegArray[1] = "tomato";
+    }
+    else if (veg2 == 2)
+    {
+        pickedVegArray[1] = "pepper";
+    }
+    else
+    {
+        pickedVegArray[1] = "onion";
+    }
+
     return *pickedVegArray;
 }

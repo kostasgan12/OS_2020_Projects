@@ -87,7 +87,7 @@ int main(int argc, char *argv[])
     if (combinedLogFile == NULL)
         cout << "Error Creating Log File" << endl;
 
-    fprintf(combinedLogFile, "\t##################################################\n\tInitialized Combined Log File For Program Work Flow...\n\t##################################################\n\n");
+    fprintf(combinedLogFile, "\t######################################################\n\tInitialized Combined Log File For Program Work Flow...\n\t######################################################\n\n");
     fclose(combinedLogFile);
 
 
@@ -127,17 +127,10 @@ int main(int argc, char *argv[])
     int chefMute;
     int isEmpty;    
     
-    string *pickedVegArray;
-    // combinedLogFile = fopen(combinedFileName.c_str(), "a+"); // a+ (create + append) option will allow appending which is useful in a log file
-    // if (combinedLogFile == NULL)
-    //     cout << "Error Creating Log File" << endl;
+    string pickedVegArray[2];
 
     while (i <= numOfSlds)
     {
-        combinedLogFile = fopen(combinedFileName.c_str(), "a+"); // a+ (create + append) option will allow appending which is useful in a log file
-        if (combinedLogFile == NULL)
-            cout << "Error Creating Log File" << endl;
-
         cout << "before chef_muting for i:\t" << i << endl;
         sem_wait(&salad_table_buffer->empty);
         sem_wait(&salad_table_buffer->chef_muting);
@@ -158,9 +151,35 @@ int main(int argc, char *argv[])
         {
             random_vegetable_2 = rand() % 3 + 1;
         }
-        *pickedVegArray = findPickedVeg(random_vegetable_1, random_vegetable_2);
-        fprintf(combinedLogFile, "\t[1]\t[Chef]\t[Selecting ingredients: [%s][%s]]\n", pickedVegArray[0].c_str(), pickedVegArray[1].c_str());
+        if (random_vegetable_1 == 1)
+        {
+            pickedVegArray[0] = "tomato";
+        }
+        else if (random_vegetable_1 == 2)
+        {
+            pickedVegArray[0] = "pepper";
+        }
+        else
+        {
+            pickedVegArray[0] = "onion";
+        }
 
+        if (random_vegetable_2 == 1)
+        {
+            pickedVegArray[1] = "tomato";
+        }
+        else if (random_vegetable_2 == 2)
+        {
+            pickedVegArray[1] = "pepper";
+        }
+        else
+        {
+            pickedVegArray[1] = "onion";
+        }
+
+        combinedLogFile = fopen(combinedFileName.c_str(), "a+"); // a+ (create + append) option will allow appending which is useful in a log file
+        fprintf(combinedLogFile, "\t[1]\t[Chef]\t[Selecting ingredients: [%s][%s]]\n", pickedVegArray[0].c_str(), pickedVegArray[1].c_str());
+        fclose(combinedLogFile);
         which_saladmaker = findSaladMaker(random_vegetable_1, random_vegetable_2);
         ////////////////////////////////////////////////
 
@@ -173,27 +192,33 @@ int main(int argc, char *argv[])
             case 't':
                 cout << "looking for a tomato..." << endl;
                 sem_post(&salad_table_buffer->occupied);
-
+                combinedLogFile = fopen(combinedFileName.c_str(), "a+"); // a+ (create + append) option will allow appending which is useful in a log file
                 fprintf(combinedLogFile, "\t[1]\t[Chef]\t[Notify saladmaker: [1]]\n");
+                fclose(combinedLogFile);
                 sem_post(&salad_table_buffer->saladmaker_1_muting);
                 break;
             case 'p':
                 cout << "looking for a pepper..." << endl;
                 sem_post(&salad_table_buffer->occupied);
+                combinedLogFile = fopen(combinedFileName.c_str(), "a+"); // a+ (create + append) option will allow appending which is useful in a log file
                 fprintf(combinedLogFile, "\t[1]\t[Chef]\t[Notify saladmaker: [2]]\n");
+                fclose(combinedLogFile);
                 sem_post(&salad_table_buffer->saladmaker_2_muting);
                 break;
             case 'o':
                 cout << "looking for an onion..." << endl;
                 sem_post(&salad_table_buffer->occupied);
+                combinedLogFile = fopen(combinedFileName.c_str(), "a+"); // a+ (create + append) option will allow appending which is useful in a log file
                 fprintf(combinedLogFile, "\t[1]\t[Chef]\t[Notify saladmaker: [3]]\n");
+                fclose(combinedLogFile);
                 sem_post(&salad_table_buffer->saladmaker_3_muting);
                 break;
             default:
                 cout << "in default switch block" << endl;
                 break;
         }
-
+        
+        combinedLogFile = fopen(combinedFileName.c_str(), "a+"); // a+ (create + append) option will allow appending which is useful in a log file
         fprintf(combinedLogFile, "\t[1]\t[Chef]\t[Man Time For Resting]\n");
         fclose(combinedLogFile);
         sleep(manTime);
