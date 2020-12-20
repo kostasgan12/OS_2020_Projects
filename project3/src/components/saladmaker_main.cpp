@@ -152,18 +152,27 @@ int main(int argc, char *argv[])
 
 
     FILE *logFile;
-    string fileName;
+    string fileName; 
+    int processId;
+
+    FILE *combinedLogFile;
+    string combinedFileName = "combinedLogFile.log";
+    
+
     if (strcmp(missingVegetable.c_str(), "tomato") == 0)
     {
         fileName = "tomatoLogFile.log";
+        processId = 2;
     }
     else if (strcmp(missingVegetable.c_str(), "pepper") == 0)
     {
         fileName = "pepperLogFile.log";
+        processId = 3;
     }
     else if (strcmp(missingVegetable.c_str(), "onion") == 0)
     {
         fileName = "onionLogFile.log";
+        processId = 4;
     }
     else
     {
@@ -173,7 +182,7 @@ int main(int argc, char *argv[])
     logFile = fopen(fileName.c_str(), "a+"); // a+ (create + append) option will allow appending which is useful in a log file
     if (logFile == NULL) cout<<"Error Creating Log File"<<endl;
 
-    fprintf(logFile, "\t##################################################\n\tInitialized Log File For %s Work Flow...\n\t##################################################\n", missingVegetable.c_str());
+    fprintf(logFile, "\t##################################################\n\tInitialized Log File For %s Work Flow...\n\t##################################################\n\n", missingVegetable.c_str());
     fclose(logFile);
     //////////////////////////////////////////////////////////////////////////////////////
 
@@ -190,56 +199,135 @@ int main(int argc, char *argv[])
     }
 
     //////////////////////////////////////////////////////////////////////////
-    /////////////////////// B U S I N E S S  L O G I C ///////////////////////
-    //////////////////////////////////////////////////////////////////////////
-
-
-
-    //////////////////////////////////////////////////////////////////////////
-
-    //////////////////////////////////////////////////////////////////////////
     ////////////////// S E M A P H O R E S  H A N D L E R S //////////////////
     //////////////////////////////////////////////////////////////////////////
 
-    
+    int workDurationTime = (rand() % (upperTimeValue - lowerTimeValue + 1)) + lowerTimeValue;
+    cout << "workDurationTime:\t" << workDurationTime << endl;
+
+    int isEmpty;
+    sem_getvalue(&salad_table_buffer->empty, &isEmpty);
+
+    int occupied;
+
     int runningFlag = true;
-    while (runningFlag)
+    while (isEmpty)
     {
-        sem_wait(&salad_table_buffer->occupied);
-        cout<<"passed occupied wait"<<endl;
+        if(isEmpty == 0){
+            cout<<"our table is empty so we exit while loop!"<<endl;
+            break;
+        }
+
+        cout << "how many salads left??\t:" << isEmpty << endl;
+
+        // logFile = fopen(fileName.c_str(), "a+"); // a+ (create + append) option will allow appending which is useful in a log file
+        // if (logFile == NULL)
+        //     cout << "Error Creating Log File" << endl;
+
+        // combinedLogFile = fopen(combinedFileName.c_str(), "a+"); // a+ (create + append) option will allow appending which is useful in a log file
+        // if (combinedLogFile == NULL)
+        //     cout << "Error Creating Log File" << endl;
 
         if (strcmp(missingVegetable.c_str(), "tomato") == 0)
         {
             cout << "waiting for tomato call" << endl;
+            logFile = fopen(fileName.c_str(), "a+");
+            combinedLogFile = fopen(combinedFileName.c_str(), "a+");
+            fprintf(logFile, "\t[%d]\t[SaladMaker %d]\t[Waiting For Ingredient: %s]\n", processId, processId - 1, missingVegetable.c_str());
+            fprintf(combinedLogFile, "\t[%d]\t[SaladMaker %d]\t[Waiting For Ingredient: %s]\n", processId, processId - 1, missingVegetable.c_str());
+            fclose(logFile);
+            fclose(combinedLogFile);
             sem_wait(&salad_table_buffer->saladmaker_1_muting);
+            
+            sem_getvalue(&salad_table_buffer->occupied, &occupied);
+            cout << "occupied\t:" << occupied << endl;
+
+            sem_wait(&salad_table_buffer->occupied);
+            logFile = fopen(fileName.c_str(), "a+");
+            combinedLogFile = fopen(combinedFileName.c_str(), "a+");
+            fprintf(logFile, "\t[%d]\t[SaladMaker %d]\t[Get Ingredient: %s]\n", processId, processId - 1, missingVegetable.c_str());
+            fprintf(combinedLogFile, "\t[%d]\t[SaladMaker %d]\t[Get Ingredient: %s]\n", processId, processId - 1, missingVegetable.c_str());
+            fclose(logFile);
+            fclose(combinedLogFile);
+            sem_post(&salad_table_buffer->chef_muting);
         }
         else if (strcmp(missingVegetable.c_str(), "pepper") == 0)
         {
             cout << "waiting for pepper call" << endl;
+            logFile = fopen(fileName.c_str(), "a+");
+            combinedLogFile = fopen(combinedFileName.c_str(), "a+");
+            fprintf(logFile, "\t[%d]\t[SaladMaker %d]\t[Waiting For Ingredient: %s]\n", processId, processId - 1, missingVegetable.c_str());
+            fprintf(combinedLogFile, "\t[%d]\t[SaladMaker %d]\t[Waiting For Ingredient: %s]\n", processId, processId - 1, missingVegetable.c_str());
+            fclose(logFile);
+            fclose(combinedLogFile);
+
             sem_wait(&salad_table_buffer->saladmaker_2_muting);
+            
+            sem_getvalue(&salad_table_buffer->occupied, &occupied);
+            cout << "occupied\t:" << occupied << endl;
+
+            sem_wait(&salad_table_buffer->occupied);
+            logFile = fopen(fileName.c_str(), "a+");
+            combinedLogFile = fopen(combinedFileName.c_str(), "a+");
+            fprintf(logFile, "\t[%d]\t[SaladMaker %d]\t[Get Ingredient: %s]\n", processId, processId - 1, missingVegetable.c_str());
+            fprintf(combinedLogFile, "\t[%d]\t[SaladMaker %d]\t[Get Ingredient: %s]\n", processId, processId - 1, missingVegetable.c_str());
+            fclose(logFile);
+            fclose(combinedLogFile);
+            sem_post(&salad_table_buffer->chef_muting);
         }
         else if (strcmp(missingVegetable.c_str(), "onion") == 0)
         {
             cout << "waiting for onion call" << endl;
+            logFile = fopen(fileName.c_str(), "a+");
+            combinedLogFile = fopen(combinedFileName.c_str(), "a+");
+            fprintf(logFile, "\t[%d]\t[SaladMaker %d]\t[Waiting For Ingredient: %s]\n", processId, processId - 1, missingVegetable.c_str());
+            fprintf(combinedLogFile, "\t[%d]\t[SaladMaker %d]\t[Waiting For Ingredient: %s]\n", processId, processId - 1, missingVegetable.c_str());
+            fclose(logFile);
+            fclose(combinedLogFile);
             sem_wait(&salad_table_buffer->saladmaker_3_muting);
+            
+            sem_getvalue(&salad_table_buffer->occupied, &occupied);
+            cout << "occupied\t:" << occupied << endl;
+
+            sem_wait(&salad_table_buffer->occupied);
+            logFile = fopen(fileName.c_str(), "a+");
+            combinedLogFile = fopen(combinedFileName.c_str(), "a+");
+            fprintf(logFile, "\t[%d]\t[SaladMaker %d]\t[Get Ingredient: %s]\n", processId, processId - 1, missingVegetable.c_str());
+            fprintf(combinedLogFile, "\t[%d]\t[SaladMaker %d]\t[Get Ingredient: %s]\n", processId, processId - 1, missingVegetable.c_str());
+            fclose(logFile);
+            fclose(combinedLogFile);
+            sem_post(&salad_table_buffer->chef_muting);
         }
         else
         {
             cout<<"unknown Vegetable"<<endl;
+            sem_post(&salad_table_buffer->chef_muting);
             break;
         }
 
-        int isEmpty;
-        sem_getvalue(&salad_table_buffer->empty, &isEmpty);
-        cout << "how many salads left??\t:" << isEmpty << endl;
+        //////////////////////////////////////////////////////////////////////////
+        /////////////////////// B U S I N E S S  L O G I C ///////////////////////
+        //////////////////////////////////////////////////////////////////////////
+        logFile = fopen(fileName.c_str(), "a+");
+        combinedLogFile = fopen(combinedFileName.c_str(), "a+");
+        fprintf(logFile, "\t[%d]\t[SaladMaker %d]\t[Started Making Salad...]\n", processId, processId - 1);
+        fprintf(combinedLogFile, "\t[%d]\t[SaladMaker %d]\t[Started Making Salad...]\n", processId, processId - 1);
+        fclose(logFile);
+        fclose(combinedLogFile);
+        
+        sleep(workDurationTime);
 
-        item = salad_table_buffer->offered_vegetable[salad_table_buffer->next_out];
-        salad_table_buffer->next_out++;
-        salad_table_buffer->next_out %= BFSIZE;
+        logFile = fopen(fileName.c_str(), "a+");
+        combinedLogFile = fopen(combinedFileName.c_str(), "a+");
+        fprintf(logFile, "\t[%d]\t[SaladMaker %d]\t[Finished Making Salad!]\n", processId, processId - 1);
+        fprintf(combinedLogFile, "\t[%d]\t[SaladMaker %d]\t[Finished Making Salad!]\n", processId, processId - 1);
+        fclose(logFile);
+        fclose(combinedLogFile);
+        //////////////////////////////////////////////////////////////////////////
 
-
-        sem_post(&salad_table_buffer->chef_muting);
+        // sem_post(&salad_table_buffer->chef_muting);
         // sem_post(&salad_table_buffer->empty);
+        sem_getvalue(&salad_table_buffer->empty, &isEmpty);
     }
     
     cout<<"out of that loop"<<endl;

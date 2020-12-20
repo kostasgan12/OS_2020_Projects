@@ -17,6 +17,8 @@
 #include <sys/ipc.h>
 #include <sys/shm.h>
 
+#include <unistd.h>
+
 #include <semaphore.h>
 
 #include "../header_files/chef_helper_functions.h"

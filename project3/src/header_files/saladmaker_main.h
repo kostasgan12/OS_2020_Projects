@@ -19,6 +19,8 @@
 
 #include <semaphore.h>
 
+#include <unistd.h>
+
 #include "../header_files/saladmaker_helper_functions.h"
 #include "../header_files/common.h"
 
