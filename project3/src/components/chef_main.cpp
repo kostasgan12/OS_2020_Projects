@@ -112,12 +112,16 @@ int main(int argc, char *argv[])
     int random_vegetable_1, random_vegetable_2;
     int which_saladmaker;
     int chefMute;
+    int isEmpty;    
     
     while (i <= numOfSlds)
     {
         cout << "before chef_muting for i:\t" << i << endl;
         sem_wait(&salad_table_buffer->empty);
         sem_wait(&salad_table_buffer->chef_muting);
+
+        sem_getvalue(&salad_table_buffer->empty, &isEmpty);
+        cout<<"how many salads left??\t:"<<isEmpty<<endl;
 
         //////////////////////////////////////////////////////////////////////////
         /////////////////////// B U S I N E S S  L O G I C ///////////////////////
@@ -161,8 +165,6 @@ int main(int argc, char *argv[])
                 cout << "in default switch block" << endl;
                 break;
         }
-        
-        
         i++;
     }
 

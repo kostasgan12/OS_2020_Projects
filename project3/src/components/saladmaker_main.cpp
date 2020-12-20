@@ -189,20 +189,6 @@ int main(int argc, char *argv[])
         exit(2);
     }
 
-    // int jj ;
-    // sem_getvalue(&salad_table_buffer->saladmaker_3_muting, &jj);
-    // cout << "salad_table_buffer->saladmaker_3_muting:\t" << jj << endl;
-    
-    // int chefMute;
-    // sem_getvalue(&salad_table_buffer->chef_muting, &chefMute);
-    // cout << "salad_table_buffer->chef_muting:\t" << chefMute << endl;
-
-    // int occupiedSem;
-    // sem_getvalue(&salad_table_buffer->occupied, &occupiedSem);
-    // cout << "salad_table_buffer->occupied:\t" << occupiedSem << endl;
-
-    // cout << "salad_table_buffer->next_in:\t" << salad_table_buffer->next_in << endl;
-
     //////////////////////////////////////////////////////////////////////////
     /////////////////////// B U S I N E S S  L O G I C ///////////////////////
     //////////////////////////////////////////////////////////////////////////
@@ -219,7 +205,7 @@ int main(int argc, char *argv[])
     int runningFlag = true;
     while (runningFlag)
     {
-        // sem_wait(&salad_table_buffer->occupied);
+        sem_wait(&salad_table_buffer->occupied);
         cout<<"passed occupied wait"<<endl;
 
         if (strcmp(missingVegetable.c_str(), "tomato") == 0)
@@ -243,16 +229,20 @@ int main(int argc, char *argv[])
             break;
         }
 
-        
+        int isEmpty;
+        sem_getvalue(&salad_table_buffer->empty, &isEmpty);
+        cout << "how many salads left??\t:" << isEmpty << endl;
+
         item = salad_table_buffer->offered_vegetable[salad_table_buffer->next_out];
         salad_table_buffer->next_out++;
         salad_table_buffer->next_out %= BFSIZE;
 
 
         sem_post(&salad_table_buffer->chef_muting);
-        sem_post(&salad_table_buffer->empty);
+        // sem_post(&salad_table_buffer->empty);
     }
     
+    cout<<"out of that loop"<<endl;
     /* Remove segment . */
     err = shmdt((void *)salad_table_buffer);
     if (err == -1)
