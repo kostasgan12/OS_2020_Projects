@@ -7,6 +7,7 @@
 #include <cassert>
 #include <unistd.h>
 #include <cstring>
+#include <memory>
 
 #include "chef_main.h"
 
@@ -14,9 +15,7 @@ using namespace std;
 
 bool isNumeric(string str);
 
-void calculateChildrenAllocation(int **valuesRangeArray, int numOfGrandchilds, int lowestValue, int upperValue);
-
 string convertToString(char *a, int size);
-int extractNumOfPrimes(string a);
 
+string getCurrentTime(time_t setTime, timeval setMilSec);
 #endif

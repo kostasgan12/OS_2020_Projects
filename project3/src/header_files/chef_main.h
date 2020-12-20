@@ -21,6 +21,8 @@
 
 #include <semaphore.h>
 
+#include <sys/time.h>
+
 #include "../header_files/chef_helper_functions.h"
 #include "../header_files/common.h"
 

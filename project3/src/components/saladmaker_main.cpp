@@ -211,6 +211,11 @@ int main(int argc, char *argv[])
     int occupied;
 
     int runningFlag = true;
+
+    time_t currentTimeMain;
+    struct timeval currentTimeMilliseconds;
+    string currentTimeString;
+
     while (isEmpty)
     {
         if(isEmpty == 0){
@@ -220,21 +225,16 @@ int main(int argc, char *argv[])
 
         cout << "how many salads left??\t:" << isEmpty << endl;
 
-        // logFile = fopen(fileName.c_str(), "a+"); // a+ (create + append) option will allow appending which is useful in a log file
-        // if (logFile == NULL)
-        //     cout << "Error Creating Log File" << endl;
-
-        // combinedLogFile = fopen(combinedFileName.c_str(), "a+"); // a+ (create + append) option will allow appending which is useful in a log file
-        // if (combinedLogFile == NULL)
-        //     cout << "Error Creating Log File" << endl;
-
         if (strcmp(missingVegetable.c_str(), "tomato") == 0)
         {
             cout << "waiting for tomato call" << endl;
             logFile = fopen(fileName.c_str(), "a+");
             combinedLogFile = fopen(combinedFileName.c_str(), "a+");
-            fprintf(logFile, "\t[%d]\t[SaladMaker %d]\t[Waiting For Ingredient: %s]\n", processId, processId - 1, missingVegetable.c_str());
-            fprintf(combinedLogFile, "\t[%d]\t[SaladMaker %d]\t[Waiting For Ingredient: %s]\n", processId, processId - 1, missingVegetable.c_str());
+            time(&currentTimeMain);
+            gettimeofday(&currentTimeMilliseconds, NULL);
+            currentTimeString = getCurrentTime(currentTimeMain, currentTimeMilliseconds);
+            fprintf(logFile, "\t[%s]\t[%d]\t[SaladMaker %d]\t[Waiting For Ingredient: %s]\n", currentTimeString.c_str(), processId, processId - 1, missingVegetable.c_str());
+            fprintf(combinedLogFile, "\t[%s]\t[%d]\t[SaladMaker %d]\t[Waiting For Ingredient: %s]\n", currentTimeString.c_str(), processId, processId - 1, missingVegetable.c_str());
             fclose(logFile);
             fclose(combinedLogFile);
             sem_wait(&salad_table_buffer->saladmaker_1_muting);
@@ -245,8 +245,11 @@ int main(int argc, char *argv[])
             sem_wait(&salad_table_buffer->occupied);
             logFile = fopen(fileName.c_str(), "a+");
             combinedLogFile = fopen(combinedFileName.c_str(), "a+");
-            fprintf(logFile, "\t[%d]\t[SaladMaker %d]\t[Get Ingredient: %s]\n", processId, processId - 1, missingVegetable.c_str());
-            fprintf(combinedLogFile, "\t[%d]\t[SaladMaker %d]\t[Get Ingredient: %s]\n", processId, processId - 1, missingVegetable.c_str());
+            time(&currentTimeMain);
+            gettimeofday(&currentTimeMilliseconds, NULL);
+            currentTimeString = getCurrentTime(currentTimeMain, currentTimeMilliseconds);
+            fprintf(logFile, "\t[%s]\t[%d]\t[SaladMaker %d]\t[Get Ingredient: %s]\n", currentTimeString.c_str(), processId, processId - 1, missingVegetable.c_str());
+            fprintf(combinedLogFile, "\t[%s]\t[%d]\t[SaladMaker %d]\t[Get Ingredient: %s]\n", currentTimeString.c_str(), processId, processId - 1, missingVegetable.c_str());
             fclose(logFile);
             fclose(combinedLogFile);
             sem_post(&salad_table_buffer->chef_muting);
@@ -256,8 +259,11 @@ int main(int argc, char *argv[])
             cout << "waiting for pepper call" << endl;
             logFile = fopen(fileName.c_str(), "a+");
             combinedLogFile = fopen(combinedFileName.c_str(), "a+");
-            fprintf(logFile, "\t[%d]\t[SaladMaker %d]\t[Waiting For Ingredient: %s]\n", processId, processId - 1, missingVegetable.c_str());
-            fprintf(combinedLogFile, "\t[%d]\t[SaladMaker %d]\t[Waiting For Ingredient: %s]\n", processId, processId - 1, missingVegetable.c_str());
+            time(&currentTimeMain);
+            gettimeofday(&currentTimeMilliseconds, NULL);
+            currentTimeString = getCurrentTime(currentTimeMain, currentTimeMilliseconds);
+            fprintf(logFile, "\t[%s]\t[%d]\t[SaladMaker %d]\t[Waiting For Ingredient: %s]\n", currentTimeString.c_str(), processId, processId - 1, missingVegetable.c_str());
+            fprintf(combinedLogFile, "\t[%s]\t[%d]\t[SaladMaker %d]\t[Waiting For Ingredient: %s]\n", currentTimeString.c_str(), processId, processId - 1, missingVegetable.c_str());
             fclose(logFile);
             fclose(combinedLogFile);
 
@@ -269,8 +275,11 @@ int main(int argc, char *argv[])
             sem_wait(&salad_table_buffer->occupied);
             logFile = fopen(fileName.c_str(), "a+");
             combinedLogFile = fopen(combinedFileName.c_str(), "a+");
-            fprintf(logFile, "\t[%d]\t[SaladMaker %d]\t[Get Ingredient: %s]\n", processId, processId - 1, missingVegetable.c_str());
-            fprintf(combinedLogFile, "\t[%d]\t[SaladMaker %d]\t[Get Ingredient: %s]\n", processId, processId - 1, missingVegetable.c_str());
+            time(&currentTimeMain);
+            gettimeofday(&currentTimeMilliseconds, NULL);
+            currentTimeString = getCurrentTime(currentTimeMain, currentTimeMilliseconds);
+            fprintf(logFile, "\t[%s]\t[%d]\t[SaladMaker %d]\t[Get Ingredient: %s]\n", currentTimeString.c_str(), processId, processId - 1, missingVegetable.c_str());
+            fprintf(combinedLogFile, "\t[%s]\t[%d]\t[SaladMaker %d]\t[Get Ingredient: %s]\n", currentTimeString.c_str(), processId, processId - 1, missingVegetable.c_str());
             fclose(logFile);
             fclose(combinedLogFile);
             sem_post(&salad_table_buffer->chef_muting);
@@ -280,8 +289,11 @@ int main(int argc, char *argv[])
             cout << "waiting for onion call" << endl;
             logFile = fopen(fileName.c_str(), "a+");
             combinedLogFile = fopen(combinedFileName.c_str(), "a+");
-            fprintf(logFile, "\t[%d]\t[SaladMaker %d]\t[Waiting For Ingredient: %s]\n", processId, processId - 1, missingVegetable.c_str());
-            fprintf(combinedLogFile, "\t[%d]\t[SaladMaker %d]\t[Waiting For Ingredient: %s]\n", processId, processId - 1, missingVegetable.c_str());
+            time(&currentTimeMain);
+            gettimeofday(&currentTimeMilliseconds, NULL);
+            currentTimeString = getCurrentTime(currentTimeMain, currentTimeMilliseconds);
+            fprintf(logFile, "\t[%s]\t[%d]\t[SaladMaker %d]\t[Waiting For Ingredient: %s]\n", currentTimeString.c_str(), processId, processId - 1, missingVegetable.c_str());
+            fprintf(combinedLogFile, "\t[%s]\t[%d]\t[SaladMaker %d]\t[Waiting For Ingredient: %s]\n", currentTimeString.c_str(), processId, processId - 1, missingVegetable.c_str());
             fclose(logFile);
             fclose(combinedLogFile);
             sem_wait(&salad_table_buffer->saladmaker_3_muting);
@@ -292,8 +304,11 @@ int main(int argc, char *argv[])
             sem_wait(&salad_table_buffer->occupied);
             logFile = fopen(fileName.c_str(), "a+");
             combinedLogFile = fopen(combinedFileName.c_str(), "a+");
-            fprintf(logFile, "\t[%d]\t[SaladMaker %d]\t[Get Ingredient: %s]\n", processId, processId - 1, missingVegetable.c_str());
-            fprintf(combinedLogFile, "\t[%d]\t[SaladMaker %d]\t[Get Ingredient: %s]\n", processId, processId - 1, missingVegetable.c_str());
+            time(&currentTimeMain);
+            gettimeofday(&currentTimeMilliseconds, NULL);
+            currentTimeString = getCurrentTime(currentTimeMain, currentTimeMilliseconds);
+            fprintf(logFile, "\t[%s]\t[%d]\t[SaladMaker %d]\t[Get Ingredient: %s]\n", currentTimeString.c_str(), processId, processId - 1, missingVegetable.c_str());
+            fprintf(combinedLogFile, "\t[%s]\t[%d]\t[SaladMaker %d]\t[Get Ingredient: %s]\n", currentTimeString.c_str(), processId, processId - 1, missingVegetable.c_str());
             fclose(logFile);
             fclose(combinedLogFile);
             sem_post(&salad_table_buffer->chef_muting);
@@ -310,8 +325,11 @@ int main(int argc, char *argv[])
         //////////////////////////////////////////////////////////////////////////
         logFile = fopen(fileName.c_str(), "a+");
         combinedLogFile = fopen(combinedFileName.c_str(), "a+");
-        fprintf(logFile, "\t[%d]\t[SaladMaker %d]\t[Started Making Salad...]\n", processId, processId - 1);
-        fprintf(combinedLogFile, "\t[%d]\t[SaladMaker %d]\t[Started Making Salad...]\n", processId, processId - 1);
+        time(&currentTimeMain);
+        gettimeofday(&currentTimeMilliseconds, NULL);
+        currentTimeString = getCurrentTime(currentTimeMain, currentTimeMilliseconds);
+        fprintf(logFile, "\t[%s]\t[%d]\t[SaladMaker %d]\t[Started Making Salad...]\n", currentTimeString.c_str(), processId, processId - 1);
+        fprintf(combinedLogFile, "\t[%s]\t[%d]\t[SaladMaker %d]\t[Started Making Salad...]\n", currentTimeString.c_str(), processId, processId - 1);
         fclose(logFile);
         fclose(combinedLogFile);
         
@@ -319,8 +337,11 @@ int main(int argc, char *argv[])
 
         logFile = fopen(fileName.c_str(), "a+");
         combinedLogFile = fopen(combinedFileName.c_str(), "a+");
-        fprintf(logFile, "\t[%d]\t[SaladMaker %d]\t[Finished Making Salad!]\n", processId, processId - 1);
-        fprintf(combinedLogFile, "\t[%d]\t[SaladMaker %d]\t[Finished Making Salad!]\n", processId, processId - 1);
+        time(&currentTimeMain);
+        gettimeofday(&currentTimeMilliseconds, NULL);
+        currentTimeString = getCurrentTime(currentTimeMain, currentTimeMilliseconds);
+        fprintf(logFile, "\t[%s]\t[%d]\t[SaladMaker %d]\t[Finished Making Salad!]\n", currentTimeString.c_str(), processId, processId - 1);
+        fprintf(combinedLogFile, "\t[%s]\t[%d]\t[SaladMaker %d]\t[Finished Making Salad!]\n", currentTimeString.c_str(), processId, processId - 1);
         fclose(logFile);
         fclose(combinedLogFile);
         //////////////////////////////////////////////////////////////////////////

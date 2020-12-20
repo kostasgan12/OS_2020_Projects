@@ -125,18 +125,33 @@ int main(int argc, char *argv[])
     int random_vegetable_1, random_vegetable_2;
     int which_saladmaker;
     int chefMute;
-    int isEmpty;    
-    
+    int isEmpty;
+    sem_getvalue(&salad_table_buffer->empty, &isEmpty);
+
     string pickedVegArray[2];
 
-    while (i <= numOfSlds)
-    {
-        cout << "before chef_muting for i:\t" << i << endl;
-        sem_wait(&salad_table_buffer->empty);
-        sem_wait(&salad_table_buffer->chef_muting);
+    time_t currentTimeMain;
+    struct timeval currentTimeMilliseconds;
+    string currentTimeString;
 
+    // time(&currentTimeMain);
+    // gettimeofday(&currentTimeMilliseconds, NULL);
+
+    // currentTimeString = getCurrentTime(currentTimeMain, currentTimeMilliseconds);
+
+    // sleep(2);
+
+    // time(&currentTimeMain);
+    // gettimeofday(&currentTimeMilliseconds, NULL);
+    // currentTimeString = getCurrentTime(currentTimeMain, currentTimeMilliseconds);
+
+    while (isEmpty)
+    {
         sem_getvalue(&salad_table_buffer->empty, &isEmpty);
         cout<<"how many salads left??\t:"<<isEmpty<<endl;
+
+        sem_wait(&salad_table_buffer->empty);
+        sem_wait(&salad_table_buffer->chef_muting);
 
         //////////////////////////////////////////////////////////////////////////
         /////////////////////// B U S I N E S S  L O G I C ///////////////////////
@@ -178,7 +193,10 @@ int main(int argc, char *argv[])
         }
 
         combinedLogFile = fopen(combinedFileName.c_str(), "a+"); // a+ (create + append) option will allow appending which is useful in a log file
-        fprintf(combinedLogFile, "\t[1]\t[Chef]\t[Selecting ingredients: [%s][%s]]\n", pickedVegArray[0].c_str(), pickedVegArray[1].c_str());
+        time(&currentTimeMain);
+        gettimeofday(&currentTimeMilliseconds, NULL);
+        currentTimeString = getCurrentTime(currentTimeMain, currentTimeMilliseconds);
+        fprintf(combinedLogFile, "\t[%s]\t[1]\t[Chef]\t[Selecting ingredients: [%s][%s]]\n", currentTimeString.c_str(), pickedVegArray[0].c_str(), pickedVegArray[1].c_str());
         fclose(combinedLogFile);
         which_saladmaker = findSaladMaker(random_vegetable_1, random_vegetable_2);
         ////////////////////////////////////////////////
@@ -193,7 +211,10 @@ int main(int argc, char *argv[])
                 cout << "looking for a tomato..." << endl;
                 sem_post(&salad_table_buffer->occupied);
                 combinedLogFile = fopen(combinedFileName.c_str(), "a+"); // a+ (create + append) option will allow appending which is useful in a log file
-                fprintf(combinedLogFile, "\t[1]\t[Chef]\t[Notify saladmaker: [1]]\n");
+                time(&currentTimeMain);
+                gettimeofday(&currentTimeMilliseconds, NULL);
+                currentTimeString = getCurrentTime(currentTimeMain, currentTimeMilliseconds);
+                fprintf(combinedLogFile, "\t[%s]\t[1]\t[Chef]\t[Notify saladmaker: [1]]\n",currentTimeString.c_str());
                 fclose(combinedLogFile);
                 sem_post(&salad_table_buffer->saladmaker_1_muting);
                 break;
@@ -201,7 +222,10 @@ int main(int argc, char *argv[])
                 cout << "looking for a pepper..." << endl;
                 sem_post(&salad_table_buffer->occupied);
                 combinedLogFile = fopen(combinedFileName.c_str(), "a+"); // a+ (create + append) option will allow appending which is useful in a log file
-                fprintf(combinedLogFile, "\t[1]\t[Chef]\t[Notify saladmaker: [2]]\n");
+                time(&currentTimeMain);
+                gettimeofday(&currentTimeMilliseconds, NULL);
+                currentTimeString = getCurrentTime(currentTimeMain, currentTimeMilliseconds);
+                fprintf(combinedLogFile, "\t[%s]\t[1]\t[Chef]\t[Notify saladmaker: [2]]\n",currentTimeString.c_str());
                 fclose(combinedLogFile);
                 sem_post(&salad_table_buffer->saladmaker_2_muting);
                 break;
@@ -209,7 +233,10 @@ int main(int argc, char *argv[])
                 cout << "looking for an onion..." << endl;
                 sem_post(&salad_table_buffer->occupied);
                 combinedLogFile = fopen(combinedFileName.c_str(), "a+"); // a+ (create + append) option will allow appending which is useful in a log file
-                fprintf(combinedLogFile, "\t[1]\t[Chef]\t[Notify saladmaker: [3]]\n");
+                time(&currentTimeMain);
+                gettimeofday(&currentTimeMilliseconds, NULL);
+                currentTimeString = getCurrentTime(currentTimeMain, currentTimeMilliseconds);
+                fprintf(combinedLogFile, "\t[%s]\t[1]\t[Chef]\t[Notify saladmaker: [3]]\n",currentTimeString.c_str());
                 fclose(combinedLogFile);
                 sem_post(&salad_table_buffer->saladmaker_3_muting);
                 break;
@@ -219,10 +246,15 @@ int main(int argc, char *argv[])
         }
         
         combinedLogFile = fopen(combinedFileName.c_str(), "a+"); // a+ (create + append) option will allow appending which is useful in a log file
-        fprintf(combinedLogFile, "\t[1]\t[Chef]\t[Man Time For Resting]\n");
+        time(&currentTimeMain);
+        gettimeofday(&currentTimeMilliseconds, NULL);
+        currentTimeString = getCurrentTime(currentTimeMain, currentTimeMilliseconds);
+        fprintf(combinedLogFile, "\t[%s]\t[1]\t[Chef]\t[Man Time For Resting]\n",currentTimeString.c_str());
         fclose(combinedLogFile);
         sleep(manTime);
-        i++;
+        
+        sem_getvalue(&salad_table_buffer->empty, &isEmpty);
+        // i++;
     }
     
 

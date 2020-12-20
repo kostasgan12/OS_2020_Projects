@@ -18,5 +18,5 @@ bool isNumeric(string str);
 
 char findSaladMaker(int veg1, int veg2);
 string findPickedVeg(int veg1, int veg2);
-
+string getCurrentTime(time_t setTime, timeval setMilSec);
 #endif
