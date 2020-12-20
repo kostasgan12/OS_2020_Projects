@@ -19,4 +19,4 @@ saladmaker_helper_functions.o: ./src/helpers/saladmaker_helper_functions.cpp ./s
 	g++ $(CFLAGS) -c ./src/helpers/saladmaker_helper_functions.cpp
 
 clean:
-	rm *.o chef saladmaker 
+	rm *.o chef saladmaker tomatoLogFile.log pepperLogFile.log onionLogFile.log

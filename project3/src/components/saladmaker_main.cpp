@@ -146,7 +146,37 @@ int main(int argc, char *argv[])
     //////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////
 
-    
+    //////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////// L O G  F I L E  H A N D L E R S ///////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////
+
+
+    FILE *logFile;
+    string fileName;
+    if (strcmp(missingVegetable.c_str(), "tomato") == 0)
+    {
+        fileName = "tomatoLogFile.log";
+    }
+    else if (strcmp(missingVegetable.c_str(), "pepper") == 0)
+    {
+        fileName = "pepperLogFile.log";
+    }
+    else if (strcmp(missingVegetable.c_str(), "onion") == 0)
+    {
+        fileName = "onionLogFile.log";
+    }
+    else
+    {
+        cout << "Error Creating Vegetable" << endl;
+    }
+
+    logFile = fopen(fileName.c_str(), "a+"); // a+ (create + append) option will allow appending which is useful in a log file
+    if (logFile == NULL) cout<<"Error Creating Log File"<<endl;
+
+    fprintf(logFile, "\t##################################################\n\tInitialized Log File For %s Work Flow...\n\t##################################################\n", missingVegetable.c_str());
+    fclose(logFile);
+    //////////////////////////////////////////////////////////////////////////////////////
+
     char item;
     salad_table_buffer_t *salad_table_buffer;
     int retval; 
@@ -220,12 +250,14 @@ int main(int argc, char *argv[])
 
 
         sem_post(&salad_table_buffer->chef_muting);
+        sem_post(&salad_table_buffer->empty);
     }
-    // sem_post(&salad_table_buffer->empty);
     
     /* Remove segment . */
     err = shmdt((void *)salad_table_buffer);
     if (err == -1)
         perror(" Detachment . ");
+
+    // fclose(logFile);
     return 0;
 }

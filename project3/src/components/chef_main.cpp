@@ -116,7 +116,7 @@ int main(int argc, char *argv[])
     while (i <= numOfSlds)
     {
         cout << "before chef_muting for i:\t" << i << endl;
-        // sem_wait(&salad_table_buffer->empty);
+        sem_wait(&salad_table_buffer->empty);
         sem_wait(&salad_table_buffer->chef_muting);
 
         //////////////////////////////////////////////////////////////////////////
@@ -133,12 +133,12 @@ int main(int argc, char *argv[])
             random_vegetable_2 = rand() % 3 + 1;
         }
         
-       which_saladmaker = findSaladMaker(random_vegetable_1, random_vegetable_2);
-       ////////////////////////////////////////////////
+        which_saladmaker = findSaladMaker(random_vegetable_1, random_vegetable_2);
+        ////////////////////////////////////////////////
 
-       salad_table_buffer->offered_vegetable[salad_table_buffer->next_in] = which_saladmaker;
-       salad_table_buffer->next_in++;
-       salad_table_buffer->next_in %= BFSIZE;       //check whether it exceeds BFSIZE
+        salad_table_buffer->offered_vegetable[salad_table_buffer->next_in] = which_saladmaker;
+        salad_table_buffer->next_in++;
+        salad_table_buffer->next_in %= BFSIZE;       //check whether it exceeds BFSIZE
 
         switch (which_saladmaker)
         {
