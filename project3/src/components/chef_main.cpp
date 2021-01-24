@@ -134,6 +134,10 @@ int main(int argc, char *argv[])
     struct timeval currentTimeMilliseconds;
     string currentTimeString;
 
+    int saladmaker_1_total = 0;
+    int saladmaker_2_total = 0;
+    int saladmaker_3_total = 0;
+    
     while (isEmpty)
     {
         sem_getvalue(&salad_table_buffer->empty, &isEmpty);

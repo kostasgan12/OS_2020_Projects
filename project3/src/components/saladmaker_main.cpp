@@ -117,7 +117,6 @@ int main(int argc, char *argv[])
         }
         lowerTimeValue = stoi(temp);
     }
-    // cout << "\n\tlowerTimeValue\tIs:\t" << lowerTimeValue << endl;
 
     if (upperTimeValue == 0)
     {
@@ -133,16 +132,11 @@ int main(int argc, char *argv[])
         upperTimeValue = stoi(temp);
     }
 
-    // cout << "\n\tupperTimeValue\tIs:\t" << upperTimeValue << endl;
-
     if (sharedMemoryId == 0)
     {
         cout << "\n\t!!ERROR!!\tsharedMemoryId\tIs:\t" << sharedMemoryId << endl;
         exit(-1);
     }
-
-    // cout << "\n\tsharedMemoryId\tIs:\t" << sharedMemoryId << endl;
-    cout << "\n\tmissing Vegetable\tIs:\t" << missingVegetable << endl;
     //////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////
 
@@ -203,7 +197,7 @@ int main(int argc, char *argv[])
     //////////////////////////////////////////////////////////////////////////
 
     int workDurationTime = (rand() % (upperTimeValue - lowerTimeValue + 1)) + lowerTimeValue;
-    cout << "workDurationTime:\t" << workDurationTime << endl;
+    cout << "workDurationTime:\t" << workDurationTime <<" seconds" << endl;
 
     int isEmpty;
     sem_getvalue(&salad_table_buffer->empty, &isEmpty);
