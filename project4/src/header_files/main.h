@@ -27,7 +27,8 @@
 
 using namespace std;
 
-// extern int numOfSlds;
-// extern int manTime;
+extern int verbose;
+extern int verifyDeleted;
+extern int considerLinks;
 
 #endif
