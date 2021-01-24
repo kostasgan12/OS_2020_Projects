@@ -1,5 +1,5 @@
-#ifndef CHEF_MAIN_H
-#define CHEF_MAIN_H
+#ifndef MAIN_H
+#define MAIN_H
 
 #include <cstdlib>
 #include <stdlib.h>
@@ -23,15 +23,11 @@
 
 #include <sys/time.h>
 
-#include "../header_files/chef_helper_functions.h"
-#include "../header_files/common.h"
-
-#define SEGMENTSIZE sizeof(salad_table_buffer_t)
-#define SEGMENTPERM 0666 
+#include "../header_files/main_helper_functions.h"
 
 using namespace std;
 
-extern int numOfSlds;
-extern int manTime;
+// extern int numOfSlds;
+// extern int manTime;
 
 #endif
