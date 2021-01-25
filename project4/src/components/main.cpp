@@ -66,25 +66,23 @@ int main(int argc, char *argv[])
     
     string source_dir_name, dest_dir_name;
 
-    if((verbose + verifyDeleted + considerLinks == 0 )&& argc >= 2){
+    if((verbose + verifyDeleted + considerLinks == 0 )&& argc > 2){
+        cout<<"hereee"<<endl;
         source_dir_name = argv[1];
         dest_dir_name = argv[2];
-    }else if((verbose + verifyDeleted + considerLinks == 1) && argc >= 3){
+    }else if((verbose + verifyDeleted + considerLinks == 1) && argc > 3){
         source_dir_name = argv[2];
         dest_dir_name = argv[3];
-    }else if((verbose + verifyDeleted + considerLinks == 2 )&& argc >= 4){
+    }else if((verbose + verifyDeleted + considerLinks == 2 )&& argc > 4){
         source_dir_name = argv[3];
         dest_dir_name = argv[4];
-    }else if((verbose + verifyDeleted + considerLinks == 3 )&& argc == 5){
+    }else if((verbose + verifyDeleted + considerLinks == 3 )&& argc == 6){
         source_dir_name = argv[4];
         dest_dir_name = argv[5];
     }else{
         cout<<"ERROR PARSING PATHS"<<endl;
         exit(-1);
     }
-
-    cout<<"source dir name:\t"<<source_dir_name<<endl;
-    cout<<"dest dir name:\t"<<dest_dir_name<<endl;
 
     //////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////
