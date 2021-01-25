@@ -7,8 +7,6 @@ int considerLinks = 0;
 int main(int argc, char *argv[])
 {
 
-    DIR *source_directory_pointer;
-    DIR *destination_directory_pointer;
     //////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////// INITIALIZING PARSED DATA  //////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////
@@ -63,31 +61,45 @@ int main(int argc, char *argv[])
         cout << "\tConsider Links Mode: OFF"<< endl;
     }
 
-    
-    string source_dir_name, dest_dir_name;
+    char source_dir_name[256]; 
+    char dest_dir_name[256];
+    // string source_dir_name, dest_dir_name;
 
     if((verbose + verifyDeleted + considerLinks == 0 )&& argc > 2){
-        cout<<"hereee"<<endl;
-        source_dir_name = argv[1];
-        dest_dir_name = argv[2];
+        strcpy(source_dir_name, argv[1]);
+        strcpy(dest_dir_name, argv[2]);
+        // source_dir_name = argv[1];
+        // dest_dir_name = argv[2];
     }else if((verbose + verifyDeleted + considerLinks == 1) && argc > 3){
-        source_dir_name = argv[2];
-        dest_dir_name = argv[3];
+        strcpy(source_dir_name, argv[2]);
+        strcpy(dest_dir_name, argv[3]);
+        // source_dir_name = argv[2];
+        // dest_dir_name = argv[3];
     }else if((verbose + verifyDeleted + considerLinks == 2 )&& argc > 4){
-        source_dir_name = argv[3];
-        dest_dir_name = argv[4];
+        strcpy(source_dir_name, argv[3]);
+        strcpy(dest_dir_name, argv[4]);
+        // source_dir_name = argv[3];
+        // dest_dir_name = argv[4];
     }else if((verbose + verifyDeleted + considerLinks == 3 )&& argc == 6){
-        source_dir_name = argv[4];
-        dest_dir_name = argv[5];
+        strcpy(source_dir_name, argv[4]);
+        strcpy(dest_dir_name, argv[5]);
+        // source_dir_name = argv[4];
+        // dest_dir_name = argv[5];
     }else{
         cout<<"ERROR PARSING PATHS"<<endl;
         exit(-1);
     }
 
+
     //////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////
-    
-    
+
+    DIR *source_directory_pointer;
+    struct dirent *direntp;
+
+    if ( ( source_directory_pointer = opendir ( source_dir_name ) ) == NULL ) {
+        fprintf ( stderr , "cannot open %s \n" , source_dir_name ) ;
+    }
 
     return 0;
 }
