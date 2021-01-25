@@ -23,6 +23,9 @@
 
 #include <sys/time.h>
 
+#include <sys/types.h>
+#include <dirent.h>
+
 #include "../header_files/main_helper_functions.h"
 
 using namespace std;
