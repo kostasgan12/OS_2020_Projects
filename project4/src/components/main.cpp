@@ -101,5 +101,14 @@ int main(int argc, char *argv[])
         fprintf ( stderr , "cannot open %s \n" , source_dir_name ) ;
     }
 
+    while ( ( direntp = readdir ( source_directory_pointer ) ) != NULL ){
+        printf ("inode %d of the entry %s\n" ,  ( int ) direntp->d_ino , direntp->d_name ) ;
+    }
+
+
+    if(closedir(source_directory_pointer) == -1){
+        fprintf ( stderr , "cannot close %s \n" , source_dir_name ) ;
+    }
+
     return 0;
 }
