@@ -54,11 +54,11 @@ int main(int argc, char *argv[])
     if (considerLinks)
     {
         considerLinks = 1;
-        cout << "\tConsider Links Mode: ON"<< endl;
+        cout << "\tConsider Links Mode: ON\n"<< endl;
     }
     else
     {
-        cout << "\tConsider Links Mode: OFF"<< endl;
+        cout << "\tConsider Links Mode: OFF\n"<< endl;
     }
 
     char source_dir_name[256]; 
@@ -90,21 +90,30 @@ int main(int argc, char *argv[])
         exit(-1);
     }
 
-
     //////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////
 
     DIR *source_directory_pointer;
     struct dirent *direntp;
+    struct stat statbuf;
 
     if ( ( source_directory_pointer = opendir ( source_dir_name ) ) == NULL ) {
         fprintf ( stderr , "cannot open %s \n" , source_dir_name ) ;
     }
 
     while ( ( direntp = readdir ( source_directory_pointer ) ) != NULL ){
-        printf ("inode %d of the entry %s\n" ,  ( int ) direntp->d_ino , direntp->d_name ) ;
+        printf ("\ninode %d of the entry %s\n" ,  ( int ) direntp->d_ino , direntp->d_name ) ;
+        if(stat(direntp->d_name, &statbuf) == -1){
+            perror("Failed to get file status.");
+            continue;
+        }else{
+            printf("Time/Date : %s",ctime(&statbuf.st_atime)); 
+            printf("---------------------------------\n"); 
+            printf("entity name: %s\n",direntp->d_name);
+            printf("accessed : %s", ctime(&statbuf.st_atime)+4);
+            printf("modified : %s", ctime(&statbuf.st_mtime));
+        }
     }
-
 
     if(closedir(source_directory_pointer) == -1){
         fprintf ( stderr , "cannot close %s \n" , source_dir_name ) ;

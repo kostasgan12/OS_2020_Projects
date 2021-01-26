@@ -13,17 +13,13 @@
 #include <cmath>
 #include <new>
 
-#include <sys/types.h>
-#include <sys/ipc.h>
-#include <sys/shm.h>
-
 #include <unistd.h>
 
-#include <semaphore.h>
-
 #include <sys/time.h>
+#include <time.h>
 
 #include <sys/types.h>
+#include <sys/stat.h>
 #include <dirent.h>
 
 #include "../header_files/main_helper_functions.h"
