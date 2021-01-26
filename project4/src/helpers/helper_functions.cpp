@@ -63,7 +63,6 @@ void travelDir(char *name)
 
                     cout<<"newPathName\t"<<newPathName<<endl;
                     
-
                     pathPtr = realpath(newPathName, actualpath);
                     cout<<"pathPtr:\t"<<pathPtr<<endl;
                     
@@ -77,6 +76,9 @@ void travelDir(char *name)
                         travelDir(newPathName);
                     }
 
+                    if ((statbuf.st_mode & S_IFMT) == S_IFREG ){
+                        printf("This is a regular file\n");
+                    }
                     
                     // printout(pathPtr);
                     free(newPathName); 

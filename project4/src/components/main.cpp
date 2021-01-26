@@ -117,11 +117,11 @@ int main(int argc, char *argv[])
         if((strcmp(direntp->d_name, "..") != 0) && strcmp(direntp->d_name, ".") != 0){
             
             printf ("\ninode %d of the entry %s\n" ,  ( int ) direntp->d_ino , direntp->d_name );
-            newPathName=(char *)malloc(strlen(source_dir_name)+strlen(direntp->d_name)+4); 
+            newPathName=(char *)malloc(strlen(source_dir_name)+strlen(direntp->d_name)+3); 
             strcpy(newPathName, source_dir_name);
             strcat(newPathName, "/");
             strcat(newPathName,direntp->d_name);
-            strcat(newPathName, "/");
+            // strcat(newPathName, "/");
             cout<<"newPathName\t"<<newPathName<<endl;
 
             pathPtr = realpath(newPathName, actualpath);
