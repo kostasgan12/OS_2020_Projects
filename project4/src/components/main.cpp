@@ -121,8 +121,6 @@ int main(int argc, char *argv[])
             strcpy(newPathName, source_dir_name);
             strcat(newPathName, "/");
             strcat(newPathName,direntp->d_name);
-            // strcat(newPathName, "/");
-            cout<<"newPathName\t"<<newPathName<<endl;
 
             pathPtr = realpath(newPathName, actualpath);
             cout<<"pathPtr:\t"<<pathPtr<<endl;

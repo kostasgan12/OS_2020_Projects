@@ -42,8 +42,7 @@ void travelDir(char *name)
     struct stat statbuf;
     char actualpath [PATH_MAX+1];
     char *pathPtr;
-    
-    cout<<"#############################################"<<endl;
+
     if ((dp=opendir(name))== NULL ) { 
         perror("opendir"); 
 
@@ -60,8 +59,6 @@ void travelDir(char *name)
                     strcpy(newPathName ,name);
                     strcat(newPathName ,"/");
                     strcat(newPathName,dir->d_name);
-
-                    cout<<"newPathName\t"<<newPathName<<endl;
                     
                     pathPtr = realpath(newPathName, actualpath);
                     cout<<"pathPtr:\t"<<pathPtr<<endl;
@@ -89,7 +86,6 @@ void travelDir(char *name)
 
         closedir(dp); 
     }
-    cout<<"#############################################"<<endl;
     return;
 }
 
