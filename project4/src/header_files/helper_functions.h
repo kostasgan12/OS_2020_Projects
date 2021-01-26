@@ -22,4 +22,6 @@ bool isNumeric(string str);
 void list(char *name);
 void printout(char *name);
 
+void travelDir(char *name);
+
 #endif

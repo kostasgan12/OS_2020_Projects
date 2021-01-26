@@ -92,36 +92,60 @@ int main(int argc, char *argv[])
 
     //////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////
-
+    
     DIR *source_directory_pointer;
     struct dirent *direntp;
     struct stat statbuf;
+    char *newPathName;
+    char actualpath [PATH_MAX+1];
+    char *pathPtr;
+
+    // cout<<"source_dir_name:\t"<<source_dir_name<<endl;
+    // if(stat(source_dir_name, &statbuf) == -1){
+    //     perror("Failed to get source_dir_name file status");
+    //     return -1;
+    // }
+    // if ((statbuf.st_mode & S_IFMT) == S_IFDIR ){
+    //     printf("source_dir_name is a directory\n");
+    // }
 
     if ( ( source_directory_pointer = opendir ( source_dir_name ) ) == NULL ) {
         fprintf ( stderr , "cannot open %s \n" , source_dir_name ) ;
     }
 
     while ( ( direntp = readdir ( source_directory_pointer ) ) != NULL ){
-        // if ( (info.st_mode & S_IFMT) == S_IFDIR ){
-        //     printf("this is a fifo queue.\n");
-        // }
-        printf ("\ninode %d of the entry %s\n" ,  ( int ) direntp->d_ino , direntp->d_name );
+        if((strcmp(direntp->d_name, "..") != 0) && strcmp(direntp->d_name, ".") != 0){
+            
+            printf ("\ninode %d of the entry %s\n" ,  ( int ) direntp->d_ino , direntp->d_name );
+            newPathName=(char *)malloc(strlen(source_dir_name)+strlen(direntp->d_name)+4); 
+            strcpy(newPathName, source_dir_name);
+            strcat(newPathName, "/");
+            strcat(newPathName,direntp->d_name);
+            strcat(newPathName, "/");
+            cout<<"newPathName\t"<<newPathName<<endl;
 
-        if(stat(direntp->d_name, &statbuf) == -1){
-            perror("Failed to get file status");
-            continue;
-        }else{
+            pathPtr = realpath(newPathName, actualpath);
+            cout<<"pathPtr:\t"<<pathPtr<<endl;
+                    
+
+            if(stat(pathPtr, &statbuf) == -1){
+                perror("Failed to get file status");
+                free(newPathName); 
+                newPathName=NULL;
+                continue;
+            }
+            
+            if ((statbuf.st_mode & S_IFMT) == S_IFREG ){
+                printf("This is a regular file\n");
+            }
+
             if ((statbuf.st_mode & S_IFMT) == S_IFDIR ){
                 printf("This is a directory\n");
-                list(direntp->d_name);
-            }else{
-                printout(direntp->d_name);
-                // printf("Time/Date : %s",ctime(&statbuf.st_atime)); 
-                // printf("---------------------------------\n"); 
-                // printf("entity name: %s\n",direntp->d_name);
-                // printf("last accessed : %s", ctime(&statbuf.st_atime)+4);
-                // printf("last modified : %s", ctime(&statbuf.st_mtime));
+                travelDir(pathPtr);
             }
+
+            free(newPathName); 
+            newPathName=NULL;
         }
     }
 
