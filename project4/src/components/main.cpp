@@ -102,16 +102,26 @@ int main(int argc, char *argv[])
     }
 
     while ( ( direntp = readdir ( source_directory_pointer ) ) != NULL ){
-        printf ("\ninode %d of the entry %s\n" ,  ( int ) direntp->d_ino , direntp->d_name ) ;
+        // if ( (info.st_mode & S_IFMT) == S_IFDIR ){
+        //     printf("this is a fifo queue.\n");
+        // }
+        printf ("\ninode %d of the entry %s\n" ,  ( int ) direntp->d_ino , direntp->d_name );
+
         if(stat(direntp->d_name, &statbuf) == -1){
-            perror("Failed to get file status.");
+            perror("Failed to get file status");
             continue;
         }else{
-            printf("Time/Date : %s",ctime(&statbuf.st_atime)); 
-            printf("---------------------------------\n"); 
-            printf("entity name: %s\n",direntp->d_name);
-            printf("accessed : %s", ctime(&statbuf.st_atime)+4);
-            printf("modified : %s", ctime(&statbuf.st_mtime));
+            if ((statbuf.st_mode & S_IFMT) == S_IFDIR ){
+                printf("This is a directory\n");
+                list(direntp->d_name);
+            }else{
+                printout(direntp->d_name);
+                // printf("Time/Date : %s",ctime(&statbuf.st_atime)); 
+                // printf("---------------------------------\n"); 
+                // printf("entity name: %s\n",direntp->d_name);
+                // printf("last accessed : %s", ctime(&statbuf.st_atime)+4);
+                // printf("last modified : %s", ctime(&statbuf.st_mtime));
+            }
         }
     }
 

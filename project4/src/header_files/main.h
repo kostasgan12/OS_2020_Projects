@@ -22,7 +22,7 @@
 #include <sys/stat.h>
 #include <dirent.h>
 
-#include "../header_files/main_helper_functions.h"
+#include "../header_files/helper_functions.h"
 
 using namespace std;
 
