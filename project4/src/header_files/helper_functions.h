@@ -22,6 +22,8 @@ bool isNumeric(string str);
 void list(char *name);
 void printout(char *name);
 
-void travelDir(char *name);
+void travelDir(char *name, char *targetFolder);
+
+void copyFile(char *fileName, char *targetDirectory);
 
 #endif

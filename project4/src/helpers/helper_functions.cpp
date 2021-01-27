@@ -35,10 +35,12 @@ void list(char *name)
     closedir(dp); 
 }
 
-void travelDir(char *name)
+void travelDir(char *name, char *targetFolder)
 { 
     DIR *dp;
-    struct dirent *dir; char *newPathName;
+    struct dirent *dir; 
+    char *newPathName;
+    char *innerTargetPath;
     struct stat statbuf;
     char actualpath [PATH_MAX+1];
     char *pathPtr;
@@ -49,8 +51,6 @@ void travelDir(char *name)
         return;
     }else{
         while ((dir = readdir(dp)) != NULL ) {
-            // if(name[strlen(name)-1] == "." ){
-            // if((strcmp(name, "..") != 0) && strcmp(name, ".") != 0){
             if (dir->d_ino == 0 ){
                 continue;
             }else{
@@ -61,22 +61,37 @@ void travelDir(char *name)
                     strcat(newPathName,dir->d_name);
                     
                     pathPtr = realpath(newPathName, actualpath);
-                    cout<<"pathPtr:\t"<<pathPtr<<endl;
+                    // cout<<"pathPtr:\t"<<pathPtr<<endl;
                     
                     if(stat(pathPtr, &statbuf) == -1){
                         perror("Failed to get file status");
                         return;
                     }
 
+                    // cout<<"targetFolder:\t"<<targetFolder<<endl;
+                    // cout<<"dir->d_name:\t"<<dir->d_name<<endl;
+                    innerTargetPath=(char *)malloc(strlen(targetFolder)+strlen(name)+3); 
+                    strcpy(innerTargetPath, targetFolder);
+                    strcat(innerTargetPath, "/");
+                    strcat(innerTargetPath, dir->d_name);
+
                     if ((statbuf.st_mode & S_IFMT) == S_IFDIR ){
-                        printf("This is a directory\n");
-                        travelDir(newPathName);
+                        // printf("This is a directory\n");
+                        
+                        cout<<"pathPtr for travelling...:\t"<<newPathName<<endl;
+                        travelDir(newPathName, innerTargetPath);
+                        
+                        // copyFile(name, targetFolder);
+
                     }
 
                     if ((statbuf.st_mode & S_IFMT) == S_IFREG ){
-                        printf("This is a regular file\n");
+                        // printf("This is a regular file\n");
+                        copyFile(name, targetFolder);
                     }
                     
+                    free(innerTargetPath); 
+                    innerTargetPath=NULL;
                     // printout(pathPtr);
                     free(newPathName); 
                     newPathName=NULL;
@@ -86,6 +101,51 @@ void travelDir(char *name)
 
         closedir(dp); 
     }
+    return;
+}
+
+void copyFile(char *fileName, char *targetDirectory){
+    DIR *dp;
+    struct dirent *dir; char *newname;
+    
+    struct stat statbuf;
+    char actualpath [PATH_MAX+1];
+    char *targetPathPointer;
+
+    targetPathPointer = realpath(targetDirectory, actualpath);
+
+    char oldPath[100];
+    char newPath[100];
+
+    cout<<"\n$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"<<endl;
+    //set current path so we can change back
+    getcwd(oldPath, 100);
+
+    // if ((dp=opendir(name))== NULL ) { 
+    //     perror("opendir"); 
+    //     return;
+    // }
+
+    // cout<<"targetDirectory:\t"<<targetDirectory<<endl;
+
+    if(stat(targetPathPointer, &statbuf) == -1){
+        // cout<<"making new folder at: \t"<<targetDirectory<<endl;
+
+        mkdir(targetDirectory, 0700);
+    }
+
+    //change to destination folder
+    // if(chdir(targetPathPointer)){
+    //     perror("changing dir");
+    // }else{
+    //     printf("path after\t%s\n", getcwd(newPath, 100)); 
+
+    //     //change back to source folder
+    // }
+    chdir(targetPathPointer);
+    // printf("path after\t%s\n", getcwd(newPath, 100)); 
+    chdir(oldPath);
+
     return;
 }
 

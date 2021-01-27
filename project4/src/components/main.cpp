@@ -97,17 +97,9 @@ int main(int argc, char *argv[])
     struct dirent *direntp;
     struct stat statbuf;
     char *newPathName;
+    char *innerTargetPath;
     char actualpath [PATH_MAX+1];
     char *pathPtr;
-
-    // cout<<"source_dir_name:\t"<<source_dir_name<<endl;
-    // if(stat(source_dir_name, &statbuf) == -1){
-    //     perror("Failed to get source_dir_name file status");
-    //     return -1;
-    // }
-    // if ((statbuf.st_mode & S_IFMT) == S_IFDIR ){
-    //     printf("source_dir_name is a directory\n");
-    // }
 
     if ( ( source_directory_pointer = opendir ( source_dir_name ) ) == NULL ) {
         fprintf ( stderr , "cannot open %s \n" , source_dir_name ) ;
@@ -116,14 +108,15 @@ int main(int argc, char *argv[])
     while ( ( direntp = readdir ( source_directory_pointer ) ) != NULL ){
         if((strcmp(direntp->d_name, "..") != 0) && strcmp(direntp->d_name, ".") != 0){
             
-            printf ("\ninode %d of the entry %s\n" ,  ( int ) direntp->d_ino , direntp->d_name );
+            printf ("\n\ninode %d of the entry %s\n" ,  ( int ) direntp->d_ino , direntp->d_name );
+            
             newPathName=(char *)malloc(strlen(source_dir_name)+strlen(direntp->d_name)+3); 
             strcpy(newPathName, source_dir_name);
             strcat(newPathName, "/");
             strcat(newPathName,direntp->d_name);
 
             pathPtr = realpath(newPathName, actualpath);
-            cout<<"pathPtr:\t"<<pathPtr<<endl;
+            // cout<<"pathPtr:\t"<<pathPtr<<endl;
                     
 
             if(stat(pathPtr, &statbuf) == -1){
@@ -134,12 +127,21 @@ int main(int argc, char *argv[])
             }
             
             if ((statbuf.st_mode & S_IFMT) == S_IFREG ){
-                printf("This is a regular file\n");
+                // printf("This is a regular file\n");
+                copyFile(direntp->d_name, dest_dir_name);
             }
 
             if ((statbuf.st_mode & S_IFMT) == S_IFDIR ){
-                printf("This is a directory\n");
-                travelDir(pathPtr);
+                // printf("This is a directory\n");
+                innerTargetPath=(char *)malloc(strlen(dest_dir_name)+strlen(direntp->d_name)+3); 
+                strcpy(innerTargetPath, dest_dir_name);
+                strcat(innerTargetPath, "/");
+                strcat(innerTargetPath,direntp->d_name);
+
+                travelDir(pathPtr, innerTargetPath);
+                
+                free(innerTargetPath); 
+                innerTargetPath=NULL;
             }
 
             free(newPathName); 
