@@ -88,8 +88,7 @@ void travelDir(char *currentDir, char *targetFolder)
                         //new directory has currentDir -> newSourcePath e.g. source_dir/item1
                         //and target folder -> dest_dir/item1
 
-                        //TODO, check whether directory exists
-                        //TODO check if this path exists in target before travelling further down
+                        //check if this path exists in target before travelling further down
                         if(doesPathExist(newSourcePath, newTargetPath)){
                             cout<<"path:"<<newTargetPath<< " exists!"<<endl;
                         }else{
@@ -98,11 +97,9 @@ void travelDir(char *currentDir, char *targetFolder)
                         }
                         cout<<"pathPtr for travelling...:\t"<<newSourcePath<<endl;
                         travelDir(newSourcePath, newTargetPath);
-                        // copyFile(currentDir, targetFolder);
                     }
 
                     if ((statbuf.st_mode & S_IFMT) == S_IFREG ){
-                        // printf("This is a regular file\n");
                         copyFile(currentDir, targetFolder);
                     }
                     
