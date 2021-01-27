@@ -188,40 +188,40 @@ void copyFile(char *fileName, char *sourceDirectory, char *targetDirectory){
     chdir(sourceDirectory);
 
     newFileName=(char *)malloc(strlen(fileName)+3); 
-    strcpy(newFileName, "./");
-    strcat(newFileName, fileName);
+    // strcpy(newFileName, "./");
+    strcpy(newFileName, fileName);
     
     cout<<"sourceDirectory is:\t"<<sourceDirectory<<endl;
     printf("tempPath:\t%s\n", getcwd(tempPath, 100));
     cout<<"newFileName to open is:\t"<<newFileName<<endl;
-    cout<<"newFileName to open is:\t"<<newFileName<<endl;
 
-    if( (source_file_ptr = fopen(fileName, "rw")) == NULL )
+    if( (source_file_ptr = fopen(newFileName, "r")) == NULL )
     {
         printf("couldnt open file: %s\n", newFileName);
         free(newFileName); 
         newFileName=NULL;
         return;
     }
-    //copy file
-    while( ( ch = fgetc(source_file_ptr) ) != EOF )
-    fclose(source_file_ptr);
 
-    chdir(targetDirectory);
-    getcwd(targetPath, 100);
+    // //copy file
+    // while( ( ch = fgetc(source_file_ptr) ) != EOF )
+    // fclose(source_file_ptr);
 
-    //TODO check if file already exists and business logic
-    if( (target_file_ptr = fopen(target_file_name, "w+")) == NULL )
-    {
-        printf("couldnt open file: %s\n", target_file_name);
+    // chdir(targetDirectory);
+    // getcwd(targetPath, 100);
 
-        free(newFileName); 
-        newFileName=NULL;
-        return;
-    }
-    //paste file
-    fputc(ch, target_file_ptr);
-    fclose(target_file_ptr);
+    // //TODO check if file already exists and business logic
+    // if( (target_file_ptr = fopen(target_file_name, "w+")) == NULL )
+    // {
+    //     printf("couldnt open file: %s\n", target_file_name);
+
+    //     free(newFileName); 
+    //     newFileName=NULL;
+    //     return;
+    // }
+    // //paste file
+    // fputc(ch, target_file_ptr);
+    // fclose(target_file_ptr);
 
     //return to previous path
     chdir(sourcePath);
