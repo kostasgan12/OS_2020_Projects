@@ -66,7 +66,7 @@ void travelDir(char *currentDir, char *targetFolder)
             }else{
                 //skip .. and . entities
                 if((strcmp(dir->d_name, "..") != 0) && strcmp(dir->d_name, ".") != 0){
-
+                    totalEntitiesInHierarchy++;
                     //change path to item path. e.g. source_dir -> source_dir/item1
                     newSourcePath=(char *)malloc(strlen(currentDir)+strlen(dir->d_name)+2); 
                     strcpy(newSourcePath ,currentDir);
@@ -107,6 +107,7 @@ void travelDir(char *currentDir, char *targetFolder)
                             // cout<<"path:"<<newTargetPath<< " exists!"<<endl;
                         }else{
                             mkdir(newTargetPath, 0700);
+                            totalEntitiesCopied++;
                         }
                         travelDir(newSourcePath, newTargetPath);
                     }
@@ -258,17 +259,17 @@ void copyFile(char *fileName, char *sourceDirectory, char *targetDirectory){
             free(srcFileName);
             free(targetFileName);
             
-            printf("COPY COMPLETED\n");
             return;
         }
     }
+
+    totalEntitiesCopied++;
 
     fclose(source_file_ptr);
     fclose(target_file_ptr);
     free(srcFileName);
     free(targetFileName);
     
-    printf("COPY COMPLETED\n");
     return;
 }
 

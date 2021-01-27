@@ -23,11 +23,17 @@
 #include <dirent.h>
 
 #include "../header_files/helper_functions.h"
+#include "../header_files/global_variables.h"
+
+
 
 using namespace std;
 
 extern int verbose;
 extern int verifyDeleted;
 extern int considerLinks;
+
+
+
 
 #endif

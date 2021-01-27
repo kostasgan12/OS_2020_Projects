@@ -17,6 +17,8 @@
 #include <chrono>
 #include <ctime>  
 
+#include "../header_files/global_variables.h"
+
 using namespace std;
 
 bool isNumeric(string str);

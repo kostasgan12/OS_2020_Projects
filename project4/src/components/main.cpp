@@ -3,6 +3,9 @@
 int verbose = 0;
 int verifyDeleted = 0;
 int considerLinks = 0;
+int totalEntitiesInHierarchy = 0;
+int totalEntitiesCopied = 0;
+int totalBytesCopied = 0;
 
 int main(int argc, char *argv[])
 {
@@ -116,11 +119,12 @@ int main(int argc, char *argv[])
         fprintf ( stderr , "cannot open %s \n" , source_dir_name ) ;
     }
 
+
     //in given source directory
     //loop every item in here, directories and other types
     while ( ( direntp = readdir ( source_directory_pointer ) ) != NULL ){
         if((strcmp(direntp->d_name, "..") != 0) && strcmp(direntp->d_name, ".") != 0){
-            
+            totalEntitiesInHierarchy++;
             // printf ("\n\ninode %d of the entry %s\n" ,  ( int ) direntp->d_ino , direntp->d_name );
             
             //set path from source_dir to source_dir/item
@@ -158,6 +162,7 @@ int main(int argc, char *argv[])
                 }else{
                     cout<<"path:"<<newTargetPath<< " does NOT exist!"<<endl;
                     mkdir(newTargetPath, 0700);
+                    totalEntitiesCopied++;
                 }
                 //first we check the contents of the folder
                 travelDir(pathPtr, newTargetPath);
@@ -245,6 +250,9 @@ int main(int argc, char *argv[])
 
         closedir(target_dp); 
     }
+
+    cout<<"totalEntitiesInHierarchy:\t"<<totalEntitiesInHierarchy<<endl;
+    cout<<"totalEntitiesCopied:\t"<<totalEntitiesCopied<<endl;
 
     return 0;
 }
