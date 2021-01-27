@@ -122,9 +122,7 @@ int main(int argc, char *argv[])
             strcat(newSourcePath,direntp->d_name);
 
             //get absolute path
-            cout<<"DDDDDDDDDD     "<<newSourcePath<<endl;
-            pathPtr = realpath(newSourcePath, actualpath);                    
-            cout<<"actualpath     "<<actualpath<<endl;
+            pathPtr = realpath(newSourcePath, actualpath);   
 
             //get status
             if(stat(pathPtr, &statbuf) == -1){
@@ -136,9 +134,6 @@ int main(int argc, char *argv[])
             
             //check whether item is normal file
             if ((statbuf.st_mode & S_IFMT) == S_IFREG ){
-                // printf("This is a regular file\n"); 
-
-                cout<<"source_dir_name: "<<source_dir_name<<endl;
                 copyFile(direntp->d_name, source_dir_name, dest_dir_name);
             }
             
