@@ -118,55 +118,61 @@ void travelDir(char *currentDir, char *targetFolder)
 }
 
 void copyFile(char *fileName, char *sourceDirectory, char *targetDirectory){
-    char ch, source_file_name[FILENAME_MAX], target_file_name[FILENAME_MAX];
+    char ch;
     FILE *source_file_ptr, *target_file_ptr;
-    
-    char sourcePath[100];
-    char targetPath[100];
-    char tempPath[100];
-    //copy source path
-    getcwd(sourcePath, 100);
+    char *srcFileName, *targetFileName;
+    char buffer[512];
+    size_t bytes;
 
-    char sourceActualPath [PATH_MAX+1];
-    char targetActualPath [PATH_MAX+1];
-    char *sourcePathPointer;
-    sourcePathPointer = realpath(sourceDirectory, sourceActualPath);
-    char *targetPathPointer;
-    targetPathPointer = realpath(targetDirectory, targetActualPath);
+    srcFileName=(char *)malloc(strlen(sourceDirectory)+strlen(fileName)+3);
+    targetFileName=(char *)malloc(strlen(targetDirectory)+strlen(fileName)+3);
 
-    chdir(sourceDirectory);
-    
-    cout<<"fileName to open is:\t"<<fileName<<endl;
+    strcpy(srcFileName, sourceDirectory);
+    strcat(srcFileName, "/");
+    strcat(srcFileName, fileName);
+    cout<<"srcFileName:\t"<<srcFileName<<endl;
 
-    if( (source_file_ptr = fopen(fileName, "r")) == NULL )
-    {
-        printf("@@@@@@\ncouldnt open file: %s\n@@@@@@\n", fileName);
-        chdir(sourcePath);
-        return;
+    strcpy(targetFileName, targetDirectory);
+    strcat(targetFileName, "/");
+    strcat(targetFileName, fileName);
+    cout<<"targetFileName:\t"<<targetFileName<<endl;
+
+    // Open one file for reading
+    source_file_ptr = fopen(srcFileName, "r");
+    if (source_file_ptr == NULL){
+        printf("Cannot open file %s \n", srcFileName);
+        free(srcFileName);
+        free(targetFileName);
+        exit(0);
     }
-    
 
-    chdir(targetPathPointer);
-    getcwd(targetPath, 100);
-    // //TODO check if file already exists and business logic
-    if( (target_file_ptr = fopen(fileName, "w+")) == NULL )
-    {
-        printf("@@@@@@\ncouldnt open file: %s\n@@@@@@\n", fileName);
-
-        chdir(sourcePath);
-        return;
+    // Open another file for writing
+    target_file_ptr = fopen(targetFileName, "w+");
+    if (target_file_ptr == NULL){
+        printf("Cannot open file %s \n", targetFileName);
+        free(srcFileName);
+        free(targetFileName);
+        exit(0);
     }
-    
-    //copy file
-    while( ( ch = fgetc(source_file_ptr) ) != EOF ){
-        fputc(ch, target_file_ptr);
+
+    while ((bytes = fread(buffer, 1, 512, source_file_ptr)) != 0) {
+        if(fwrite(buffer, 1, bytes, target_file_ptr) != bytes) {
+            fclose(source_file_ptr);
+            fclose(target_file_ptr);
+            free(srcFileName);
+            free(targetFileName);
+            
+            printf("COPY COMPLETED\n");
+            return;
+        }
     }
 
     fclose(source_file_ptr);
     fclose(target_file_ptr);
-
-    //return to previous path
-    chdir(sourcePath);
+    free(srcFileName);
+    free(targetFileName);
+    
+    printf("COPY COMPLETED\n");
     return;
 }
 
