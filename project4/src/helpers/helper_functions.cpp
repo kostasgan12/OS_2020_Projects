@@ -35,7 +35,7 @@ void list(char *name)
     closedir(dp); 
 }
 
-void travelDir(char *name, char *targetFolder)
+void travelDir(char *currentDir, char *targetFolder)
 { 
     DIR *dp;
     struct dirent *dir; 
@@ -45,49 +45,58 @@ void travelDir(char *name, char *targetFolder)
     char actualpath [PATH_MAX+1];
     char *pathPtr;
 
-    if ((dp=opendir(name))== NULL ) { 
+    //open current directory
+    if ((dp=opendir(currentDir))== NULL ) { 
         perror("opendir"); 
 
         return;
     }else{
+        //read every item in directory
         while ((dir = readdir(dp)) != NULL ) {
+            //if deleted, continue
             if (dir->d_ino == 0 ){
                 continue;
             }else{
+                //skip .. and . entities
                 if((strcmp(dir->d_name, "..") != 0) && strcmp(dir->d_name, ".") != 0){
-                    newPathName=(char *)malloc(strlen(name)+strlen(dir->d_name)+2); 
-                    strcpy(newPathName ,name);
+
+                    //change path to item path. e.g. source_dir -> source_dir/item1
+                    newPathName=(char *)malloc(strlen(currentDir)+strlen(dir->d_name)+2); 
+                    strcpy(newPathName ,currentDir);
                     strcat(newPathName ,"/");
                     strcat(newPathName,dir->d_name);
                     
+                    //get absolute path
                     pathPtr = realpath(newPathName, actualpath);
                     // cout<<"pathPtr:\t"<<pathPtr<<endl;
                     
+                    //get item stat
                     if(stat(pathPtr, &statbuf) == -1){
                         perror("Failed to get file status");
                         return;
                     }
 
-                    // cout<<"targetFolder:\t"<<targetFolder<<endl;
-                    // cout<<"dir->d_name:\t"<<dir->d_name<<endl;
-                    innerTargetPath=(char *)malloc(strlen(targetFolder)+strlen(name)+3); 
+                    //set target folder path, according tou our depth. e.g. source_dir/item1 -> dest_dir/item1
+                    innerTargetPath=(char *)malloc(strlen(targetFolder)+strlen(currentDir)+3); 
                     strcpy(innerTargetPath, targetFolder);
                     strcat(innerTargetPath, "/");
                     strcat(innerTargetPath, dir->d_name);
 
+                    //if current item is a directory
                     if ((statbuf.st_mode & S_IFMT) == S_IFDIR ){
-                        // printf("This is a directory\n");
-                        
+                        //we want to carry on searching in this new directory
+                        //new directory has currentDir -> newPathName e.g. source_dir/item1
+                        //and target folder -> dest_dir/item1
+
+                        //TODO, check whether directory exists
                         cout<<"pathPtr for travelling...:\t"<<newPathName<<endl;
                         travelDir(newPathName, innerTargetPath);
-                        
-                        // copyFile(name, targetFolder);
-
+                        // copyFile(currentDir, targetFolder);
                     }
 
                     if ((statbuf.st_mode & S_IFMT) == S_IFREG ){
                         // printf("This is a regular file\n");
-                        copyFile(name, targetFolder);
+                        copyFile(currentDir, targetFolder);
                     }
                     
                     free(innerTargetPath); 
