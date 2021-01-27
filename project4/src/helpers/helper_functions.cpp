@@ -154,10 +154,7 @@ void copyFile(char *fileName, char *sourceDirectory, char *targetDirectory){
         newFileName=NULL;
         return;
     }
-
-    //copy file
-    while( ( ch = fgetc(source_file_ptr) ) != EOF )
-    fclose(source_file_ptr);
+    
 
     chdir(targetPathPointer);
     getcwd(targetPath, 100);
@@ -173,8 +170,13 @@ void copyFile(char *fileName, char *sourceDirectory, char *targetDirectory){
         newFileName=NULL;
         return;
     }
-    // //paste file
-    fputc(ch, target_file_ptr);
+    
+    //copy file
+    while( ( ch = fgetc(source_file_ptr) ) != EOF ){
+        fputc(ch, target_file_ptr);
+    }
+    
+    fclose(source_file_ptr);
     fclose(target_file_ptr);
 
     //return to previous path
