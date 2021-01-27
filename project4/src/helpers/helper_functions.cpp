@@ -126,76 +126,80 @@ void travelDir(char *currentDir, char *targetFolder)
         closedir(dp); 
     }
 
-    int found = 0;
-    //open target directory
-    if ((target_dp=opendir(targetFolder))== NULL ) { 
-        perror("target opendir"); 
+    if(verifyDeleted){
 
-        return;
-    }else{
-        //for every item in target dir we want to check if it exists in source dir
-        while ((target_dir = readdir(target_dp)) != NULL ) {
-            //if deleted, continue
-            if (target_dir->d_ino == 0 ){
-                printf("\n\n\ndeleted\n");
-                continue;
-            }else{
-                //skip .. and . entities
-                if((strcmp(target_dir->d_name, "..") != 0) && strcmp(target_dir->d_name, ".") != 0){
-                    // cout<<"looking for:\t"<<target_dir->d_name<<"\t in:\t"<<targetFolder<<endl;
-                    found = 0;
+    
+        int found = 0;
+        //open target directory
+        if ((target_dp=opendir(targetFolder))== NULL ) { 
+            perror("target opendir"); 
 
-                    //open source directory
-                    if ((dp=opendir(currentDir))== NULL ) { 
-                        perror("source seccond opendir"); 
-                        closedir(target_dp); 
-                        return;
-                    }else{
-                        //loop source dir
-                        while ((dir = readdir(dp)) != NULL ) {
-                            //if deleted, continue
-                            if (dir->d_ino == 0 ){
-                                printf("deleted\n");
-                                continue;
-                            }else{
-                                //skip .. and . entities
-                                if((strcmp(dir->d_name, "..") != 0) && strcmp(dir->d_name, ".") != 0){
-                                    //check if it exists in source folder
-                                    if(stat(currentDir, &sourceFileStatBuff) == 0){
-                                        if(strcmp(target_dir->d_name, dir->d_name) == 0){
-                                            // cout<<"entry: "<<target_dir->d_name<<" exists -->:\t"<<dir->d_name<<endl;
-                                            //NOW WE FOUND A DELETED ONE WE MUST DELETE IT FROM TARGET DIR
-                                            found++;
-                                            break;
+            return;
+        }else{
+            //for every item in target dir we want to check if it exists in source dir
+            while ((target_dir = readdir(target_dp)) != NULL ) {
+                //if deleted, continue
+                if (target_dir->d_ino == 0 ){
+                    printf("\n\n\ndeleted\n");
+                    continue;
+                }else{
+                    //skip .. and . entities
+                    if((strcmp(target_dir->d_name, "..") != 0) && strcmp(target_dir->d_name, ".") != 0){
+                        // cout<<"looking for:\t"<<target_dir->d_name<<"\t in:\t"<<targetFolder<<endl;
+                        found = 0;
+
+                        //open source directory
+                        if ((dp=opendir(currentDir))== NULL ) { 
+                            perror("source seccond opendir"); 
+                            closedir(target_dp); 
+                            return;
+                        }else{
+                            //loop source dir
+                            while ((dir = readdir(dp)) != NULL ) {
+                                //if deleted, continue
+                                if (dir->d_ino == 0 ){
+                                    printf("deleted\n");
+                                    continue;
+                                }else{
+                                    //skip .. and . entities
+                                    if((strcmp(dir->d_name, "..") != 0) && strcmp(dir->d_name, ".") != 0){
+                                        //check if it exists in source folder
+                                        if(stat(currentDir, &sourceFileStatBuff) == 0){
+                                            if(strcmp(target_dir->d_name, dir->d_name) == 0){
+                                                // cout<<"entry: "<<target_dir->d_name<<" exists -->:\t"<<dir->d_name<<endl;
+                                                //NOW WE FOUND A DELETED ONE WE MUST DELETE IT FROM TARGET DIR
+                                                found++;
+                                                break;
+                                            }
                                         }
                                     }
                                 }
                             }
-                        }
 
-                        if(found == 0){
-                            cout<<"couldnt find entry:\t"<<target_dir->d_name<<endl;
-                            
-                            deletionFile=(char *)malloc(strlen(targetFolder)+strlen(target_dir->d_name)+3); 
-                            strcpy(deletionFile, targetFolder);
-                            strcat(deletionFile, "/");
-                            strcat(deletionFile,target_dir->d_name);
-                
-                            if(remove(deletionFile)){
-                                perror("deletion error");
+                            if(found == 0){
+                                cout<<"couldnt find entry:\t"<<target_dir->d_name<<endl;
+                                
+                                deletionFile=(char *)malloc(strlen(targetFolder)+strlen(target_dir->d_name)+3); 
+                                strcpy(deletionFile, targetFolder);
+                                strcat(deletionFile, "/");
+                                strcat(deletionFile,target_dir->d_name);
+                    
+                                if(remove(deletionFile)){
+                                    perror("deletion error");
+                                }
+
+                                free(deletionFile); 
+                                deletionFile=NULL;
                             }
 
-                            free(deletionFile); 
-                            deletionFile=NULL;
+                            closedir(dp); 
                         }
-
-                        closedir(dp); 
                     }
                 }
             }
-        }
 
-        closedir(target_dp); 
+            closedir(target_dp); 
+        }
     }
     return;
 }
