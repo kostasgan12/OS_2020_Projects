@@ -7,4 +7,4 @@ The file offset used to mark the current position within the file shall be set t
 The file status flags and file access modes of the open file description shall be set according to the value of oflag. 
 This is Kon Tsakalozos
 
-tsakotoooooo
+tsakotooooooddddd

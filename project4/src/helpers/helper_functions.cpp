@@ -45,6 +45,9 @@ void travelDir(char *currentDir, char *targetFolder)
     char actualpath [PATH_MAX+1];
     char *pathPtr;
 
+    int sourceDirItems = 0;
+    int targetDirItems = 0;
+
     //open current directory
     if ((dp=opendir(currentDir))== NULL ) { 
         perror("opendir"); 
@@ -55,6 +58,7 @@ void travelDir(char *currentDir, char *targetFolder)
         while ((dir = readdir(dp)) != NULL ) {
             //if deleted, continue
             if (dir->d_ino == 0 ){
+                printf("deleted\n");
                 continue;
             }else{
                 //skip .. and . entities
@@ -85,6 +89,7 @@ void travelDir(char *currentDir, char *targetFolder)
 
                     //if normal file
                     if ((statbuf.st_mode & S_IFMT) == S_IFREG ){
+                        // if(ctime(&statbuf.st_mtime))
                         copyFile(dir->d_name, currentDir, targetFolder);
                     }
 
@@ -123,6 +128,9 @@ void copyFile(char *fileName, char *sourceDirectory, char *targetDirectory){
     char *srcFileName, *targetFileName;
     char buffer[512];
     size_t bytes;
+    struct stat sourceFileStatBuff;
+    struct stat targetFileStatBuff;
+    time_t currentTime;
 
     srcFileName=(char *)malloc(strlen(sourceDirectory)+strlen(fileName)+3);
     targetFileName=(char *)malloc(strlen(targetDirectory)+strlen(fileName)+3);
@@ -130,12 +138,26 @@ void copyFile(char *fileName, char *sourceDirectory, char *targetDirectory){
     strcpy(srcFileName, sourceDirectory);
     strcat(srcFileName, "/");
     strcat(srcFileName, fileName);
-    cout<<"srcFileName:\t"<<srcFileName<<endl;
 
     strcpy(targetFileName, targetDirectory);
     strcat(targetFileName, "/");
     strcat(targetFileName, fileName);
-    cout<<"targetFileName:\t"<<targetFileName<<endl;
+
+    if(stat(srcFileName, &sourceFileStatBuff) == -1){
+        printf("Cannot get stat\n");
+        free(srcFileName);
+        free(targetFileName);
+        exit(0);
+    }
+    //get item stat
+    if(stat(targetFileName, &targetFileStatBuff) == 0){
+        //compare times
+        if(sourceFileStatBuff.st_mtime <= targetFileStatBuff.st_mtime){
+            free(srcFileName);
+            free(targetFileName);
+            return;
+        }
+    }
 
     // Open one file for reading
     source_file_ptr = fopen(srcFileName, "r");
