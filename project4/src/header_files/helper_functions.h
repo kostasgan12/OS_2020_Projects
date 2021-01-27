@@ -24,7 +24,7 @@ void printout(char *name);
 
 void travelDir(char *name, char *targetFolder);
 
-void copyFile(char *fileName, char *targetDirectory);
+void copyFile(char *fileName, char *sourceDirectory, char *targetDirectory);
 
 int doesPathExist(char *source_path, char *dest_path);
 

@@ -134,8 +134,9 @@ int main(int argc, char *argv[])
             
             //check whether item is normal file
             if ((statbuf.st_mode & S_IFMT) == S_IFREG ){
-                // printf("This is a regular file\n");
-                copyFile(direntp->d_name, dest_dir_name);
+                // printf("This is a regular file\n"); 
+
+                copyFile(direntp->d_name, source_dir_name, dest_dir_name);
             }
             
             //check whether item is a directory

@@ -100,7 +100,7 @@ void travelDir(char *currentDir, char *targetFolder)
                     }
 
                     if ((statbuf.st_mode & S_IFMT) == S_IFREG ){
-                        copyFile(currentDir, targetFolder);
+                        copyFile(currentDir, newTargetPath, targetFolder);
                     }
                     
                     free(newTargetPath); 
@@ -117,48 +117,118 @@ void travelDir(char *currentDir, char *targetFolder)
     return;
 }
 
-void copyFile(char *fileName, char *targetDirectory){
-    DIR *dp;
-    struct dirent *dir; char *newname;
+// void copyFile(char *fileName, char *targetDirectory){
+//     DIR *dp;
+//     struct dirent *dir; char *newname;
     
-    struct stat statbuf;
+//     struct stat statbuf;
+//     char actualpath [PATH_MAX+1];
+//     char *targetPathPointer;
+
+//     targetPathPointer = realpath(targetDirectory, actualpath);
+
+//     char oldPath[100];
+//     char newPath[100];
+
+//     cout<<"\n$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"<<endl;
+//     //set current path so we can change back
+//     getcwd(oldPath, 100);
+
+//     // if ((dp=opendir(name))== NULL ) { 
+//     //     perror("opendir"); 
+//     //     return;
+//     // }
+
+//     // cout<<"targetDirectory:\t"<<targetDirectory<<endl;
+
+//     if(stat(targetPathPointer, &statbuf) == -1){
+//         // cout<<"making new folder at: \t"<<targetDirectory<<endl;
+
+//         mkdir(targetDirectory, 0700);
+//     }
+
+//     //change to destination folder
+//     // if(chdir(targetPathPointer)){
+//     //     perror("changing dir");
+//     // }else{
+//     //     printf("path after\t%s\n", getcwd(newPath, 100)); 
+
+//     //     //change back to source folder
+//     // }
+//     chdir(targetPathPointer);
+//     // printf("path after\t%s\n", getcwd(newPath, 100)); 
+//     chdir(oldPath);
+
+//     return;
+// }
+
+void copyFile(char *fileName, char *sourceDirectory, char *targetDirectory){
+    char ch, source_file_name[FILENAME_MAX], target_file_name[FILENAME_MAX];
+    FILE *source_file_ptr, *target_file_ptr;
+    
+    char sourcePath[100];
+    char targetPath[100];
+    char tempPath[100];
+    //copy source path
+    getcwd(sourcePath, 100);
+
+    char    *newFileName;
+
     char actualpath [PATH_MAX+1];
+    char *sourcePathPointer;
+    sourcePathPointer = realpath(sourceDirectory, actualpath);
     char *targetPathPointer;
-
     targetPathPointer = realpath(targetDirectory, actualpath);
+    
+    // newFileName=(char *)malloc(strlen(targetPathPointer)+strlen(fileName)+3); 
+    // strcpy(newFileName, targetPathPointer);
+    // strcat(newFileName, "/");
+    // strcat(newFileName, fileName);
 
-    char oldPath[100];
-    char newPath[100];
+    chdir(sourceDirectory);
 
-    cout<<"\n$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"<<endl;
-    //set current path so we can change back
-    getcwd(oldPath, 100);
+    newFileName=(char *)malloc(strlen(fileName)+3); 
+    strcpy(newFileName, "./");
+    strcat(newFileName, fileName);
+    
+    cout<<"sourceDirectory is:\t"<<sourceDirectory<<endl;
+    printf("tempPath:\t%s\n", getcwd(tempPath, 100));
+    cout<<"newFileName to open is:\t"<<newFileName<<endl;
+    cout<<"newFileName to open is:\t"<<newFileName<<endl;
 
-    // if ((dp=opendir(name))== NULL ) { 
-    //     perror("opendir"); 
-    //     return;
-    // }
-
-    // cout<<"targetDirectory:\t"<<targetDirectory<<endl;
-
-    if(stat(targetPathPointer, &statbuf) == -1){
-        // cout<<"making new folder at: \t"<<targetDirectory<<endl;
-
-        mkdir(targetDirectory, 0700);
+    if( (source_file_ptr = fopen(fileName, "rw")) == NULL )
+    {
+        printf("couldnt open file: %s\n", newFileName);
+        free(newFileName); 
+        newFileName=NULL;
+        return;
     }
+    //copy file
+    while( ( ch = fgetc(source_file_ptr) ) != EOF )
+    fclose(source_file_ptr);
 
-    //change to destination folder
-    // if(chdir(targetPathPointer)){
-    //     perror("changing dir");
-    // }else{
-    //     printf("path after\t%s\n", getcwd(newPath, 100)); 
+    chdir(targetDirectory);
+    getcwd(targetPath, 100);
 
-    //     //change back to source folder
-    // }
-    chdir(targetPathPointer);
-    // printf("path after\t%s\n", getcwd(newPath, 100)); 
-    chdir(oldPath);
+    //TODO check if file already exists and business logic
+    if( (target_file_ptr = fopen(target_file_name, "w+")) == NULL )
+    {
+        printf("couldnt open file: %s\n", target_file_name);
 
+        free(newFileName); 
+        newFileName=NULL;
+        return;
+    }
+    //paste file
+    fputc(ch, target_file_ptr);
+    fclose(target_file_ptr);
+
+    //return to previous path
+    chdir(sourcePath);
+
+
+    free(newFileName); 
+    newFileName=NULL;
     return;
 }
 
