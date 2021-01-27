@@ -134,6 +134,8 @@ int main(int argc, char *argv[])
             
             //check whether item is normal file
             if ((statbuf.st_mode & S_IFMT) == S_IFREG ){
+                cout<<"source_dir_name:\t"<<source_dir_name<<endl;
+                cout<<"dest_dir_name:\t"<<dest_dir_name<<endl;
                 copyFile(direntp->d_name, source_dir_name, dest_dir_name);
             }
             

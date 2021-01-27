@@ -83,8 +83,12 @@ void travelDir(char *currentDir, char *targetFolder)
                     strcat(newTargetPath, "/");
                     strcat(newTargetPath, dir->d_name);
 
+                    //if normal file
                     if ((statbuf.st_mode & S_IFMT) == S_IFREG ){
-                        copyFile(dir->d_name, newTargetPath, targetFolder);
+                        cout<<"IN TRAVEL"<<endl;
+                        cout<<"source_dir_name:\t"<<currentDir<<endl;
+                        cout<<"dest_dir_name:\t"<<targetFolder<<endl;
+                        copyFile(dir->d_name, currentDir, targetFolder);
                     }
 
                     //if current item is a directory
