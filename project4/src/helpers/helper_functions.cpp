@@ -41,6 +41,7 @@ void travelDir(char *currentDir, char *targetFolder)
     struct dirent *dir, *target_dir;
     char *newSourcePath;
     char *newTargetPath;
+    char *deletionFile;
     struct stat statbuf;
     char actualpath [PATH_MAX+1];
     char *pathPtr;
@@ -138,7 +139,7 @@ void travelDir(char *currentDir, char *targetFolder)
             }else{
                 //skip .. and . entities
                 if((strcmp(target_dir->d_name, "..") != 0) && strcmp(target_dir->d_name, ".") != 0){
-                    cout<<"looking for:\t"<<target_dir->d_name<<"\t in:\t"<<targetFolder<<endl;
+                    // cout<<"looking for:\t"<<target_dir->d_name<<"\t in:\t"<<targetFolder<<endl;
                     found = 0;
 
                     //open source directory
@@ -171,6 +172,18 @@ void travelDir(char *currentDir, char *targetFolder)
 
                         if(found == 0){
                             cout<<"couldnt find entry:\t"<<target_dir->d_name<<endl;
+                            
+                            deletionFile=(char *)malloc(strlen(targetFolder)+strlen(target_dir->d_name)+3); 
+                            strcpy(deletionFile, targetFolder);
+                            strcat(deletionFile, "/");
+                            strcat(deletionFile,target_dir->d_name);
+                
+                            if(remove(deletionFile)){
+                                perror("deletion error");
+                            }
+
+                            free(deletionFile); 
+                            deletionFile=NULL;
                         }
 
                         closedir(dp); 

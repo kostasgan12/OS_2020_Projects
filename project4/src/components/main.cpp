@@ -99,8 +99,8 @@ int main(int argc, char *argv[])
     DIR *source_directory_pointer, *target_dp;
     struct dirent *direntp, *target_dir;
     struct stat statbuf;
-    char *newSourcePath;
-    char *newTargetPath;
+    char *newTargetPath, *newSourcePath, *deletionFile;
+
     char actualpath [PATH_MAX+1];
     char *pathPtr;
 
@@ -190,7 +190,7 @@ int main(int argc, char *argv[])
             }else{
                 //skip .. and . entities
                 if((strcmp(target_dir->d_name, "..") != 0) && strcmp(target_dir->d_name, ".") != 0){
-                    cout<<"looking for:\t"<<target_dir->d_name<<"\t in:\t"<<dest_dir_name<<endl;
+                    // cout<<"looking for:\t"<<target_dir->d_name<<"\t in:\t"<<dest_dir_name<<endl;
                     found = 0;
 
                     //open source directory
@@ -223,6 +223,18 @@ int main(int argc, char *argv[])
 
                         if(found == 0){
                             cout<<"couldnt find entry:\t"<<target_dir->d_name<<endl;
+                            
+                            deletionFile=(char *)malloc(strlen(dest_dir_name)+strlen(target_dir->d_name)+3); 
+                            strcpy(deletionFile, dest_dir_name);
+                            strcat(deletionFile, "/");
+                            strcat(deletionFile,target_dir->d_name);
+                
+                            if(remove(deletionFile)){
+                                perror("deletion error");
+                            }
+
+                            free(deletionFile); 
+                            deletionFile=NULL;
                         }
 
                         closedir(source_directory_pointer); 
