@@ -5,7 +5,7 @@ int verifyDeleted = 0;
 int considerLinks = 0;
 int totalEntitiesInHierarchy = 0;
 int totalEntitiesCopied = 0;
-int totalBytesCopied = 0;
+long long int  totalBytesCopied = 0;
 
 int main(int argc, char *argv[])
 {
@@ -13,7 +13,9 @@ int main(int argc, char *argv[])
     //////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////// INITIALIZING PARSED DATA  //////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////
-
+    time_t start_t, end_t;
+    time(&start_t);
+    double diff_t;
     string optionFlag;
 
     for (int i = 0; i < argc; i++)
@@ -250,9 +252,15 @@ int main(int argc, char *argv[])
 
         closedir(target_dp); 
     }
-
-    cout<<"totalEntitiesInHierarchy:\t"<<totalEntitiesInHierarchy<<endl;
-    cout<<"totalEntitiesCopied:\t"<<totalEntitiesCopied<<endl;
-
+    time(&end_t);
+    diff_t = difftime(end_t, start_t);
+    
+    cout<<"\n\t#################################################"<<endl;
+    cout<<"\t#\ttotalEntitiesInHierarchy:\t"<<totalEntitiesInHierarchy<<"\t#"<<endl;
+    cout<<"\t#\ttotalEntitiesCopied:\t"<<totalEntitiesCopied<<"\t\t#"<<endl;
+    cout<<"\t#\ttotalBytesCopied:\t"<<totalBytesCopied<<"\t\t#"<<endl;
+    printf("\t#\tExecution time = %f\t\t#\n", diff_t);
+    cout<<"\t#################################################"<<endl;
+    
     return 0;
 }

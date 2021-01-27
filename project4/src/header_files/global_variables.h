@@ -3,7 +3,6 @@
 
 extern int totalEntitiesInHierarchy;
 extern int totalEntitiesCopied;
-extern int totalBytesCopied;
-
+extern long long int totalBytesCopied;
 
 #endif

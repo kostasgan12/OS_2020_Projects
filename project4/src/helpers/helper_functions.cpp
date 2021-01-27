@@ -261,6 +261,7 @@ void copyFile(char *fileName, char *sourceDirectory, char *targetDirectory){
             
             return;
         }
+        totalBytesCopied += sizeof(bytes);
     }
 
     totalEntitiesCopied++;
