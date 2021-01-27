@@ -93,8 +93,11 @@ int main(int argc, char *argv[])
     //////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////
     
-    DIR *source_directory_pointer;
-    struct dirent *direntp;
+    // travelDir(source_dir_name, dest_dir_name);
+
+
+    DIR *source_directory_pointer, *target_dp;
+    struct dirent *direntp, *target_dir;
     struct stat statbuf;
     char *newSourcePath;
     char *newTargetPath;
@@ -103,6 +106,11 @@ int main(int argc, char *argv[])
 
     char oldPath[100];
     char newPath[100];
+
+    char *srcFileName, *targetFileName;
+
+    struct stat sourceFileStatBuff;
+    struct stat targetFileStatBuff;
 
     if ( ( source_directory_pointer = opendir ( source_dir_name ) ) == NULL ) {
         fprintf ( stderr , "cannot open %s \n" , source_dir_name ) ;
@@ -113,7 +121,7 @@ int main(int argc, char *argv[])
     while ( ( direntp = readdir ( source_directory_pointer ) ) != NULL ){
         if((strcmp(direntp->d_name, "..") != 0) && strcmp(direntp->d_name, ".") != 0){
             
-            printf ("\n\ninode %d of the entry %s\n" ,  ( int ) direntp->d_ino , direntp->d_name );
+            // printf ("\n\ninode %d of the entry %s\n" ,  ( int ) direntp->d_ino , direntp->d_name );
             
             //set path from source_dir to source_dir/item
             newSourcePath=(char *)malloc(strlen(source_dir_name)+strlen(direntp->d_name)+3); 
@@ -164,6 +172,66 @@ int main(int argc, char *argv[])
 
     if(closedir(source_directory_pointer) == -1){
         fprintf ( stderr , "cannot close %s \n" , source_dir_name ) ;
+    }
+
+    int found = 0;
+    //open target directory
+    if ((target_dp=opendir(dest_dir_name))== NULL ) { 
+        perror("target opendir"); 
+
+        return -1;
+    }else{
+        //for every item in target dir we want to check if it exists in source dir
+        while ((target_dir = readdir(target_dp)) != NULL ) {
+            //if deleted, continue
+            if (target_dir->d_ino == 0 ){
+                printf("\n\n\ndeleted\n");
+                continue;
+            }else{
+                //skip .. and . entities
+                if((strcmp(target_dir->d_name, "..") != 0) && strcmp(target_dir->d_name, ".") != 0){
+                    cout<<"looking for:\t"<<target_dir->d_name<<"\t in:\t"<<dest_dir_name<<endl;
+                    found = 0;
+
+                    //open source directory
+                    if ((source_directory_pointer=opendir(source_dir_name))== NULL ) { 
+                        perror("source seccond opendir"); 
+                        closedir(target_dp); 
+                        return -1;
+                    }else{
+                        //loop source dir
+                        while ((direntp = readdir(source_directory_pointer)) != NULL ) {
+                            //if deleted, continue
+                            if (direntp->d_ino == 0 ){
+                                printf("deleted\n");
+                                continue;
+                            }else{
+                                //skip .. and . entities
+                                if((strcmp(direntp->d_name, "..") != 0) && strcmp(direntp->d_name, ".") != 0){
+                                    //check if it exists in source folder
+                                    if(stat(source_dir_name, &sourceFileStatBuff) == 0){
+                                        if(strcmp(target_dir->d_name, direntp->d_name) == 0){
+                                            // cout<<"entry: "<<target_dir->d_name<<" exists -->:\t"<<dir->d_name<<endl;
+                                            //NOW WE FOUND A DELETED ONE WE MUST DELETE IT FROM TARGET DIR
+                                            found++;
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        if(found == 0){
+                            cout<<"couldnt find entry:\t"<<target_dir->d_name<<endl;
+                        }
+
+                        closedir(source_directory_pointer); 
+                    }
+                }
+            }
+        }
+
+        closedir(target_dp); 
     }
 
     return 0;

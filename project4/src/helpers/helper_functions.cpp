@@ -37,16 +37,18 @@ void list(char *name)
 
 void travelDir(char *currentDir, char *targetFolder)
 { 
-    DIR *dp;
-    struct dirent *dir; 
+    DIR *dp, *target_dp;
+    struct dirent *dir, *target_dir;
     char *newSourcePath;
     char *newTargetPath;
     struct stat statbuf;
     char actualpath [PATH_MAX+1];
     char *pathPtr;
 
-    int sourceDirItems = 0;
-    int targetDirItems = 0;
+    char *srcFileName, *targetFileName;
+
+    struct stat sourceFileStatBuff;
+    struct stat targetFileStatBuff;
 
     //open current directory
     if ((dp=opendir(currentDir))== NULL ) { 
@@ -101,7 +103,7 @@ void travelDir(char *currentDir, char *targetFolder)
 
                         //check if this path exists in target before travelling further down
                         if(doesPathExist(newSourcePath, newTargetPath)){
-                            cout<<"path:"<<newTargetPath<< " exists!"<<endl;
+                            // cout<<"path:"<<newTargetPath<< " exists!"<<endl;
                         }else{
                             mkdir(newTargetPath, 0700);
                         }
@@ -119,6 +121,66 @@ void travelDir(char *currentDir, char *targetFolder)
 
         closedir(dp); 
     }
+
+    int found = 0;
+    //open target directory
+    if ((target_dp=opendir(targetFolder))== NULL ) { 
+        perror("target opendir"); 
+
+        return;
+    }else{
+        //for every item in target dir we want to check if it exists in source dir
+        while ((target_dir = readdir(target_dp)) != NULL ) {
+            //if deleted, continue
+            if (target_dir->d_ino == 0 ){
+                printf("\n\n\ndeleted\n");
+                continue;
+            }else{
+                //skip .. and . entities
+                if((strcmp(target_dir->d_name, "..") != 0) && strcmp(target_dir->d_name, ".") != 0){
+                    cout<<"looking for:\t"<<target_dir->d_name<<"\t in:\t"<<targetFolder<<endl;
+                    found = 0;
+
+                    //open source directory
+                    if ((dp=opendir(currentDir))== NULL ) { 
+                        perror("source seccond opendir"); 
+                        closedir(target_dp); 
+                        return;
+                    }else{
+                        //loop source dir
+                        while ((dir = readdir(dp)) != NULL ) {
+                            //if deleted, continue
+                            if (dir->d_ino == 0 ){
+                                printf("deleted\n");
+                                continue;
+                            }else{
+                                //skip .. and . entities
+                                if((strcmp(dir->d_name, "..") != 0) && strcmp(dir->d_name, ".") != 0){
+                                    //check if it exists in source folder
+                                    if(stat(currentDir, &sourceFileStatBuff) == 0){
+                                        if(strcmp(target_dir->d_name, dir->d_name) == 0){
+                                            // cout<<"entry: "<<target_dir->d_name<<" exists -->:\t"<<dir->d_name<<endl;
+                                            //NOW WE FOUND A DELETED ONE WE MUST DELETE IT FROM TARGET DIR
+                                            found++;
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        if(found == 0){
+                            cout<<"couldnt find entry:\t"<<target_dir->d_name<<endl;
+                        }
+
+                        closedir(dp); 
+                    }
+                }
+            }
+        }
+
+        closedir(target_dp); 
+    }
     return;
 }
 
@@ -130,7 +192,6 @@ void copyFile(char *fileName, char *sourceDirectory, char *targetDirectory){
     size_t bytes;
     struct stat sourceFileStatBuff;
     struct stat targetFileStatBuff;
-    time_t currentTime;
 
     srcFileName=(char *)malloc(strlen(sourceDirectory)+strlen(fileName)+3);
     targetFileName=(char *)malloc(strlen(targetDirectory)+strlen(fileName)+3);
@@ -213,22 +274,20 @@ void printout(char *name){
 }
 
 int doesPathExist(char *source_path, char *dest_path){
-    // struct stat statbuf;
-    // char actualpath [PATH_MAX+1];
-    // char *targetPathPointer;
-
-    // targetPathPointer = realpath(targetDirectory, actualpath);
-
     struct stat statbuf;
 
-    char oldPath[100];
-    char newPath[100];
-    
-    getcwd(oldPath, 100);
-
     if(stat(dest_path, &statbuf) == -1){
-        // cout<<"making new folder at: \t"<<targetDirectory<<endl;
+        //path doesnt exist
+        return 0;
+    }
+    return 1;
+}
 
+int doesEntryExist(char* fileName, char *inLocation){
+    struct stat statbuf;
+
+    if(stat(inLocation, &statbuf) == -1){
+        //path doesnt exist
         return 0;
     }
     return 1;
