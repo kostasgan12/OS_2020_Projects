@@ -159,10 +159,11 @@ int main(int argc, char *argv[])
 
             //check whether item is a directory
             if ((statbuf.st_mode & S_IFMT) == S_IFDIR ){
-                if(doesPathExist(newSourcePath, newTargetPath)){
-                    cout<<"path:"<<newTargetPath<< " exists!"<<endl;
-                }else{
-                    cout<<"path:"<<newTargetPath<< " does NOT exist!"<<endl;
+                if(doesPathExist(newSourcePath, newTargetPath) == 0)
+                {
+                    if(verbose){
+                        cout<<"path for :\t"<<direntp->d_name<<"\tdoesn't exist, so we create one."<<endl;
+                    }
                     mkdir(newTargetPath, 0700);
                     totalEntitiesCopied++;
                 }

@@ -29,11 +29,4 @@
 
 using namespace std;
 
-extern int verbose;
-extern int verifyDeleted;
-extern int considerLinks;
-
-
-
-
 #endif

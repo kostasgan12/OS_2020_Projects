@@ -103,9 +103,11 @@ void travelDir(char *currentDir, char *targetFolder)
                         //and target folder -> dest_dir/item1
 
                         //check if this path exists in target before travelling further down
-                        if(doesPathExist(newSourcePath, newTargetPath)){
-                            // cout<<"path:"<<newTargetPath<< " exists!"<<endl;
-                        }else{
+                        if(doesPathExist(newSourcePath, newTargetPath) == 0)
+                        {
+                            if(verbose){
+                                cout<<"path for :\t"<<dir->d_name<<"\tdoesn't exist, so we create one."<<endl;
+                            }
                             mkdir(newTargetPath, 0700);
                             totalEntitiesCopied++;
                         }
@@ -228,10 +230,16 @@ void copyFile(char *fileName, char *sourceDirectory, char *targetDirectory){
     if(stat(targetFileName, &targetFileStatBuff) == 0){
         //compare times
         if(sourceFileStatBuff.st_mtime <= targetFileStatBuff.st_mtime){
+            if(verbose){
+                cout<<"file :\t"<<fileName<<"\t,has not been modified, so we do not overwrite it."<<endl;
+            }
             free(srcFileName);
             free(targetFileName);
             return;
         }
+    }
+    if(verbose){
+        cout<<"file :\t"<<fileName<<"\t,has  been modified, so we will overwrite it."<<endl;
     }
 
     // Open one file for reading
