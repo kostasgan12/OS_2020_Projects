@@ -39,8 +39,8 @@ void travelDir(char *currentDir, char *targetFolder)
 { 
     DIR *dp;
     struct dirent *dir; 
-    char *newPathName;
-    char *innerTargetPath;
+    char *newSourcePath;
+    char *newTargetPath;
     struct stat statbuf;
     char actualpath [PATH_MAX+1];
     char *pathPtr;
@@ -61,13 +61,13 @@ void travelDir(char *currentDir, char *targetFolder)
                 if((strcmp(dir->d_name, "..") != 0) && strcmp(dir->d_name, ".") != 0){
 
                     //change path to item path. e.g. source_dir -> source_dir/item1
-                    newPathName=(char *)malloc(strlen(currentDir)+strlen(dir->d_name)+2); 
-                    strcpy(newPathName ,currentDir);
-                    strcat(newPathName ,"/");
-                    strcat(newPathName,dir->d_name);
+                    newSourcePath=(char *)malloc(strlen(currentDir)+strlen(dir->d_name)+2); 
+                    strcpy(newSourcePath ,currentDir);
+                    strcat(newSourcePath ,"/");
+                    strcat(newSourcePath,dir->d_name);
                     
                     //get absolute path
-                    pathPtr = realpath(newPathName, actualpath);
+                    pathPtr = realpath(newSourcePath, actualpath);
                     // cout<<"pathPtr:\t"<<pathPtr<<endl;
                     
                     //get item stat
@@ -77,20 +77,27 @@ void travelDir(char *currentDir, char *targetFolder)
                     }
 
                     //set target folder path, according tou our depth. e.g. source_dir/item1 -> dest_dir/item1
-                    innerTargetPath=(char *)malloc(strlen(targetFolder)+strlen(currentDir)+3); 
-                    strcpy(innerTargetPath, targetFolder);
-                    strcat(innerTargetPath, "/");
-                    strcat(innerTargetPath, dir->d_name);
+                    newTargetPath=(char *)malloc(strlen(targetFolder)+strlen(currentDir)+3); 
+                    strcpy(newTargetPath, targetFolder);
+                    strcat(newTargetPath, "/");
+                    strcat(newTargetPath, dir->d_name);
 
                     //if current item is a directory
                     if ((statbuf.st_mode & S_IFMT) == S_IFDIR ){
                         //we want to carry on searching in this new directory
-                        //new directory has currentDir -> newPathName e.g. source_dir/item1
+                        //new directory has currentDir -> newSourcePath e.g. source_dir/item1
                         //and target folder -> dest_dir/item1
 
                         //TODO, check whether directory exists
-                        cout<<"pathPtr for travelling...:\t"<<newPathName<<endl;
-                        travelDir(newPathName, innerTargetPath);
+                        //TODO check if this path exists in target before travelling further down
+                        if(doesPathExist(newSourcePath, newTargetPath)){
+                            cout<<"path:"<<newTargetPath<< " exists!"<<endl;
+                        }else{
+                            cout<<"path:"<<newTargetPath<< " does NOT exist!"<<endl;
+                            mkdir(newTargetPath, 0700);
+                        }
+                        cout<<"pathPtr for travelling...:\t"<<newSourcePath<<endl;
+                        travelDir(newSourcePath, newTargetPath);
                         // copyFile(currentDir, targetFolder);
                     }
 
@@ -99,11 +106,11 @@ void travelDir(char *currentDir, char *targetFolder)
                         copyFile(currentDir, targetFolder);
                     }
                     
-                    free(innerTargetPath); 
-                    innerTargetPath=NULL;
+                    free(newTargetPath); 
+                    newTargetPath=NULL;
                     // printout(pathPtr);
-                    free(newPathName); 
-                    newPathName=NULL;
+                    free(newSourcePath); 
+                    newSourcePath=NULL;
                 }
             }
         }
@@ -170,4 +177,26 @@ void printout(char *name){
     printf("entity name: %s\n",name);
     printf("accessed : %s", ctime(&mybuf.st_atime)+4);
     printf("modified : %s", ctime(&mybuf.st_mtime));
+}
+
+int doesPathExist(char *source_path, char *dest_path){
+    // struct stat statbuf;
+    // char actualpath [PATH_MAX+1];
+    // char *targetPathPointer;
+
+    // targetPathPointer = realpath(targetDirectory, actualpath);
+
+    struct stat statbuf;
+
+    char oldPath[100];
+    char newPath[100];
+    
+    getcwd(oldPath, 100);
+
+    if(stat(dest_path, &statbuf) == -1){
+        // cout<<"making new folder at: \t"<<targetDirectory<<endl;
+
+        return 0;
+    }
+    return 1;
 }

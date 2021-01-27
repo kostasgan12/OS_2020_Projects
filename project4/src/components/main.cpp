@@ -96,56 +96,73 @@ int main(int argc, char *argv[])
     DIR *source_directory_pointer;
     struct dirent *direntp;
     struct stat statbuf;
-    char *newPathName;
-    char *innerTargetPath;
+    char *newSourcePath;
+    char *newTargetPath;
     char actualpath [PATH_MAX+1];
     char *pathPtr;
+
+    char oldPath[100];
+    char newPath[100];
 
     if ( ( source_directory_pointer = opendir ( source_dir_name ) ) == NULL ) {
         fprintf ( stderr , "cannot open %s \n" , source_dir_name ) ;
     }
 
+    //in given source directory
+    //loop every item in here, directories and other types
     while ( ( direntp = readdir ( source_directory_pointer ) ) != NULL ){
         if((strcmp(direntp->d_name, "..") != 0) && strcmp(direntp->d_name, ".") != 0){
             
             printf ("\n\ninode %d of the entry %s\n" ,  ( int ) direntp->d_ino , direntp->d_name );
             
-            newPathName=(char *)malloc(strlen(source_dir_name)+strlen(direntp->d_name)+3); 
-            strcpy(newPathName, source_dir_name);
-            strcat(newPathName, "/");
-            strcat(newPathName,direntp->d_name);
+            //set path from source_dir to source_dir/item
+            newSourcePath=(char *)malloc(strlen(source_dir_name)+strlen(direntp->d_name)+3); 
+            strcpy(newSourcePath, source_dir_name);
+            strcat(newSourcePath, "/");
+            strcat(newSourcePath,direntp->d_name);
 
-            pathPtr = realpath(newPathName, actualpath);
-            // cout<<"pathPtr:\t"<<pathPtr<<endl;
-                    
+            //get absolute path
+            pathPtr = realpath(newSourcePath, actualpath);                    
 
+            //get status
             if(stat(pathPtr, &statbuf) == -1){
                 perror("Failed to get file status");
-                free(newPathName); 
-                newPathName=NULL;
+                free(newSourcePath); 
+                newSourcePath=NULL;
                 continue;
             }
             
+            //check whether item is normal file
             if ((statbuf.st_mode & S_IFMT) == S_IFREG ){
                 // printf("This is a regular file\n");
                 copyFile(direntp->d_name, dest_dir_name);
             }
-
+            
+            //check whether item is a directory
             if ((statbuf.st_mode & S_IFMT) == S_IFDIR ){
-                // printf("This is a directory\n");
-                innerTargetPath=(char *)malloc(strlen(dest_dir_name)+strlen(direntp->d_name)+3); 
-                strcpy(innerTargetPath, dest_dir_name);
-                strcat(innerTargetPath, "/");
-                strcat(innerTargetPath,direntp->d_name);
+                //set path for target folder
+                newTargetPath=(char *)malloc(strlen(dest_dir_name)+strlen(direntp->d_name)+3); 
+                strcpy(newTargetPath, dest_dir_name);
+                strcat(newTargetPath, "/");
+                strcat(newTargetPath,direntp->d_name); 
 
-                travelDir(pathPtr, innerTargetPath);
+                //TODO check if this path exists in target before travelling further down
+                if(doesPathExist(newSourcePath, newTargetPath)){
+                    cout<<"path:"<<newTargetPath<< " exists!"<<endl;
+                }else{
+                    cout<<"path:"<<newTargetPath<< " does NOT exist!"<<endl;
+                    mkdir(newTargetPath, 0700);
+                }
+
+                //first we check the contents of the folder
+                travelDir(pathPtr, newTargetPath);
                 
-                free(innerTargetPath); 
-                innerTargetPath=NULL;
+                free(newTargetPath); 
+                newTargetPath=NULL;
             }
 
-            free(newPathName); 
-            newPathName=NULL;
+            free(newSourcePath); 
+            newSourcePath=NULL;
         }
     }
 
