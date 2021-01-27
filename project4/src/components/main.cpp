@@ -121,6 +121,12 @@ int main(int argc, char *argv[])
             strcat(newSourcePath, "/");
             strcat(newSourcePath,direntp->d_name);
 
+            //set path for target folder
+            newTargetPath=(char *)malloc(strlen(dest_dir_name)+strlen(direntp->d_name)+3); 
+            strcpy(newTargetPath, dest_dir_name);
+            strcat(newTargetPath, "/");
+            strcat(newTargetPath,direntp->d_name); 
+
             //get absolute path
             pathPtr = realpath(newSourcePath, actualpath);   
 
@@ -134,36 +140,25 @@ int main(int argc, char *argv[])
             
             //check whether item is normal file
             if ((statbuf.st_mode & S_IFMT) == S_IFREG ){
-                cout<<"source_dir_name:\t"<<source_dir_name<<endl;
-                cout<<"dest_dir_name:\t"<<dest_dir_name<<endl;
                 copyFile(direntp->d_name, source_dir_name, dest_dir_name);
             }
-            
+
             //check whether item is a directory
             if ((statbuf.st_mode & S_IFMT) == S_IFDIR ){
-                //set path for target folder
-                newTargetPath=(char *)malloc(strlen(dest_dir_name)+strlen(direntp->d_name)+3); 
-                strcpy(newTargetPath, dest_dir_name);
-                strcat(newTargetPath, "/");
-                strcat(newTargetPath,direntp->d_name); 
-
-                //TODO check if this path exists in target before travelling further down
                 if(doesPathExist(newSourcePath, newTargetPath)){
                     cout<<"path:"<<newTargetPath<< " exists!"<<endl;
                 }else{
                     cout<<"path:"<<newTargetPath<< " does NOT exist!"<<endl;
                     mkdir(newTargetPath, 0700);
                 }
-
                 //first we check the contents of the folder
                 travelDir(pathPtr, newTargetPath);
-                
-                free(newTargetPath); 
-                newTargetPath=NULL;
             }
 
             free(newSourcePath); 
             newSourcePath=NULL;
+            free(newTargetPath); 
+            newTargetPath=NULL;
         }
     }
 

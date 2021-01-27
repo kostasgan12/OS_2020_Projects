@@ -85,9 +85,6 @@ void travelDir(char *currentDir, char *targetFolder)
 
                     //if normal file
                     if ((statbuf.st_mode & S_IFMT) == S_IFREG ){
-                        cout<<"IN TRAVEL"<<endl;
-                        cout<<"source_dir_name:\t"<<currentDir<<endl;
-                        cout<<"dest_dir_name:\t"<<targetFolder<<endl;
                         copyFile(dir->d_name, currentDir, targetFolder);
                     }
 
@@ -101,10 +98,8 @@ void travelDir(char *currentDir, char *targetFolder)
                         if(doesPathExist(newSourcePath, newTargetPath)){
                             cout<<"path:"<<newTargetPath<< " exists!"<<endl;
                         }else{
-                            cout<<"path:"<<newTargetPath<< " does NOT exist!"<<endl;
                             mkdir(newTargetPath, 0700);
                         }
-                        cout<<"pathPtr for travelling...:\t"<<newSourcePath<<endl;
                         travelDir(newSourcePath, newTargetPath);
                     }
                     
@@ -141,7 +136,6 @@ void copyFile(char *fileName, char *sourceDirectory, char *targetDirectory){
 
     chdir(sourceDirectory);
     
-    printf("tempPath:\t%s\n", getcwd(tempPath, 100));
     cout<<"fileName to open is:\t"<<fileName<<endl;
 
     if( (source_file_ptr = fopen(fileName, "r")) == NULL )
@@ -154,8 +148,6 @@ void copyFile(char *fileName, char *sourceDirectory, char *targetDirectory){
 
     chdir(targetPathPointer);
     getcwd(targetPath, 100);
-    printf("tempPath in target dir:\t%s\n", getcwd(targetPath, 100));
-
     // //TODO check if file already exists and business logic
     if( (target_file_ptr = fopen(fileName, "w+")) == NULL )
     {
