@@ -201,31 +201,37 @@ void copyFile(char *fileName, char *sourceDirectory, char *targetDirectory){
         free(newFileName); 
         newFileName=NULL;
         return;
+    }else{
+        cout<<"SOURCE FILE OPEN OK"<<endl;
     }
 
-    // //copy file
-    // while( ( ch = fgetc(source_file_ptr) ) != EOF )
-    // fclose(source_file_ptr);
+    //copy file
+    while( ( ch = fgetc(source_file_ptr) ) != EOF )
+    fclose(source_file_ptr);
 
-    // chdir(targetDirectory);
-    // getcwd(targetPath, 100);
+    chdir(targetPathPointer);
+    cout<<"targetDirectory:\t"<<targetDirectory<<endl;
+    getcwd(targetPath, 100);
+    printf("tempPath in target dir:\t%s\n", getcwd(targetPath, 100));
 
     // //TODO check if file already exists and business logic
-    // if( (target_file_ptr = fopen(target_file_name, "w+")) == NULL )
-    // {
-    //     printf("couldnt open file: %s\n", target_file_name);
+    if( (target_file_ptr = fopen(fileName, "w+")) == NULL )
+    {
+        printf("couldnt open file: %s\n", fileName);
 
-    //     free(newFileName); 
-    //     newFileName=NULL;
-    //     return;
-    // }
+        free(newFileName); 
+        newFileName=NULL;
+        return;
+    }else{
+        cout<<"TARGET FILE OPEN OK"<<endl;
+    }
     // //paste file
-    // fputc(ch, target_file_ptr);
-    // fclose(target_file_ptr);
+    fputc(ch, target_file_ptr);
+    fclose(target_file_ptr);
 
     //return to previous path
     chdir(sourcePath);
-
+    printf("tempPath after finishing:\t%s\n", getcwd(tempPath, 100));
 
     free(newFileName); 
     newFileName=NULL;
