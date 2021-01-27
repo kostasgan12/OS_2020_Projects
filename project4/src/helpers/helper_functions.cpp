@@ -128,8 +128,6 @@ void copyFile(char *fileName, char *sourceDirectory, char *targetDirectory){
     //copy source path
     getcwd(sourcePath, 100);
 
-    char    *newFileName;
-
     char sourceActualPath [PATH_MAX+1];
     char targetActualPath [PATH_MAX+1];
     char *sourcePathPointer;
@@ -138,20 +136,14 @@ void copyFile(char *fileName, char *sourceDirectory, char *targetDirectory){
     targetPathPointer = realpath(targetDirectory, targetActualPath);
 
     chdir(sourceDirectory);
-
-    newFileName=(char *)malloc(strlen(fileName)+3); 
-    // strcpy(newFileName, "./");
-    strcpy(newFileName, fileName);
     
     printf("tempPath:\t%s\n", getcwd(tempPath, 100));
-    cout<<"newFileName to open is:\t"<<newFileName<<endl;
+    cout<<"fileName to open is:\t"<<fileName<<endl;
 
-    if( (source_file_ptr = fopen(newFileName, "r")) == NULL )
+    if( (source_file_ptr = fopen(fileName, "r")) == NULL )
     {
-        printf("@@@@@@\ncouldnt open file: %s\n@@@@@@\n", newFileName);
+        printf("@@@@@@\ncouldnt open file: %s\n@@@@@@\n", fileName);
         chdir(sourcePath);
-        free(newFileName); 
-        newFileName=NULL;
         return;
     }
     
@@ -166,8 +158,6 @@ void copyFile(char *fileName, char *sourceDirectory, char *targetDirectory){
         printf("@@@@@@\ncouldnt open file: %s\n@@@@@@\n", fileName);
 
         chdir(sourcePath);
-        free(newFileName); 
-        newFileName=NULL;
         return;
     }
     
@@ -175,14 +165,12 @@ void copyFile(char *fileName, char *sourceDirectory, char *targetDirectory){
     while( ( ch = fgetc(source_file_ptr) ) != EOF ){
         fputc(ch, target_file_ptr);
     }
-    
+
     fclose(source_file_ptr);
     fclose(target_file_ptr);
 
     //return to previous path
     chdir(sourcePath);
-    free(newFileName); 
-    newFileName=NULL;
     return;
 }
 
