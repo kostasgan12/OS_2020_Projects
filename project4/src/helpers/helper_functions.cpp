@@ -174,11 +174,12 @@ void copyFile(char *fileName, char *sourceDirectory, char *targetDirectory){
 
     char    *newFileName;
 
-    char actualpath [PATH_MAX+1];
+    char sourceActualPath [PATH_MAX+1];
+    char targetActualPath [PATH_MAX+1];
     char *sourcePathPointer;
-    sourcePathPointer = realpath(sourceDirectory, actualpath);
+    sourcePathPointer = realpath(sourceDirectory, sourceActualPath);
     char *targetPathPointer;
-    targetPathPointer = realpath(targetDirectory, actualpath);
+    targetPathPointer = realpath(targetDirectory, targetActualPath);
     
     // newFileName=(char *)malloc(strlen(targetPathPointer)+strlen(fileName)+3); 
     // strcpy(newFileName, targetPathPointer);
